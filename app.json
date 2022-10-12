@@ -1,0 +1,48 @@
+{
+  "id": "d2b16d48-1842-473b-be64-5c4e8957d663",
+  "name": "N24_Forma_System",
+  "publisher": "NAV24 Sp. z o.o.",
+  "version": "1.0.0.0",
+  "brief": "https://nav24.pl",
+  "privacyStatement": "https://nav24.pl",
+  "EULA": "https://nav24.pl",
+  "help": "https://nav24.pl",
+  "url": "https://nav24.pl",
+  "logo": "logo_nav24.png",
+  "description": "Forma System Extension",
+  "dependencies": [
+    {
+        "id": "a41facb4-aa1f-4f4b-a6d5-a574d9a33911",
+        "publisher": "IT.integro sp. z o.o.",
+        "name": "Polish Functionality - Starter Pack",
+        "version": "2.0.0.5"
+    },
+    {
+      "appId": "814e15ad-69eb-43cc-ac3f-4f0f3d10ff3c",
+      "name": "Electronic Banking Base App",
+      "publisher": "IT.integro sp. z o.o.",
+      "version": "1.4.1.2"
+    },
+    {
+      "appId": "9265ba93-0fdb-4622-b1c4-fd5af7e108f9",
+      "name": "Electronic Banking Extension PL",
+      "publisher": "IT.integro sp. z o.o.",
+      "version": "3.0.0.5"
+    }
+  ],
+  "screenshots": [],
+  "platform": "19.0.0.0",
+  "application": "19.0.0.0",
+  "idRanges": [{
+      "from": 50000,
+      "to": 50999
+  }],
+  "contextSensitiveHelpUrl": "https://nav24.pl",
+  "resourceExposurePolicy": {
+      "allowDebugging": true,
+      "allowDownloadingSource": true,
+      "includeSourceInSymbolFile": true
+  },
+  "runtime": "8.0",
+  "features": ["TranslationFile"]
+}

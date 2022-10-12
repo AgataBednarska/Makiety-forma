@@ -1,0 +1,41 @@
+{
+    "name": "N24",
+    "description": "N24 Rules",
+    "generalAction": "Hidden",
+    "rules": [
+        {
+            "id": "AA0072",
+            "action": "Hidden",
+            "justification": "The name of variable is not valid. The name of variables and parameters must be suffixed with the type or object name."
+        },  
+        {
+            "id": "AA0218",
+            "action": "Hidden",
+            "justification": "N24 Tooltips must be filled."
+        },
+        {
+            "id": "AA0214",
+            "action": "Hidden",
+            "justification": "The record XYZ should be modified before saving to the database - it's broken https://github.com/microsoft/AL/issues/5665"
+        },
+        {
+            "id": "AL0603",
+            "action": "Hidden",
+            "justification": "Enum conversion to integer in the TESTFIELD - it's broken https://github.com/microsoft/AL/issues/5693"
+        },
+        {
+            "id": "AS0084",
+            "action": "Hidden",
+            "justification": "The ID range '[50000..50999]' is not valid. It must be within the range allocated to the partner for AppSource, within the range '[1000000..75999999]' allocated to AppSource applications, and outside the range '[50000..99999]' allocated to per-tenant customizations"
+        },
+        {
+            "id": "AS0092",
+            "action": "Hidden",
+            "justification": "The app.json file must specify an Azure Application Insights resource with the property 'applicationInsightsConnectionString' for monitoring operations related to this extension. See https://docs.microsoft.com/dynamics365/business-central/dev-itpro/administration/telemetry-overview for additional information."
+        },
+        {
+            "id": "AS0054",
+            "action": "Hidden",
+            "justification": "The AppSourceCop configuration must specify one of the following properties: 'mandatorySuffix', 'mandatoryPrefix', or 'mandatoryAffixes'"
+        }]
+}
