@@ -11,4 +11,9 @@ codeunit 50004 "Constants N24"
     begin
         exit(1045);
     end;
+
+    procedure GetPLLanguageCode(): Text
+    begin
+        exit('PL');
+    end;
 }

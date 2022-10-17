@@ -1,13 +1,14 @@
-tableextension 50006 "User Setup N24" extends "User Setup"
+tableextension 50016 "User Setup N24" extends "User Setup"
 {
     fields
     {
-        field(60000; "Allow Skip Bank Ldg. Entry"; Boolean)
+        field(50000; "Allow Skip Bank Ldg. Entry N24"; Boolean)
         {
             DataClassification = CustomerContent;
             Caption = 'Allow Skip Bank Ledger Entry';
         }
     }
+    
     procedure GetOrCreateUserSetup(): Record "User Setup"
     var
         UserSetup: Record "User Setup";

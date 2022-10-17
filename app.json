@@ -2,7 +2,7 @@
   "id": "d2b16d48-1842-473b-be64-5c4e8957d663",
   "name": "N24_Forma_System",
   "publisher": "NAV24 Sp. z o.o.",
-  "version": "1.0.0.0",
+  "version": "1.1.0.0",
   "brief": "https://nav24.pl",
   "privacyStatement": "https://nav24.pl",
   "EULA": "https://nav24.pl",
@@ -18,13 +18,13 @@
         "version": "2.0.0.5"
     },
     {
-      "appId": "814e15ad-69eb-43cc-ac3f-4f0f3d10ff3c",
+      "id": "814e15ad-69eb-43cc-ac3f-4f0f3d10ff3c",
       "name": "Electronic Banking Base App",
       "publisher": "IT.integro sp. z o.o.",
       "version": "1.4.1.2"
     },
     {
-      "appId": "9265ba93-0fdb-4622-b1c4-fd5af7e108f9",
+      "id": "9265ba93-0fdb-4622-b1c4-fd5af7e108f9",
       "name": "Electronic Banking Extension PL",
       "publisher": "IT.integro sp. z o.o.",
       "version": "3.0.0.5"
