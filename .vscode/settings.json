@@ -2,8 +2,10 @@
     "al.enableCodeAnalysis": true,
       "al.codeAnalyzers": [
         "${CodeCop}",
+        "${UICop}",
         "${PerTenantExtensionCop}",
-        "${AppSourceCop}"
+        "${AppSourceCop}",
+        "${analyzerFolder}BusinessCentral.LinterCop.dll"
       ],
     "CRS.OnSaveAlFileAction": "Rename",
     "CRS.FileNamePattern": "<ObjectNameShort>.<ObjectTypeShortPascalCase>.al",
