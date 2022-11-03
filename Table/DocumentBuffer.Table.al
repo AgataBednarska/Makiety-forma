@@ -8,27 +8,35 @@ table 50000 "Document Buffer N24"
     {
         field(1; "Entry No."; Integer)
         {
+            Caption = 'Entry No.';
         }
         field(10; "Document No."; Code[20])
         {
+            Caption = 'Document No.';
         }
         field(20; "Item No."; Code[20])
         {
+            Caption = 'Item No.';
         }
         field(21; "Item Description"; Text[100])
         {
+            Caption = 'Item Description';
         }
         field(22; "Item Category Code"; Code[20])
         {
+            Caption = 'Item Category Code';
         }
         field(23; Quantity; Decimal)
         {
+            Caption = 'Quantity';
         }
         field(24; Amount; Decimal)
         {
+            Caption = 'Amount';
         }
         field(25; "Date Text"; Text[512])
         {
+            Caption = 'Date Text';
         }
     }
 
@@ -46,7 +54,7 @@ table 50000 "Document Buffer N24"
     begin
         TempDocumentBuffer.Copy(Rec, true);
 
-        If TempDocumentBuffer.FindLast() then
+        if TempDocumentBuffer.FindLast() then
             "Entry No." := TempDocumentBuffer."Entry No." + 1
         else
             "Entry No." := 1;

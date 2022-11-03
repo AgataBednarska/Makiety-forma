@@ -144,7 +144,7 @@ codeunit 50000 "Custom Events N24"
     [EventSubscriber(ObjectType::Table, database::"Assembly Line", 'OnBeforeValidateEvent', 'Location Code', false, false)]
     local procedure AssemblyLine_OnBeforeValidateEvent_LocationCode(var Rec: Record "Assembly Line"; var xRec: Record "Assembly Line"; CurrFieldNo: Integer)
     var
-        AssemblyMgtN24: codeunit "AssemblyMgt N24";
+        AssemblyMgtN24: Codeunit "AssemblyMgt N24";
     begin
         AssemblyMgtN24.ValidateInProdAssemblyLine(Rec, xRec);
     end;
@@ -152,7 +152,7 @@ codeunit 50000 "Custom Events N24"
     [EventSubscriber(ObjectType::Table, database::"Assembly Line", 'OnBeforeValidateEvent', 'Quantity', false, false)]
     local procedure AssemblyLine_OnBeforeValidateEvent_Quantity(var Rec: Record "Assembly Line"; var xRec: Record "Assembly Line"; CurrFieldNo: Integer)
     var
-        AssemblyMgtN24: codeunit "AssemblyMgt N24";
+        AssemblyMgtN24: Codeunit "AssemblyMgt N24";
     begin
         AssemblyMgtN24.ValidateInProdAssemblyLine(Rec, xRec);
     end;
@@ -176,7 +176,7 @@ codeunit 50000 "Custom Events N24"
         AsmHeader.Modify();
     end;
 
-    [EventSubscriber(ObjectType::codeunit, codeunit::"Assembly Line Management", 'OnBeforeUpdateExistingLine', '', false, false)]
+    [EventSubscriber(ObjectType::codeunit, Codeunit::"Assembly Line Management", 'OnBeforeUpdateExistingLine', '', false, false)]
     local procedure AssemblyLineManagement_OnBeforeUpdateExistingLine(var AsmHeader: Record "Assembly Header"; OldAsmHeader: Record "Assembly Header"; CurrFieldNo: Integer; var AssemblyLine: Record "Assembly Line"; UpdateDueDate: Boolean; UpdateLocation: Boolean; UpdateQuantity: Boolean; UpdateUOM: Boolean; UpdateQtyToConsume: Boolean; UpdateDimension: Boolean; var IsHandled: Boolean)
     var
         AssemblyMgtN24: Codeunit "AssemblyMgt N24";
@@ -184,7 +184,7 @@ codeunit 50000 "Custom Events N24"
         AssemblyMgtN24.NotifyIfLocationisInProduction(AssemblyLine, UpdateLocation, UpdateQuantity, UpdateUOM);
     end;
 
-    [EventSubscriber(ObjectType::codeunit, codeunit::"Assembly Line Management", 'OnBeforeUpdateAssemblyLines', '', false, false)]
+    [EventSubscriber(ObjectType::codeunit, Codeunit::"Assembly Line Management", 'OnBeforeUpdateAssemblyLines', '', false, false)]
     local procedure OnBeforeUpdateAssemblyLines(var AsmHeader: Record "Assembly Header"; OldAsmHeader: Record "Assembly Header"; FieldNum: Integer; ReplaceLinesFromBOM: Boolean; CurrFieldNo: Integer; CurrentFieldNum: Integer)
     var
         AssemblyMgtN24: Codeunit "AssemblyMgt N24";

@@ -19,11 +19,6 @@
             "justification": "N24 Tooltips must be filled."
         },
         {
-            "id": "AA0214",
-            "action": "Hidden",
-            "justification": "The record XYZ should be modified before saving to the database - it's broken https://github.com/microsoft/AL/issues/5665"
-        },
-        {
             "id": "AL0603",
             "action": "Hidden",
             "justification": "Enum conversion to integer in the TESTFIELD - it's broken https://github.com/microsoft/AL/issues/5693"
@@ -42,5 +37,41 @@
             "id": "AS0054",
             "action": "Hidden",
             "justification": "The AppSourceCop configuration must specify one of the following properties: 'mandatorySuffix', 'mandatoryPrefix', or 'mandatoryAffixes'"
-        }]
+        },
+        {
+            "id": "AS0016",
+            "action": "Hidden",
+            "justification": "Field with name 'Show Sell-To VAT Reg. No.' must use the DataClassification property and its value should be different from ToBeClassified."
+        },
+        {
+            "id": "AA0470",
+            "action": "Hidden",
+            "justification": "Variable '' with placeholders should have a comment explaining their content."
+        },
+        {
+            "id": "LC0019",
+            "action": "Hidden",
+            "justification": "Data Classification is equal to the Table. Remove to reduce redundancy."
+        },
+        {
+            "id": "AW0005",
+            "action": "Hidden",
+            "justification": "Action with name 'XYZ' should have a value for the Image property."
+        },
+        {
+            "id": "LC0010",
+            "action": "Hidden",
+            "justification": "Cyclomatic complexity: XX, Maintainability index: YY."
+        },
+        {
+            "id": "AS0051",
+            "action": "Hidden",
+            "justification": "The manifest property 'XYZ' must be specified and contain a meaningful value."
+        },
+        {
+            "id": "AS0052",
+            "action": "Hidden",
+            "justification": "The property 'url' must be set to a valid URL."
+        }
+    ]
 }

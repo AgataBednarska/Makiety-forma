@@ -8,7 +8,7 @@ pageextension 50007 "Assemble-to-Order Lines N24" extends "Assemble-to-Order Lin
 
             trigger OnAfterValidate();
             begin
-                Rec.validate("Quantity to Consume", Rec.Quantity);
+                Rec.Validate("Quantity to Consume", Rec.Quantity);
             end;
         }
         modify("Quantity per")

@@ -17,7 +17,7 @@ report 50006 "FindPurchHdrsByLineFilter N24"
                 var
                     PurchInvHeader: Record "Purch. Inv. Header";
                 begin
-                    IF not TempPurchInvHeader.Get("Document No.") then begin
+                    if not TempPurchInvHeader.Get("Document No.") then begin
                         PurchInvHeader.Get("Document No.");
                         TempPurchInvHeader := PurchInvHeader;
                         TempPurchInvHeader.Insert();

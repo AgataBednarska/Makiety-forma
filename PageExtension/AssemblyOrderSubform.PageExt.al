@@ -11,10 +11,10 @@ pageextension 50003 "Assembly Order Subform N24" extends "Assembly Order Subform
             var
                 AssemblySetup: Record "Assembly Setup";
             begin
-                AssemblySetup.get();
+                AssemblySetup.Get();
 
                 if Rec."Location Code" = AssemblySetup."In-Production Location N24" then
-                    Rec.validate("Quantity to Consume", Rec.Quantity);
+                    Rec.Validate("Quantity to Consume", Rec.Quantity);
             end;
         }
         modify("Quantity per")
@@ -57,7 +57,7 @@ pageextension 50003 "Assembly Order Subform N24" extends "Assembly Order Subform
     var
         AssemblySetup: Record "Assembly Setup";
     begin
-        AssemblySetup.get();
+        AssemblySetup.Get();
         exit(Rec."Location Code" = AssemblySetup."In-Production Location N24");
     end;
 }

@@ -4,7 +4,7 @@ codeunit 50006 "PurchaseMgt N24"
     var
         TempPurchaseLine: Record "Purchase Line" temporary;
         TempErrorMessage: Record "Error Message" temporary;
-        CheckDimensions: codeunit "Check Dimensions";
+        CheckDimensions: Codeunit "Check Dimensions";
         PurchPost: Codeunit "Purch.-Post";
         ErrorMessageHandler: Codeunit "Error Message Handler";
         ErrorMessageMgt: Codeunit "Error Message Management";

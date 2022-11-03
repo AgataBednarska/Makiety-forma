@@ -5,8 +5,9 @@ tableextension 50021 "Posted Assembly Line N24" extends "Posted Assembly Line"
         field(50000; "External Document No. N24"; Code[35])
         {
             Caption = 'External Document No.';
+            Editable = false;
             FieldClass = FlowField;
-            CalcFormula = lookup("Posted Assembly Header"."External Document No. N24" where("No." = FIELD("Document No.")));
+            CalcFormula = lookup("Posted Assembly Header"."External Document No. N24" where("No." = field("Document No.")));
         }
         field(50001; "Quantity Transferred N24"; Decimal)
         {
@@ -14,7 +15,7 @@ tableextension 50021 "Posted Assembly Line N24" extends "Posted Assembly Line"
             Editable = false;
             DecimalPlaces = 0 : 5;
             FieldClass = FlowField;
-            CalcFormula = sum("Item Ledger Entry".Quantity where("Location Code" = field("Location Code"), "Entry Type" = const(transfer), "External Document No." = field("External Document No. N24"), "Item No." = field("No.")));
+            CalcFormula = sum("Item Ledger Entry".Quantity where("Location Code" = field("Location Code"), "Entry Type" = const(Transfer), "External Document No." = field("External Document No. N24"), "Item No." = field("No.")));
         }
     }
 }

@@ -1,12 +1,16 @@
 {
     "al.enableCodeAnalysis": true,
-      "al.codeAnalyzers": [
+    "al.backgroundCodeAnalysis": false,
+
+    "al.codeAnalyzers": [
         "${CodeCop}",
         "${UICop}",
         "${PerTenantExtensionCop}",
         "${AppSourceCop}",
         "${analyzerFolder}BusinessCentral.LinterCop.dll"
-      ],
+    ],
+    "al.ruleSetPath": ".vscode/N24.ruleset.json",
+
     "CRS.OnSaveAlFileAction": "Rename",
     "CRS.FileNamePattern": "<ObjectNameShort>.<ObjectTypeShortPascalCase>.al",
     "CRS.FileNamePatternExtensions": "<ObjectNameShort>.<ObjectTypeShortPascalCase>.al",
@@ -16,5 +20,27 @@
     "CRS.RemoveUnderscoreFromFilename": false,
     "CRS.ObjectNameSuffix": " N24",
     "alVarHelper.ignoreALSuffix": "N24",
-    "al.ruleSetPath": ".vscode/N24.ruleset.json",
-  }
+
+    "todo-tree.general.tags": [
+        "BUG",
+        "HACK",
+        "FIXME",
+        "TODO"
+    ],
+
+    // Needed for alOutline.codeActionsOnSave to work
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    },
+
+    "alOutline.codeActionsOnSave": [
+        "SortProperties",
+        "SortVariables",
+        "FormatDocument"
+    ],
+
+    "alOutline.enableCodeCopFixes": true,
+    "alOutline.fixCodeCopMissingParenthesesOnSave": true,
+
+    "xliffSync.baseFile": "N24_AIRHELP.g.xlf"
+}

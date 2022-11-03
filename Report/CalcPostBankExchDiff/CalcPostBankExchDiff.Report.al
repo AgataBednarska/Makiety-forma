@@ -3,7 +3,7 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
     DefaultLayout = RDLC;
     RDLCLayout = './Report/CalcPostBankExchDiff/CalcPostBankExchDiff.rdlc';
     Caption = 'Calc. & Post Bank Exch. Diff.';
-    Permissions = TableData "Bank Account Ledger Entry" = m;
+    Permissions = tabledata "Bank Account Ledger Entry" = m;
     ApplicationArea = Basic, Suite;
     UsageCategory = Tasks;
 
@@ -32,7 +32,7 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
             column(GetAppVersion_CompanyInfo; GetAppNameAndVersion.AppNameAndVersion())
             {
             }
-            column(COMPANYNAME; COMPANYNAME())
+            column(COMPANYNAME; CompanyName())
             {
             }
             column(TestMode; VTestMode)
@@ -50,7 +50,7 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
                 begin
                     CalculatingNo += 1;
 
-                    Window.Update(2, ROUND(CalculatingNo / CalculatingNoTotal * 10000, 1));
+                    Window.Update(2, Round(CalculatingNo / CalculatingNoTotal * 10000, 1));
 
                     if VTestMode then begin
                         if TempBankAccLedgEntry.Get("Entry No.") then
@@ -66,7 +66,7 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
                     RemainingAmount := Amount - "Applied Amount N24";
 
                     BankAccountLedgerEntry.Reset();
-                    BankAccountLedgerEntry.SetCurrentkey("Bank Account No.", "Posting Date");       //FIFO
+                    BankAccountLedgerEntry.SetCurrentKey("Bank Account No.", "Posting Date");       //FIFO
                     BankAccountLedgerEntry.CopyFilters("Bank Account Ledger Entry");
                     BankAccountLedgerEntry.SetRange("Skip in Difference Calc. N24", false);
                     BankAccountLedgerEntry.SetRange(Reversed, false);
@@ -77,20 +77,20 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
                             if VTestMode then
                                 if TempBankAccLedgEntry.Get(BankAccountLedgerEntry."Entry No.") then
                                     BankAccountLedgerEntry := TempBankAccLedgEntry;
-                            
+
                             if ((not BankAccountLedgerEntry."Applied N24") or (not BankAccountLedgerEntry.Reversed)
                                 or (not BankAccountLedgerEntry."Skip in Difference Calc. N24")) and (BankAccountLedgerEntry.Amount < 0) then begin
                                 if -RemainingAmount <= (BankAccountLedgerEntry.Amount - BankAccountLedgerEntry."Applied Amount N24") then begin
                                     AppAmount := BankAccountLedgerEntry.Amount - BankAccountLedgerEntry."Applied Amount N24";
                                     RemainingAmount := RemainingAmount + AppAmount;
                                     BankAccountLedgerEntry."Applied N24" := true;
-                                    
+
                                     if VTestMode then begin
                                         TempBankAccLedgEntry := BankAccountLedgerEntry;
-                                        
+
                                         if not TempBankAccLedgEntry.Modify() then begin
                                             TempBankAccLedgEntry.Insert();
-                                            
+
                                             if TempBankAccLedgEntry."Posting Date" < StartTempDate then
                                                 StartTempDate := TempBankAccLedgEntry."Posting Date";
                                         end;
@@ -108,7 +108,7 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
                                         if not TempBankAccLedgEntry.Get(ApplBankAccountLedgerEntry."Entry No.") then
                                             AmountLCY += ApplBankAccountLedgerEntry."Amount (LCY)";
                                     end else
-                                            AmountLCY += ApplBankAccountLedgerEntry."Amount (LCY)";
+                                        AmountLCY += ApplBankAccountLedgerEntry."Amount (LCY)";
 
                                 if VTestMode then begin
                                     TempBankAccLedgEntry.SetRange("Applied to Entry N24", BankAccountLedgerEntry."Entry No.");
@@ -122,12 +122,12 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
                                 if VTestMode then
                                     if TempBankAccLedgEntry.Get(BankAccountLedgerEntry."Entry No.") then
                                         BankAccountLedgerEntry := TempBankAccLedgEntry;
-                                
+
                                 if BankAccountLedgerEntry.Amount <> 0 then
                                     ExchDiff := -(AppAmount * ExchRate - (AmountLCY * (AppAmount / BankAccountLedgerEntry.Amount)));
-                                
+
                                 BankAccountLedgerEntry."Difference Amount N24" := BankAccountLedgerEntry."Difference Amount N24" + ExchDiff;
-                                BankAccountLedgerEntry."Difference Amount N24" := ROUND(BankAccountLedgerEntry."Difference Amount N24", Currency."Amount Rounding Precision");
+                                BankAccountLedgerEntry."Difference Amount N24" := Round(BankAccountLedgerEntry."Difference Amount N24", Currency."Amount Rounding Precision");
                                 BankAccountLedgerEntry."Applied Amount N24" := BankAccountLedgerEntry."Applied Amount N24" + AppAmount;
                                 BankAccountLedgerEntry."Remaining Amount" := BankAccountLedgerEntry."Remaining Amount" - AppAmount;
                                 BankAccountLedgerEntry."Applied to Entry N24" := "Entry No.";
@@ -244,15 +244,15 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
                 trigger OnAfterGetRecord()
                 begin
                     PrintingNo += 1;
-                    Window.Update(4, ROUND(PrintingNo / PrintingNoTotal * 10000, 1));
+                    Window.Update(4, Round(PrintingNo / PrintingNoTotal * 10000, 1));
 
                     if not TempBankAccLedgEntry.Get("Entry No.") then
                         CurrReport.Skip();
 
                     if TempBankAccLedgEntry."Applied N24" then
-                        AppliedOpt := Appliedopt::Yes
+                        AppliedOpt := AppliedOpt::Yes
                     else begin
-                        AppliedOpt := Appliedopt::" ";
+                        AppliedOpt := AppliedOpt::" ";
                         if (Amount < 0) and (Amount - "Applied Amount N24" <> 0) then
                             TempBankAccLedgEntry."Difference Amount N24" := 0;
                     end;
@@ -267,9 +267,9 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
                         ExRate := 0;
 
                     if TempBankAccLedgEntry."Difference Posted N24" then
-                        DifferencePostedOpt := Differencepostedopt::Yes
+                        DifferencePostedOpt := DifferencePostedOpt::Yes
                     else
-                        DifferencePostedOpt := Differencepostedopt::" ";
+                        DifferencePostedOpt := DifferencePostedOpt::" ";
                 end;
 
                 trigger OnPreDataItem()
@@ -342,12 +342,12 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
                 begin
                     PostingNo += 1;
 
-                    Window.Update(3, ROUND(PostingNo / PostingNoTotal * 10000, 1));
-                    
+                    Window.Update(3, Round(PostingNo / PostingNoTotal * 10000, 1));
+
                     if "Applied N24" then
-                        AppliedOpt := Appliedopt::Yes
+                        AppliedOpt := AppliedOpt::Yes
                     else begin
-                        AppliedOpt := Appliedopt::" ";
+                        AppliedOpt := AppliedOpt::" ";
 
                         if (Amount < 0) and (Amount - "Applied Amount N24" <> 0) then
                             "Difference Amount N24" := 0;
@@ -360,19 +360,19 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
                             RealizedLosses -= "Difference Amount N24";
 
                         if "Bank Account Ledger Entry 3".Next(1) = 0 then begin
-                            RoundingDifference += "Difference Amount N24" - ROUND("Difference Amount N24", Currency."Amount Rounding Precision");
-                            
-                            PostDifference(ROUND("Difference Amount N24", Currency."Amount Rounding Precision") + ROUND(RoundingDifference, Currency."Amount Rounding Precision"), Amount,
+                            RoundingDifference += "Difference Amount N24" - Round("Difference Amount N24", Currency."Amount Rounding Precision");
+
+                            PostDifference(Round("Difference Amount N24", Currency."Amount Rounding Precision") + Round(RoundingDifference, Currency."Amount Rounding Precision"), Amount,
                                          Format("Document Type"), "Document No.", "Posting Date",
                                          "Entry No.", "Dimension Set ID");
                         end else begin
                             "Bank Account Ledger Entry 3".Next(-1);
-                            
+
                             PostDifference("Difference Amount N24", Amount,
                                          Format("Document Type"), "Document No.", "Posting Date",
                                          "Entry No.", "Dimension Set ID");
-                            
-                            RoundingDifference += "Difference Amount N24" - ROUND("Difference Amount N24", Currency."Amount Rounding Precision");
+
+                            RoundingDifference += "Difference Amount N24" - Round("Difference Amount N24", Currency."Amount Rounding Precision");
                         end;
 
                         "Difference Posted N24" := true;
@@ -386,9 +386,9 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
                         ExRate := 0;
 
                     if "Difference Posted N24" then
-                        DifferencePostedOpt := Differencepostedopt::Yes
+                        DifferencePostedOpt := DifferencePostedOpt::Yes
                     else
-                        DifferencePostedOpt := Differencepostedopt::" ";
+                        DifferencePostedOpt := DifferencePostedOpt::" ";
                 end;
 
                 trigger OnPreDataItem()
@@ -416,12 +416,12 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
                 RealizedLosses := 0;
 
                 BankAccNo += 1;
-                Window.Update(1, ROUND(BankAccNo / BankAccNoTotal * 10000, 1));
+                Window.Update(1, Round(BankAccNo / BankAccNoTotal * 10000, 1));
 
                 if VTestMode then
                     TempBankAccLedgEntry.DeleteAll();
-                    
-                StartTempDate := Dmy2date(31, 12, 9999);
+
+                StartTempDate := DMY2Date(31, 12, 9999);
             end;
 
             trigger OnPreDataItem()
@@ -437,7 +437,7 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
 
         layout
         {
-            area(content)
+            area(Content)
             {
                 group(Options)
                 {
@@ -514,13 +514,13 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
 
     trigger OnPreReport()
     var
-        
+
     begin
         GeneralLedgerSetup.Get();
         SourceCodeSetup.Get();
 
         if VEndDateReq = 0D then
-            EndDate := Dmy2date(31, 12, 9999)
+            EndDate := DMY2Date(31, 12, 9999)
         else
             EndDate := VEndDateReq;
 
@@ -576,13 +576,13 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
         Window: Dialog;
         WindowText: Text[1024];
         RoundingDifference: Decimal;
-        MustBeEnteredErr: label '%1 must be entered.', Comment = '%1 - GenJnlLine."Document No."';
-        BankTransCalcLbl: label 'Bank Trans. Calc. of %1 %2 %3 %4', Comment = '%1 - "Currency Code", %2 - BaseAmount, %3 - DocType, %4 - DocNo)';
-        CalculatingTransactionsMsg: label 'Calculating bank transactions...\\';
-        BankAccLbl: label 'Bank Account    @1@@@@@@@@@@@@@\\';
-        CalcLbl: label 'Calculating        @2@@@@@@@@@@@@@\';
-        PostingLbl: label 'Posting          @3@@@@@@@@@@@@@\';
-        PrintingLbl: label 'Printing          @4@@@@@@@@@@@@@\';
+        MustBeEnteredErr: Label '%1 must be entered.', Comment = '%1 - GenJnlLine."Document No."';
+        BankTransCalcLbl: Label 'Bank Trans. Calc. of %1 %2 %3 %4', Comment = '%1 - "Currency Code", %2 - BaseAmount, %3 - DocType, %4 - DocNo)';
+        CalculatingTransactionsMsg: Label 'Calculating bank transactions...\\';
+        BankAccLbl: Label 'Bank Account    @1@@@@@@@@@@@@@\\';
+        CalcLbl: Label 'Calculating        @2@@@@@@@@@@@@@\';
+        PostingLbl: Label 'Posting          @3@@@@@@@@@@@@@\';
+        PrintingLbl: Label 'Printing          @4@@@@@@@@@@@@@\';
         DateFormatLbl: Label '<Year4>-<Month,2>-<Day,2>', Locked = true;
 
     procedure PostDifference(Amount: Decimal; BaseAmount: Decimal; DocNo: Code[20]; DocType: Text[30]; PostingDate: Date; BankAccLedgEntryNo: Integer; BankAccLedgEntryDimSetID: Integer)
@@ -596,7 +596,7 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
         GenJournalLine."Document No." := VPostingDocNo;
 
         if VPostingDescription <> '' then
-            GenJournalLine.Description := COPYSTR(STRSUBSTNO(VPostingDescription,
+            GenJournalLine.Description := CopyStr(StrSubstNo(VPostingDescription,
                                                         "Bank Account"."Currency Code",
                                                         BaseAmount, DocType, DocNo),
                                             1, MaxStrLen(GenJournalLine.Description));
@@ -615,16 +615,16 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
         GenJournalLine."Allow Zero-Amount Posting" := true;
         GenJournalLine."System-Created Entry" := true;
         GenJournalLine."Source Code" := SourceCodeSetup."Bank Trans. Recalculation N24";
-        GenJournalLine."Account Type" := GenJournalLine."bal. account type"::"G/L Account";
-        GenJournalLine."Amount (LCY)" := ROUND(Amount, Currency."Amount Rounding Precision");
+        GenJournalLine."Account Type" := GenJournalLine."Bal. Account Type"::"G/L Account";
+        GenJournalLine."Amount (LCY)" := Round(Amount, Currency."Amount Rounding Precision");
         GenJournalLine.Amount := 0;
-        
+
         if Amount > 0 then
             GenJournalLine."Account No." := Currency."Realized Losses Acc."
         else
             GenJournalLine."Account No." := Currency."Realized Gains Acc.";
-        
-        GenJournalLine."Bal. Account Type" := GenJournalLine."bal. account type"::"Bank Account";
+
+        GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"Bank Account";
         GenJournalLine."Bal. Account No." := "Bank Account"."No.";
         GenJournalLine."Appl. to Bank Entry No. N24" := BankAccLedgEntryNo;
 
@@ -648,9 +648,9 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
     begin
         DimSetEntry2.SetRange("Dimension Set ID", BankAccLedgEntryDimSetID);
         if DimSetEntry2.FindFirst() then begin
-                DimSetEntry := DimSetEntry2;
-                DimSetEntry.Insert();
-            end;
+            DimSetEntry := DimSetEntry2;
+            DimSetEntry.Insert();
+        end;
     end;
 
     local procedure GetGlobalDimVal(GlobalDimCode: Code[20]; var DimSetEntry: Record "Dimension Set Entry"): Code[20]
@@ -661,15 +661,15 @@ report 50005 "Calc.Post Bank Exch. Diff. N24"
             DimVal := ''
         else begin
             DimSetEntry.SetRange("Dimension Code", GlobalDimCode);
-            
+
             if DimSetEntry.Find('-') then
                 DimVal := DimSetEntry."Dimension Value Code"
             else
                 DimVal := '';
-            
+
             DimSetEntry.SetRange("Dimension Code");
         end;
-        
+
         exit(DimVal);
     end;
 }

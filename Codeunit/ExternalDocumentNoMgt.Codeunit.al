@@ -35,10 +35,10 @@ codeunit 50010 "ExternalDocumentNoMgt N24"
                 DocList += StrSubstNo(DocList2ValuesTok, SalesCrMemoHeader.TableCaption, SalesCrMemoHeader."No.");
             until SalesHeader.Next() = 0;
 
-        If DocCount > 0 then begin
+        if DocCount > 0 then begin
             if ShowMessage then
-                Message(strsubstno(FoundDocMsg, ExternalDocumentNo, DocCount) + DocList);
-            
+                Message(StrSubstNo(FoundDocMsg, ExternalDocumentNo, DocCount) + DocList);
+
             exit(true);
         end else
             exit(false);

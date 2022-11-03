@@ -86,6 +86,7 @@ tableextension 50004 "Assembly Setup N24" extends "Assembly Setup"
                     ItemJournalTemplate.Description := StrSubstNo(TypeOfJournalLbl, ItemJournalTemplate.Type);
                     ItemJournalTemplate.Insert();
 
+                    //Commit przeniesiony z poprzedniego rozszerzenia
                     Commit();
                 end;
             1:

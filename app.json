@@ -2,7 +2,7 @@
   "id": "d2b16d48-1842-473b-be64-5c4e8957d663",
   "name": "N24_Forma_System",
   "publisher": "NAV24 Sp. z o.o.",
-  "version": "1.1.0.0",
+  "version": "1.2.0.0",
   "brief": "https://nav24.pl",
   "privacyStatement": "https://nav24.pl",
   "EULA": "https://nav24.pl",
@@ -14,8 +14,8 @@
     {
         "id": "a41facb4-aa1f-4f4b-a6d5-a574d9a33911",
         "publisher": "IT.integro sp. z o.o.",
-        "name": "Polish Functionality - Starter Pack",
-        "version": "2.0.0.5"
+        "name": "Polish Localization",
+        "version": "2.6.0.3"
     },
     {
       "id": "814e15ad-69eb-43cc-ac3f-4f0f3d10ff3c",

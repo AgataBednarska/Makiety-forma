@@ -5,6 +5,7 @@ tableextension 50006 "Assembly Line N24" extends "Assembly Line"
         field(50000; "External Document No. N24"; Code[35])
         {
             Caption = 'External Document No.';
+            Editable = false;
             FieldClass = FlowField;
             CalcFormula = lookup("Assembly Header"."External Document No. N24" where("Document Type" = field("Document Type"), "No." = field("Document No.")));
         }
