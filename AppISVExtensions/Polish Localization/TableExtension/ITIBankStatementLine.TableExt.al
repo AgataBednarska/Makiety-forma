@@ -5,8 +5,8 @@ tableextension 50025 "ITI Bank Statement Line N24" extends "ITI Bank Statement L
         field(50000; "Salespers./Purch. Code N24"; Code[20])
         {
             Caption = 'Salespers./Purch. Code';
-            TableRelation = "Salesperson/Purchaser";
             DataClassification = CustomerContent;
+            TableRelation = "Salesperson/Purchaser";
         }
     }
 }

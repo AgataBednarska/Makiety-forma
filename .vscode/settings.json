@@ -41,6 +41,4 @@
 
     "alOutline.enableCodeCopFixes": true,
     "alOutline.fixCodeCopMissingParenthesesOnSave": true,
-
-    "xliffSync.baseFile": "N24_AIRHELP.g.xlf"
 }
