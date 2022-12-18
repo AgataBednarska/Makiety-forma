@@ -53,30 +53,20 @@
           <note from="Developer" annotates="general" priority="2">%1 - "External Document No." caption</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit AssemblyMgt N24 - Method CheckAssemblyBeforValidateExtDocumentNo - NamedType UpdateQst</note>
         </trans-unit>
-        <trans-unit id="Codeunit 1503456484 - Method 2731400401 - NamedType 1064122630" size-unit="char" translate="yes" xml:space="preserve">
-          <source>You could not update %1 because assembly order is in progress or completed</source>
-          <note from="Developer" annotates="general" priority="2">%1 - Location Code</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit AssemblyMgt N24 - Method NotifyIfLocationisInProduction - NamedType UpdateLineErr</note>
-        </trans-unit>
         <trans-unit id="Codeunit 1503456484 - Method 2731400401 - NamedType 153711663" size-unit="char" translate="yes" xml:space="preserve">
           <source>No assembly setup exists</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit AssemblyMgt N24 - Method NotifyIfLocationisInProduction - NamedType NoAssemblySetupErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1503456484 - Method 2731400401 - NamedType 1064122630" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You could not update %1 because assembly order is in progress or completed</source>
+          <note from="Developer" annotates="general" priority="2">%1 - Location Code</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit AssemblyMgt N24 - Method NotifyIfLocationisInProduction - NamedType UpdateLineErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 1503456484 - Method 2898500676 - NamedType 2453555887" size-unit="char" translate="yes" xml:space="preserve">
           <source>This action may lead to an inconsistency in stock because item was transferred to production already.\Do you want to continue?</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit AssemblyMgt N24 - Method ValidateInProdAssemblyLine - NamedType UpdateFieldQst</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 1246075511 - Method 2968836443 - NamedType 3976087116" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Split Payment has been turned on</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit AutoPurchSplitPaymentMgt N24 - Method SetPurchaseSplitPayment - NamedType SplitPaymentOnMsg</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 1246075511 - Method 2968836443 - NamedType 3232068674" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Split Payment has been turned off</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit AutoPurchSplitPaymentMgt N24 - Method SetPurchaseSplitPayment - NamedType SplitPaymentOffMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 915385999 - Method 2110094099 - NamedType 163307534" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ext. Document No. %1:</source>
@@ -828,15 +818,15 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension Assembly Order N24 - Action PostExpenseAndRevenue N24 - Property Caption</note>
         </trans-unit>
-        <trans-unit id="PageExtension 872741964 - Action 3890335003 - Method 1377591017 - NamedType 261446950" size-unit="char" translate="yes" xml:space="preserve" al-object-target="PageExtension 872741964">
-          <source>Do you want to post transfer of used items to in-production location and residue positive adjustment?</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension Assembly Order N24 - Action PostExpenseAndRevenue N24 - Method OnAction - NamedType PostTransferAdjustmentQst</note>
-        </trans-unit>
         <trans-unit id="PageExtension 872741964 - Action 3890335003 - Method 1377591017 - NamedType 2312853063" size-unit="char" translate="yes" xml:space="preserve" al-object-target="PageExtension 872741964">
           <source>The Assembly Order %1 is completed</source>
           <note from="Developer" annotates="general" priority="2">%1 - Assembly Order</note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension Assembly Order N24 - Action PostExpenseAndRevenue N24 - Method OnAction - NamedType OrderAssembledErr</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 872741964 - Action 3890335003 - Method 1377591017 - NamedType 261446950" size-unit="char" translate="yes" xml:space="preserve" al-object-target="PageExtension 872741964">
+          <source>Do you want to post transfer of used items to in-production location and residue positive adjustment?</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension Assembly Order N24 - Action PostExpenseAndRevenue N24 - Method OnAction - NamedType PostTransferAdjustmentQst</note>
         </trans-unit>
         <trans-unit id="PageExtension 872741964 - Change 3471137671 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1662713252">
           <source>Assembly Lines (Expense journal)</source>
@@ -898,6 +888,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension Posted Sales Invoice N24 - Control CommentsGroup N24 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="PageExtension 472243321 - Control 3211716062 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1056066689">
+          <source>Line Price for Unit Price Calculation</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension Sales Cr. Memo Subform N24 - Control Line Price for Unit Price Calculation N24 - Property Caption</note>
+        </trans-unit>
         <trans-unit id="PageExtension 1277577489 - Control 2391891585 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1708100201">
           <source>Comments</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -908,10 +903,20 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension Sales Invoice N24 - Control CommentsGroup N24 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="PageExtension 3988455021 - Control 3211716062 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3689007477">
+          <source>Line Price for Unit Price Calculation</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension Sales Invoice Subform N24 - Control Line Price for Unit Price Calculation N24 - Property Caption</note>
+        </trans-unit>
         <trans-unit id="PageExtension 2825037130 - Control 2391891585 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1673401186">
           <source>Comments</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension Sales Order N24 - Control CommentsGroup N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 3271611584 - Control 3211716062 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2026081320">
+          <source>Line Price for Unit Price Calculation</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension Sales Order Subform N24 - Control Line Price for Unit Price Calculation N24 - Property Caption</note>
         </trans-unit>
         <trans-unit id="PageExtension 1290364382 - Control 2391891585 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 280137910">
           <source>Comments</source>

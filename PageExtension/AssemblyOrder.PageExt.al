@@ -58,12 +58,12 @@ pageextension 50008 "Assembly Order N24" extends "Assembly Order"
                 var
                     AssemblyMgtN24: Codeunit "AssemblyMgt N24";
                     ConfirmManagement: Codeunit "Confirm Management";
-                    PostTransferAdjustmentQst: Label 'Do you want to post transfer of used items to in-production location and residue positive adjustment?';
                     OrderAssembledErr: Label 'The Assembly Order %1 is completed', Comment = '%1 - Assembly Order';
+                    PostTransferAdjustmentQst: Label 'Do you want to post transfer of used items to in-production location and residue positive adjustment?';
                 begin
                     if Rec."Remaining Quantity" = 0 then
                         Error(OrderAssembledErr, Rec."No.");
-                        
+
                     if ConfirmManagement.GetResponse(PostTransferAdjustmentQst, false) then begin
                         AssemblyMgtN24.PostTransferLines(Rec);
                         AssemblyMgtN24.PostResidueLines(Rec);

@@ -2,14 +2,14 @@ codeunit 50010 "ExternalDocumentNoMgt N24"
 {
     procedure ExternalDocumentNoWasUsed(ExternalDocumentNo: Code[35]; ShowMessage: Boolean): Boolean
     var
+        SalesCrMemoHeader: Record "Sales Cr.Memo Header";
         SalesHeader: Record "Sales Header";
         SalesInvHeader: Record "Sales Invoice Header";
-        SalesCrMemoHeader: Record "Sales Cr.Memo Header";
-        DocList: Text;
         DocCount: Integer;
-        FoundDocMsg: Label 'External Document No. %1 has been found in %2 documents:\', Comment = '%1 - Ext. Doc. No, %2 - No. of documents';
         DocList2ValuesTok: Label '\• %1 %2', Locked = true;
         DocList3ValuesTok: Label '\• %1, %2 %3', Locked = true;
+        FoundDocMsg: Label 'External Document No. %1 has been found in %2 documents:\', Comment = '%1 - Ext. Doc. No, %2 - No. of documents';
+        DocList: Text;
     begin
         if ExternalDocumentNo = '' then
             exit(false);
@@ -60,14 +60,14 @@ codeunit 50010 "ExternalDocumentNoMgt N24"
 
     procedure CheckExternalDocNoAlreadyExistsAndCreatenewSalesLine(var ToSalesLine: Record "Sales Line"; OldDocType: Option; OldDocNo: Code[20])
     var
-        SalesLine2: Record "Sales Line";
-        SalesShipmentHeader: Record "Sales Shipment Header";
-        SalesInvoiceHeader: Record "Sales Invoice Header";
         ReturnReceiptHeader: Record "Return Receipt Header";
         SalesCrMemoHeader: Record "Sales Cr.Memo Header";
+        SalesInvoiceHeader: Record "Sales Invoice Header";
+        SalesLine2: Record "Sales Line";
+        SalesShipmentHeader: Record "Sales Shipment Header";
         ExtDocNo: Code[35];
-        FromDocType: Option "Sales Shipment","Sales Invoice","Sales Return Receipt","Sales Credit Memo";
         ExtDocNoLbl: Label 'Ext. Document No. %1:', Comment = '%1 - Ext. Document No.';
+        FromDocType: Option "Sales Shipment","Sales Invoice","Sales Return Receipt","Sales Credit Memo";
     begin
         case (OldDocType - 1) of
             FromDocType::"Sales Shipment":

@@ -1,15 +1,7 @@
-pageextension 50018 "Sales Invoice Subform N24" extends "Sales Invoice Subform"
+pageextension 50072 "Sales Cr. Memo Subform N24" extends "Sales Cr. Memo Subform"
 {
     layout
     {
-        addafter("Line Amount")
-        {
-            field("Amount Including VAT N24"; Rec."Amount Including VAT")
-            {
-                ApplicationArea = All;
-                Editable = false;
-            }
-        }
         addbefore("Unit Price")
         {
             field("Line Price for Unit Price Calculation N24"; LinePriceForCalc)
@@ -27,13 +19,8 @@ pageextension 50018 "Sales Invoice Subform N24" extends "Sales Invoice Subform"
                 end;
             }
         }
-        movelast(Control1; "ITI PKWiU", "ITI Skip in VAT Register", "ITI Full VAT Base Amount", "Tax Area Code", "Tax Group Code")
-        modify("VAT Prod. Posting Group")
-        {
-            Visible = true;
-        }
     }
-
+    
     var
         LinePriceForCalc: Decimal;
 }

@@ -16,10 +16,10 @@ report 50001 "Order Profitability Excel N24"
         OrderProfitability: Report "Order Profitability N24";
         FileManagement: Codeunit "File Management";
         TempBlob: Codeunit "Temp Blob";
+        DateFormatTok: Label '<Year4><Month,2><Day,2><Hours24><Minutes,2><Seconds,2>', Locked = true;
+        FilePathTok: Label '%1_%2.xlsx', Locked = true;
         OutStr: OutStream;
         RequestPageParameters: Text;
-        FilePathTok: Label '%1_%2.xlsx', Locked = true;
-        DateFormatTok: Label '<Year4><Month,2><Day,2><Hours24><Minutes,2><Seconds,2>', Locked = true;
     begin
         RequestPageParameters := OrderProfitability.RunRequestPage();
 

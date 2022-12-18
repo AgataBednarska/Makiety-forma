@@ -8,7 +8,7 @@ tableextension 50016 "User Setup N24" extends "User Setup"
             Caption = 'Allow Skip Bank Ledger Entry';
         }
     }
-    
+
     procedure GetOrCreateUserSetup(): Record "User Setup"
     var
         UserSetup: Record "User Setup";

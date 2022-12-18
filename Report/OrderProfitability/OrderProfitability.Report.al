@@ -1,16 +1,17 @@
 report 50000 "Order Profitability N24"
 {
-    DefaultLayout = RDLC;
-    RDLCLayout = './Report/OrderProfitability/OrderProfitability.rdlc';
     Caption = 'Order Profitability';
+    DefaultLayout = RDLC;
     Permissions = tabledata "Document Buffer N24" = RIMD;
+    RDLCLayout = './Report/OrderProfitability/OrderProfitability.rdlc';
+    UsageCategory = None;
 
     dataset
     {
         dataitem(PostedAssemblyHeader; "Posted Assembly Header")
         {
-            RequestFilterFields = "No.", "External Document No. N24", "Order No.", "Posting Date";
             PrintOnlyIfDetail = true;
+            RequestFilterFields = "No.", "External Document No. N24", "Order No.", "Posting Date";
 
             column(PostedAssemblyHeader_No; "No.") { }
             column(PostedAssemblyHeader_ExternalDocumentNo; "External Document No. N24") { IncludeCaption = true; }
@@ -22,10 +23,10 @@ report 50000 "Order Profitability N24"
 
             dataitem(PostedAssemblyLine; "Posted Assembly Line")
             {
-                DataItemLinkReference = PostedAssemblyHeader;
-                DataItemLink = "Document No." = field("No.");
-                DataItemTableView = sorting("Document No.", "Line No.") where(Quantity = filter(<> 0));
                 CalcFields = "External Document No. N24";
+                DataItemLink = "Document No." = field("No.");
+                DataItemLinkReference = PostedAssemblyHeader;
+                DataItemTableView = sorting("Document No.", "Line No.") where(Quantity = filter(<> 0));
 
                 trigger OnPreDataItem()
                 begin
@@ -122,8 +123,8 @@ report 50000 "Order Profitability N24"
 
             dataitem(PostedATOLink; "Posted Assemble-to-Order Link")
             {
-                DataItemLinkReference = PostedAssemblyHeader;
                 DataItemLink = "Assembly Document No." = field("No.");
+                DataItemLinkReference = PostedAssemblyHeader;
                 DataItemTableView = sorting("Assembly Document Type", "Assembly Document No.")
                                     where("Assembly Document Type" = const(Assembly), "Document Type" = const("Sales Shipment"));
 
@@ -242,16 +243,16 @@ report 50000 "Order Profitability N24"
     }
 
     var
-        ConsumedItem: Record Item;
+        RWCustomer: Record Customer;
         AssembledItem: Record Item;
+        ConsumedItem: Record Item;
+        SalesInvoiceHeader: Record "Sales Invoice Header";
         SalesShipmentHeader: Record "Sales Shipment Header";
         SalesShipmentLine: Record "Sales Shipment Line";
         RWValueEntry: Record "Value Entry";
-        RWCustomer: Record Customer;
-        SalesInvoiceHeader: Record "Sales Invoice Header";
-        ConsumptionDates: Text;
         ConsumptionCost: Decimal;
-        LineAmountLCY: Decimal;
         HeaderAmountLCY: Decimal;
+        LineAmountLCY: Decimal;
         ConsumptionDatesJoinTok: Label ' / %1', Locked = true;
+        ConsumptionDates: Text;
 }

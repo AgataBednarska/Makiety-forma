@@ -174,16 +174,16 @@ report 50004 "Bank Exch. Diff. Report N24"
 
     var
         ITIGetAppNameAndVersion: Codeunit "ITI GetAppNameAndVersion";
-        AppliedOpt: Enum "BlankYesOption N24";
-        DifferencePostedOpt: Enum "BlankYesOption N24";
         EndDate: Date;
         VEndDateReq: Date;
+        VStartDate: Date;
         ExRate: Decimal;
         RealizedGains: Decimal;
         RealizedLosses: Decimal;
-        VStartDate: Date;
+        AppliedOpt: Enum "BlankYesOption N24";
+        DifferencePostedOpt: Enum "BlankYesOption N24";
         AppliedAmountLbl: Label 'Applied Amount';
-        DifferenceAmountLbl: Label 'Difference Amount';
         AppliedToEntryLbl: Label 'Applied to Entry';
         DateFormatLbl: Label '<Year4>-<Month,2>-<Day,2>', Locked = true;
+        DifferenceAmountLbl: Label 'Difference Amount';
 }

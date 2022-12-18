@@ -1,9 +1,10 @@
 report 50003 "Customer/Item Sales Total N24"
 {
-    DefaultLayout = RDLC;
-    RDLCLayout = './Report/CustomerItemSalesTotal/CustomerItemSalesTotal.rdlc';
     Caption = 'Customer/Item Sales with Total';
+    DefaultLayout = RDLC;
     PreviewMode = PrintLayout;
+    RDLCLayout = './Report/CustomerItemSalesTotal/CustomerItemSalesTotal.rdlc';
+    UsageCategory = None;
 
     dataset
     {
@@ -105,10 +106,10 @@ report 50003 "Customer/Item Sales Total N24"
 
                 trigger OnAfterGetRecord()
                 var
-                    ValueEntry: Record "Value Entry";
+                    PostedAssemblyHeader: Record "Posted Assembly Header";
                     SalesInvoiceHeader: Record "Sales Invoice Header";
                     SalesInvoiceLine: Record "Sales Invoice Line";
-                    PostedAssemblyHeader: Record "Posted Assembly Header";
+                    ValueEntry: Record "Value Entry";
                     EntryInBufferExists: Boolean;
                 begin
                     TempValueEntryBuffer.Init();
@@ -236,8 +237,8 @@ report 50003 "Customer/Item Sales Total N24"
 
                 dataitem(PostedAssemblyHeaderBuffer; "Posted Assembly Header")
                 {
-                    UseTemporary = true;
                     PrintOnlyIfDetail = true;
+                    UseTemporary = true;
 
                     column(AssyTest; StrSubstNo(ResidueExtDocNoTxt, "External Document No. N24")) { }
                     column(Residue_ExternalDocumentNo; "External Document No. N24") { }
@@ -245,9 +246,9 @@ report 50003 "Customer/Item Sales Total N24"
                     dataitem(ResItemLedgerEntry; "Item Ledger Entry")
                     {
 
+                        CalcFields = "Cost Amount (Actual)";
                         DataItemLink = "External Document No." = field("External Document No. N24");
                         DataItemTableView = sorting("Entry Type") where("Entry Type" = const("Positive Adjmt."), "Document Type" = const(" "));
-                        CalcFields = "Cost Amount (Actual)";
 
                         column(Residue_ItemNo; "Item No.") { }
                         column(ResItem_Description; ResItem.Description) { }
@@ -374,33 +375,33 @@ report 50003 "Customer/Item Sales Total N24"
     var
         Item: Record Item;
         ResItem: Record Item;
+        TempItemLedgerEntry: Record "Item Ledger Entry" temporary;
         TempResidueValueEntry: Record "Value Entry" temporary;
         TempValueEntryBuffer: Record "Value Entry" temporary;
-        TempItemLedgerEntry: Record "Item Ledger Entry" temporary;
-        CustFilter: Text;
-        ValueEntryFilter: Text;
-        PeriodText: Text;
+        IncludeOrderResidue: Boolean;
         PrintOnlyOnePerPage: Boolean;
         Profit: Decimal;
         ProfitPct: Decimal;
-        PeriodLbl: Label 'Period: %1', Comment = '%1 - Pieriod text';
-        Customer_Item_SalesCaptionLbl: Label 'Customer/Item Sales';
-        CurrReport_PAGENOCaptionLbl: Label 'Page';
+        ResidueAmount: Decimal;
         All_amounts_are_in_LCYCaptionLbl: Label 'All amounts are in LCY';
-        ValueEntryBuffer__Item_No__CaptionLbl: Label 'Item No.';
-        Item_DescriptionCaptionLbl: Label 'Description';
-        ValueEntryBuffer__Invoiced_Quantity_CaptionLbl: Label 'Invoiced Quantity';
+        CurrReport_PAGENOCaptionLbl: Label 'Page';
+        Customer_Item_SalesCaptionLbl: Label 'Customer/Item Sales';
+        EmptyReportDatasetTxt: Label 'There is nothing to print for the selected filters.';
         Item__Base_Unit_of_Measure_CaptionLbl: Label 'Unit of Measure';
-        ValueEntryBuffer__Sales_Amount__Actual___Control44CaptionLbl: Label 'Amount';
-        ValueEntryBuffer__Discount_Amount__Control45CaptionLbl: Label 'Discount Amount';
+        Item_DescriptionCaptionLbl: Label 'Description';
+        PeriodLbl: Label 'Period: %1', Comment = '%1 - Pieriod text';
         Profit_Control46CaptionLbl: Label 'Profit';
         ProfitPct_Control47CaptionLbl: Label 'Profit %';
-        TotalCaptionLbl: Label 'Total';
-        EmptyReportDatasetTxt: Label 'There is nothing to print for the selected filters.';
-        IncludeOrderResidue: Boolean;
-        OrderNo: Text;
         ResidueExtDocNoTxt: Label 'External Document No.: %1', Comment = '%1 - External Document No.';
-        ResidueAmount: Decimal;
+        TotalCaptionLbl: Label 'Total';
+        ValueEntryBuffer__Discount_Amount__Control45CaptionLbl: Label 'Discount Amount';
+        ValueEntryBuffer__Invoiced_Quantity_CaptionLbl: Label 'Invoiced Quantity';
+        ValueEntryBuffer__Item_No__CaptionLbl: Label 'Item No.';
+        ValueEntryBuffer__Sales_Amount__Actual___Control44CaptionLbl: Label 'Amount';
+        CustFilter: Text;
+        OrderNo: Text;
+        PeriodText: Text;
+        ValueEntryFilter: Text;
 
     procedure InitializeRequest(NewPagePerCustomer: Boolean)
     begin

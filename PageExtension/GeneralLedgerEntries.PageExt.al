@@ -6,7 +6,7 @@ pageextension 50004 "General Ledger Entries N24" extends "General Ledger Entries
         {
             Visible = true;
         }
-        
+
         moveafter("Document No."; "External Document No.")
     }
 }

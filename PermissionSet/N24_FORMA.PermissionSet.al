@@ -7,7 +7,6 @@ permissionset 50000 "N24_FORMA N24"
     Permissions =
          codeunit "App Mgt. Shared N24" = X,
          codeunit "AssemblyMgt N24" = X,
-         codeunit "AutoPurchSplitPaymentMgt N24" = X,
          codeunit "Constants N24" = X,
          codeunit "Custom Events N24" = X,
          codeunit "ExternalDocumentNoMgt N24" = X,

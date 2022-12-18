@@ -322,8 +322,6 @@ page 50000 "AssyOrderResidueSubform N24"
 
     var
         AssemblyHeader: Record "Assembly Header";
-        ItemDescription: Text[100];
-        ShortcutDimCode: array[8] of Code[20];
         DimVisible1: Boolean;
         DimVisible2: Boolean;
         DimVisible3: Boolean;
@@ -332,4 +330,6 @@ page 50000 "AssyOrderResidueSubform N24"
         DimVisible6: Boolean;
         DimVisible7: Boolean;
         DimVisible8: Boolean;
+        ShortcutDimCode: array[8] of Code[20];
+        ItemDescription: Text[100];
 }

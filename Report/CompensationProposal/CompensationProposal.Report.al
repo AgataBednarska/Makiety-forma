@@ -2,6 +2,7 @@ report 50002 "Compensation Proposal N24"
 {
     DefaultLayout = RDLC;
     RDLCLayout = './Report/CompensationProposal/CompensationProposal.rdlc';
+    UsageCategory = None;
 
     dataset
     {
@@ -172,42 +173,42 @@ report 50002 "Compensation Proposal N24"
     end;
 
     var
-        GenJnlLine: Record "Gen. Journal Line";
         CompanyInformation: Record "Company Information";
-        Customer: Record Customer;
-        Vendor: Record Vendor;
         CustLedgEntry: Record "Cust. Ledger Entry";
+        Customer: Record Customer;
+        GenJnlLine: Record "Gen. Journal Line";
+        Vendor: Record Vendor;
         VendorLedgerEntry: Record "Vendor Ledger Entry";
+        CustomerLine: Boolean;
         AppDocNo: Code[35];
         AmountInclVAT: Decimal;
         AccountType: Enum "Gen. Journal Account Type";
-        ProposalMainTitle: Text[250];
-        CompanyInfoText: Text[250];
-        CompanyNameText: Text[100];
-        ContractorInfoText: Text[250];
-        ContractorNameText: Text[100];
-        AppDocType: Text[30];
-        MonetaryClaimText1: Text[250];
-        MonetaryClaimText2: Text[250];
-        CustomerLine: Boolean;
+        AmountForCompensationTxt: Label 'Amount for Compensation';
+        AndLbl: Label 'and';
+        CompensationContainsLbl: Label 'Compensation contains and applies to the following:';
+        CompensationProposalMsg: Label 'If you confirm Compensation Proposal, please sign it and return one copy back.';
+        MonetaryClaim1Lbl: Label '1.   Monetary claim of company %1 to company %2 on basis of these documents:', Comment = '%1 - CompanyNameText, %2 - ContractorNameText';
+        MonetaryClaim2Lbl: Label '2.   Monetary claim of company %1 to company %2 on basis of these documents:', Comment = '%1 - CompanyNameText, %2 - ContractorNameText';
+        OnbehalfofLbl: Label 'On behalf of';
         Part_I_Txt: Label 'I.', Locked = true;
         Part_II_Txt: Label 'II.', Locked = true;
         Part_III_Txt: Label 'III.', Locked = true;
         Part_IV_Txt: Label 'IV.', Locked = true;
-        TotalLbl: Label 'Total:';
         ProposalMainTitleLbl: Label 'Compensation Proposal No. %1 of %2', Comment = '%1 - GenJournalLine."Document No.", %2 - GenJournalLine."Posting Date"';
-        UsingThisProposalLbl: Label 'Using this proposal we confirm that all legally required conditions have been satisfied for compensation of monetary claims between:';
-        CompensationContainsLbl: Label 'Compensation contains and applies to the following:';
-        MonetaryClaim1Lbl: Label '1.   Monetary claim of company %1 to company %2 on basis of these documents:', Comment = '%1 - CompanyNameText, %2 - ContractorNameText';
-        MonetaryClaim2Lbl: Label '2.   Monetary claim of company %1 to company %2 on basis of these documents:', Comment = '%1 - CompanyNameText, %2 - ContractorNameText';
-        TotalAmountLbl: Label 'Total amount in this compensation proposal is:';
-        CompensationProposalMsg: Label 'If you confirm Compensation Proposal, please sign it and return one copy back.';
-        OnbehalfofLbl: Label 'On behalf of';
+        RemainingAmountLbl: Label 'Remaining Amount';
         ResponsiblePersonLbl: Label 'Responsible Person: ____________________________';
         SignatureLbl: Label '(name, surname, signature)';
-        AndLbl: Label 'and';
-        AmountForCompensationTxt: Label 'Amount for Compensation';
-        RemainingAmountLbl: Label 'Remaining Amount';
+        TotalAmountLbl: Label 'Total amount in this compensation proposal is:';
+        TotalLbl: Label 'Total:';
+        UsingThisProposalLbl: Label 'Using this proposal we confirm that all legally required conditions have been satisfied for compensation of monetary claims between:';
+        AppDocType: Text[30];
+        CompanyNameText: Text[100];
+        ContractorNameText: Text[100];
+        CompanyInfoText: Text[250];
+        ContractorInfoText: Text[250];
+        MonetaryClaimText1: Text[250];
+        MonetaryClaimText2: Text[250];
+        ProposalMainTitle: Text[250];
 
     procedure SetGenJnlLine(TempGenJnlLine: Record "Gen. Journal Line");
     begin
@@ -248,7 +249,7 @@ report 50002 "Compensation Proposal N24"
             CustLedgEntry.SetRange("Document No.", GenJournalLine."Applies-to Doc. No.");
             if CustLedgEntry.FindFirst() then
                 CustLedgEntry.CalcFields("Remaining Amount");
-            
+
             AmountInclVAT := CustLedgEntry."Remaining Amount";
             CustomerLine := true;
             GenJournalLine.Amount := -GenJournalLine.Amount;
@@ -266,10 +267,10 @@ report 50002 "Compensation Proposal N24"
 
             if Vendor.City <> '' then
                 ContractorInfoText := CopyStr(ContractorInfoText + ', ' + Vendor.City, 1, MaxStrLen(ContractorInfoText));
-            
+
             if Vendor.Address <> '' then
                 ContractorInfoText := CopyStr(ContractorInfoText + ', ' + Vendor.Address, 1, MaxStrLen(ContractorInfoText));
-            
+
             if Vendor."Address 2" <> '' then
                 ContractorInfoText := CopyStr(ContractorInfoText + ', ' + Vendor."Address 2", 1, MaxStrLen(ContractorInfoText));
 
@@ -278,7 +279,7 @@ report 50002 "Compensation Proposal N24"
             VendorLedgerEntry.SetRange("Document No.", GenJournalLine."Applies-to Doc. No.");
             if VendorLedgerEntry.FindFirst() then
                 VendorLedgerEntry.CalcFields("Remaining Amount");
-            
+
             AmountInclVAT := -VendorLedgerEntry."Remaining Amount";
             CustomerLine := false;
         end;

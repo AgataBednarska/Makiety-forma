@@ -1,7 +1,7 @@
 enum 50002 "SetWantedForMatrix N24"
 {
     Extensible = true;
-    
+
     value(0; Initial)
     {
         Caption = 'Initial', Locked = true;

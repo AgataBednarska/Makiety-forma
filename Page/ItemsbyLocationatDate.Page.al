@@ -125,19 +125,19 @@ page 50001 "Items by Location at Date N24"
     end;
 
     var
-        TempMatrixLocation: Record Location temporary;
         MatrixRecords: array[32] of Record Location;
+        TempMatrixLocation: Record Location temporary;
         MatrixRecordRef: RecordRef;
-        SetWantedForMatrix: Enum "SetWantedForMatrix N24";
-        MATRIX_CaptionSet: array[32] of Text[80];
         ShowColumnName: Boolean;
         ShowInTransit: Boolean;
+        InventoryAtDate: Date;
+        SetWantedForMatrix: Enum "SetWantedForMatrix N24";
+        MATRIX_CurrSetLength: Integer;
+        UnspecifiedLocationCodeTxt: Label 'UNSPECIFIED', Comment = 'Code for unspecified location';
+        InventoryDateFilter: Text;
         MATRIX_CaptionRange: Text;
         MATRIX_PKFirstRecInCurrSet: Text;
-        MATRIX_CurrSetLength: Integer;
-        InventoryDateFilter: Text;
-        InventoryAtDate: Date;
-        UnspecifiedLocationCodeTxt: Label 'UNSPECIFIED', Comment = 'Code for unspecified location';
+        MATRIX_CaptionSet: array[32] of Text[80];
 
     procedure SetColumns(SetWantedForMatrixValue: Enum "SetWantedForMatrix N24")
     var

@@ -13,7 +13,7 @@ tableextension 50004 "Assembly Setup N24" extends "Assembly Setup"
             begin
                 "Item Journal Tmpl. Residue N24" := TemplateSelection(ItemJournalTemplate, Page::"Item Journal", 0);
 
-                if "Item Journal Batch Residue N24" = '' then
+                if "Item Journal Tmpl. Residue N24" = '' then
                     Error('');
 
                 BatchSelection(ItemJournalTemplate.Name, "Item Journal Batch Residue N24");
@@ -36,8 +36,8 @@ tableextension 50004 "Assembly Setup N24" extends "Assembly Setup"
         field(50001; "Def. Location for Residue N24"; Code[10])
         {
             Caption = 'Default Location for Residue';
-            TableRelation = Location.Code;
             DataClassification = CustomerContent;
+            TableRelation = Location.Code;
         }
 
         field(50002; "Item Journal Tmpl. Residue N24"; Code[10])
@@ -49,20 +49,20 @@ tableextension 50004 "Assembly Setup N24" extends "Assembly Setup"
         field(50003; "Def. Location for Material N24"; Code[20])
         {
             Caption = 'Default Location for Material';
-            TableRelation = Location.Code;
             DataClassification = CustomerContent;
+            TableRelation = Location.Code;
         }
         field(50004; "In-Production Location N24"; Code[20])
         {
             Caption = 'In-Production Location';
-            TableRelation = Location.Code;
             DataClassification = CustomerContent;
+            TableRelation = Location.Code;
         }
         field(50005; "Def.Gen.Bus.Post.Gr. Adjmt N24"; Code[20])
         {
             Caption = 'Def. Gen. Bus. Post. Gr. for Adjustments';
-            TableRelation = "Gen. Business Posting Group".Code;
             DataClassification = CustomerContent;
+            TableRelation = "Gen. Business Posting Group".Code;
         }
     }
 
@@ -105,7 +105,7 @@ tableextension 50004 "Assembly Setup N24" extends "Assembly Setup"
         ItemJnlBatch.FilterGroup(2);
         ItemJnlBatch.SetRange("Journal Template Name", ItemJnlTemplateName);
         ItemJnlBatch.FilterGroup(0);
-        
+
         if Page.RunModal(0, ItemJnlBatch) = Action::LookupOK then
             CurrentJnlBatchName := ItemJnlBatch.Name;
     end;

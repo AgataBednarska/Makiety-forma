@@ -38,12 +38,12 @@ report 50006 "FindPurchHdrsByLineFilter N24"
     begin
         if TempPurchInvHeader.FindSet() then begin
             DocumentNoFilter := TempPurchInvHeader."No.";
-            
+
             if TempPurchInvHeader.Next() <> 0 then
                 repeat
                     DocumentNoFilter += '|' + TempPurchInvHeader."No.";
                 until TempPurchInvHeader.Next() = 0;
-            
+
             FilteredPurchInvHeader.SetFilter("No.", DocumentNoFilter);
         end;
     end;
@@ -54,6 +54,6 @@ report 50006 "FindPurchHdrsByLineFilter N24"
     end;
 
     var
-        TempPurchInvHeader: Record "Purch. Inv. Header" temporary;
         FilteredPurchInvHeader: Record "Purch. Inv. Header";
+        TempPurchInvHeader: Record "Purch. Inv. Header" temporary;
 }

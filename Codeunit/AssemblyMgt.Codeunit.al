@@ -26,8 +26,8 @@ codeunit 50011 "AssemblyMgt N24"
 
     procedure PostResidueLines(var AssemblyHeader: Record "Assembly Header")
     var
-        ItemJnlLine: Record "Item Journal Line";
         AssemblySetup: Record "Assembly Setup";
+        ItemJnlLine: Record "Item Journal Line";
         ItemJnlPostLine: Codeunit "Item Jnl.-Post Line";
     begin
         AssemblySetup.Get();
@@ -45,9 +45,9 @@ codeunit 50011 "AssemblyMgt N24"
 
     procedure PostTransferLines(var AssemblyHeader: Record "Assembly Header")
     var
-        TempItemJournalLine: Record "Item Journal Line" temporary;
         AssemblyLine: Record "Assembly Line";
         AssemblySetup: Record "Assembly Setup";
+        TempItemJournalLine: Record "Item Journal Line" temporary;
         ItemJnlPostLine: Codeunit "Item Jnl.-Post Line";
         QtyToTransfer: Decimal;
     begin
@@ -83,12 +83,13 @@ codeunit 50011 "AssemblyMgt N24"
         ItemJournalLine.Init();
         ItemJournalLine."Line No." := LineNo;
 
+        AssemblySetup.Get();
+
         ItemJournalLine."Journal Template Name" := AssemblySetup."Item Journal Tmpl. Residue N24";
         ItemJournalLine."Journal Batch Name" := AssemblySetup."Item Journal Batch Residue N24";
 
         ItemJournalLine.Validate("Posting Date", WorkDate());
 
-        AssemblySetup.Get();
 
         AssemblySetup.TestField("Def.Gen.Bus.Post.Gr. Adjmt N24");
 
@@ -111,6 +112,8 @@ codeunit 50011 "AssemblyMgt N24"
         AssemblyLine2: Record "Assembly Line";
         AssemblySetup: Record "Assembly Setup";
     begin
+        AssemblySetup.Get();
+
         AssemblyLine2.Copy(AssemblyLine);
 
         AssemblyLine.SetRange("Document Type", AssemblyLine."Document Type");
@@ -138,8 +141,8 @@ codeunit 50011 "AssemblyMgt N24"
 
     procedure UpdateResidueJournalLines(AssemblyHeader: Record "Assembly Header"; ResidueItemJnlLine: Record "Item Journal Line")
     var
-        ItemJnlLine: Record "Item Journal Line";
         AssemblyLine: Record "Assembly Line";
+        ItemJnlLine: Record "Item Journal Line";
         ResidueItemNo: Code[20];
         ResidueUnitAmount: Decimal;
     begin
@@ -184,8 +187,8 @@ codeunit 50011 "AssemblyMgt N24"
 
     procedure UpdateAssemblyLinesWithDefaultLocation(AssemblyHeader: Record "Assembly Header")
     var
-        AssemblySetup: Record "Assembly Setup";
         AssemblyLine: Record "Assembly Line";
+        AssemblySetup: Record "Assembly Setup";
     begin
         AssemblySetup.Get();
         AssemblyLine.SetRange("Document No.", AssemblyHeader."No.");
@@ -196,8 +199,8 @@ codeunit 50011 "AssemblyMgt N24"
 
     procedure GetATOExternalDocumentNo(AssemblyHeader: Record "Assembly Header"): Code[35]
     var
-        SalesHeader: Record "Sales Header";
         ATOLink: Record "Assemble-to-Order Link";
+        SalesHeader: Record "Sales Header";
     begin
         if not AssemblyHeader.IsAsmToOrder() then
             exit;
@@ -211,8 +214,8 @@ codeunit 50011 "AssemblyMgt N24"
 
     procedure TestATOReleased(SalesHeader: Record "Sales Header")
     var
-        SalesLine: Record "Sales Line";
         AssemblyHeader: Record "Assembly Header";
+        SalesLine: Record "Sales Line";
     begin
         if (SalesHeader."Document Type" <> "Sales Document Type"::Order) and (not SalesHeader.Ship) then
             exit;
@@ -230,12 +233,12 @@ codeunit 50011 "AssemblyMgt N24"
 
     procedure SetHeaderDimensionsFromInventoryAdjmtAccount(var AssemblyHeader: Record "Assembly Header"; UpdateLines: Boolean)
     var
+        AsmLine: Record "Assembly Line";
         DefaultDimension: Record "Default Dimension";
         TempDimSetEntry: Record "Dimension Set Entry" temporary;
-        AsmLine: Record "Assembly Line";
         DimMgt: Codeunit DimensionManagement;
-        OldDimSet: Integer;
         NewDimSet: Integer;
+        OldDimSet: Integer;
     begin
         DefaultDimension.SetRange("Table ID", Database::"G/L Account");
         DefaultDimension.SetRange("No.", GetInventoryAdjustmentAccount(AssemblyHeader));
@@ -270,10 +273,10 @@ codeunit 50011 "AssemblyMgt N24"
 
     procedure SetResidueDimensionsFromInventoryAdjmtAccount(var AssemblyHeader: Record "Assembly Header")
     var
-        DefaultDimension: Record "Default Dimension";
-        ItemJnlLine: Record "Item Journal Line";
         AssemblySetup: Record "Assembly Setup";
+        DefaultDimension: Record "Default Dimension";
         GLSetup: Record "General Ledger Setup";
+        ItemJnlLine: Record "Item Journal Line";
     begin
         AssemblySetup.Get();
         GLSetup.Get();
@@ -303,9 +306,9 @@ codeunit 50011 "AssemblyMgt N24"
 
     procedure UpdateResidueDimensionsFromAssemblyHeader(var AssemblyHeader: Record "Assembly Header")
     var
-        ItemJnlLine: Record "Item Journal Line";
         AssemblySetup: Record "Assembly Setup";
         GLSetup: Record "General Ledger Setup";
+        ItemJnlLine: Record "Item Journal Line";
     begin
         AssemblySetup.Get();
         GLSetup.Get();
@@ -317,16 +320,18 @@ codeunit 50011 "AssemblyMgt N24"
         if ItemJnlLine.FindSet() then
             repeat
                 ItemJnlLine.CopyDim(AssemblyHeader."Dimension Set ID");
+
                 ItemJnlLine.Modify();
+
             until ItemJnlLine.Next() = 0;
     end;
 
     local procedure GetInventoryAdjustmentAccount(AssemblyHeader: Record "Assembly Header"): Code[20]
     var
-        GenPostSetup: Record "General Posting Setup";
         GLAccount: Record "G/L Account";
-        GLAccountTok: Label '4111', Locked = true;
+        GenPostSetup: Record "General Posting Setup";
         GLAccount2Tok: Label '411-1', Locked = true;
+        GLAccountTok: Label '4111', Locked = true;
     begin
         if (not GLAccount.Get(GLAccount2Tok)) and (not GLAccount.Get(GLAccountTok)) then
             exit;
@@ -340,8 +345,8 @@ codeunit 50011 "AssemblyMgt N24"
     procedure CheckAssemblyBeforValidateExtDocumentNo(SalesHeader: Record "Sales Header")
     var
         AssembletoOrderLink: Record "Assemble-to-Order Link";
-        ExternalDocumentNoMgt: Codeunit "ExternalDocumentNoMgt N24";
         ConfirmManagement: Codeunit "Confirm Management";
+        ExternalDocumentNoMgt: Codeunit "ExternalDocumentNoMgt N24";
         UpdateQst: Label 'Field %1 will not be updated on related assembly orders.\Do you want to continue?', Comment = '%1 - "External Document No." caption';
     begin
         ExternalDocumentNoMgt.ExternalDocumentNoWasUsed(SalesHeader."External Document No.", true);
@@ -395,8 +400,8 @@ codeunit 50011 "AssemblyMgt N24"
     procedure NotifyIfLocationisInProduction(AssemblyLine: Record "Assembly Line"; UpdateLocation: Boolean; UpdateQuantity: Boolean; UpdateUOM: Boolean)
     var
         AssemblySetup: Record "Assembly Setup";
-        UpdateLineErr: Label 'You could not update %1 because assembly order is in progress or completed', Comment = '%1 - Location Code';
         NoAssemblySetupErr: Label 'No assembly setup exists';
+        UpdateLineErr: Label 'You could not update %1 because assembly order is in progress or completed', Comment = '%1 - Location Code';
     begin
         if not AssemblySetup.Get() then
             Error(NoAssemblySetupErr);
@@ -404,10 +409,10 @@ codeunit 50011 "AssemblyMgt N24"
         if AssemblyLine."Location Code" = AssemblySetup."In-Production Location N24" then begin
             if UpdateLocation then
                 Error(UpdateLineErr, AssemblyLine.FieldCaption("Location Code"));
-            
+
             if UpdateQuantity then
                 Error(UpdateLineErr, AssemblyLine.FieldCaption(Quantity));
-            
+
             if UpdateUOM then
                 Error(UpdateLineErr, AssemblyLine.FieldCaption("Unit of Measure Code"));
         end;

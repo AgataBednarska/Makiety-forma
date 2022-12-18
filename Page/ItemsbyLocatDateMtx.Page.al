@@ -574,13 +574,9 @@ page 50002 "Items by Loc. at Date Mtx N24"
 
     var
         ItemLedgerEntry: Record "Item Ledger Entry";
-        TempMatrixLocation: Record Location temporary;
         MatrixRecords: array[32] of Record Location;
+        TempMatrixLocation: Record Location temporary;
         ItemAvailFormsMgt: Codeunit "Item Availability Forms Mgt";
-        MATRIX_CellData: array[32] of Decimal;
-        MATRIX_ColumnCaption: array[32] of Text[1024];
-        MATRIX_NoOfMatrixColumns: Integer;
-        MATRIX_CurrSetLength: Integer;
         [InDataSet]
         Field1Visible: Boolean;
         [InDataSet]
@@ -645,7 +641,11 @@ page 50002 "Items by Loc. at Date Mtx N24"
         Field31Visible: Boolean;
         [InDataSet]
         Field32Visible: Boolean;
+        MATRIX_CellData: array[32] of Decimal;
+        MATRIX_CurrSetLength: Integer;
+        MATRIX_NoOfMatrixColumns: Integer;
         gDateFilter: Text;
+        MATRIX_ColumnCaption: array[32] of Text[1024];
 
     local procedure MATRIX_OnAfterGetRecord(ColumnID: Integer)
     var

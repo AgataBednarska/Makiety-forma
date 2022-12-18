@@ -2,12 +2,12 @@ codeunit 50006 "PurchaseMgt N24"
 {
     procedure CheckPurchaseDocumentDimensions(PurchaseHeader: Record "Purchase Header")
     var
-        TempPurchaseLine: Record "Purchase Line" temporary;
         TempErrorMessage: Record "Error Message" temporary;
+        TempPurchaseLine: Record "Purchase Line" temporary;
         CheckDimensions: Codeunit "Check Dimensions";
-        PurchPost: Codeunit "Purch.-Post";
         ErrorMessageHandler: Codeunit "Error Message Handler";
         ErrorMessageMgt: Codeunit "Error Message Management";
+        PurchPost: Codeunit "Purch.-Post";
     begin
         ErrorMessageMgt.Activate(ErrorMessageHandler);
 
@@ -23,8 +23,8 @@ codeunit 50006 "PurchaseMgt N24"
 
     procedure RemoveInvoicedOrdersOfPostedInvoice(PurchInvHdrNo: Code[20])
     var
-        PurchHeaders: Record "Purchase Header";
         PurchInvLine: Record "Purch. Inv. Line";
+        PurchHeaders: Record "Purchase Header";
         DeleteInvoicedPurchOrders: Report "Delete Invoiced Purch. Orders";
         OrderNoFilter: Text;
     begin
@@ -38,7 +38,7 @@ codeunit 50006 "PurchaseMgt N24"
                         else
                             OrderNoFilter += '|' + PurchInvLine."Order No.";
             until PurchInvLine.Next() = 0;
-        
+
         if OrderNoFilter = '' then
             exit;
 

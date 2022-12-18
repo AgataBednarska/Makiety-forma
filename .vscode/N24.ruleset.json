@@ -72,6 +72,11 @@
             "id": "AS0052",
             "action": "Hidden",
             "justification": "The property 'url' must be set to a valid URL."
+        },
+        {
+            "id": "LC0023",
+            "action": "Hidden",
+            "justification": "Fieldgroup Brick or DropDown is missing on table"
         }
     ]
 }
