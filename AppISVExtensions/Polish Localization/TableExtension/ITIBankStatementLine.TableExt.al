@@ -2,7 +2,7 @@ tableextension 50025 "ITI Bank Statement Line N24" extends "ITI Bank Statement L
 {
     fields
     {
-        field(50000; "Salespers./Purch. Code N24"; Code[20])
+        field(50002; "Salespers./Purch. Code N24"; Code[20])
         {
             Caption = 'Salespers./Purch. Code';
             DataClassification = CustomerContent;
