@@ -33,5 +33,17 @@ pageextension 50022 "Bank Account Card N24" extends "Bank Account Card"
                 end;
             }
         }
+        modify(ITIAdjustBankAccExchangeRates)
+        {
+            Enabled = TempBlockade;
+            Visible = TempBlockade;
+        }
     }
+    trigger OnOpenPage()
+    begin
+        TempBlockade := false;
+    end;
+
+    var
+        TempBlockade: Boolean;
 }
