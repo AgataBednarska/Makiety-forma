@@ -2,7 +2,7 @@ codeunit 50008 "FinancialMgt N24"
 {
     Permissions = tabledata "Bank Account Ledger Entry" = m;
 
-    procedure AssignPostingDescriptionToGLFromPurchaseLine(var PurchaseLine: Record "Purchase Line"; var InvoicePostingBuffer: Record "Invoice Posting Buffer")
+    procedure AssignPostingDescriptionToGLFromPurchaseLine(var PurchaseLine: Record "Purchase Line"; var InvoicePostBuffer: Record "Invoice Post. Buffer")
     var
         PurchasesPayablesSetup: Record "Purchases & Payables Setup";
     begin
@@ -12,7 +12,7 @@ codeunit 50008 "FinancialMgt N24"
         PurchasesPayablesSetup.Get();
 
         if PurchasesPayablesSetup."GLAcc. Line Post. Desc. N24" then
-            InvoicePostingBuffer."Entry Description" := PurchaseLine.Description;
+            InvoicePostBuffer."Entry Description" := PurchaseLine.Description;
     end;
 
     procedure EditBankLedgerEntry(var Rec: Record "Bank Account Ledger Entry")

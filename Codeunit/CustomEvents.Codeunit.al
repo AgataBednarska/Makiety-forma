@@ -269,11 +269,11 @@ codeunit 50000 "Custom Events N24"
         AssemblyMgtN24.SetResidueDimensionsFromInventoryAdjmtAccount(Rec);
     end;
 
-    [EventSubscriber(ObjectType::Table, Database::"Invoice Posting Buffer", 'OnAfterPreparePurchase', '', false, false)]
-    local procedure OnAfterInvPostBufferPreparePurchase(var PurchaseLine: Record "Purchase Line"; var InvoicePostingBuffer: Record "Invoice Posting Buffer")
+    [EventSubscriber(ObjectType::Table, Database::"Invoice Post. Buffer", 'OnAfterInvPostBufferPreparePurchase', '', false, false)]
+    local procedure OnAfterInvPostBufferPreparePurchase(var PurchaseLine: Record "Purchase Line"; var InvoicePostBuffer: Record "Invoice Post. Buffer")
     var
         FinancialMgt: Codeunit "FinancialMgt N24";
     begin
-        FinancialMgt.AssignPostingDescriptionToGLFromPurchaseLine(PurchaseLine, InvoicePostingBuffer);
+        FinancialMgt.AssignPostingDescriptionToGLFromPurchaseLine(PurchaseLine, InvoicePostBuffer);
     end;
 }
