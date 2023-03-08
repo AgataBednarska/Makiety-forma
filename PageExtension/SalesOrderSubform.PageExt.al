@@ -26,7 +26,7 @@ pageextension 50002 "Sales Order Subform N24" extends "Sales Order Subform"
                 begin
                     if LinePriceForCalc <> 0 then
                         Rec.Validate("Unit Price", Round(LinePriceForCalc / Rec.Quantity, 0.01, '='));
-                    
+
                     LinePriceForCalc := 0;
                 end;
             }

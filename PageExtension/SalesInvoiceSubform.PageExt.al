@@ -22,7 +22,7 @@ pageextension 50018 "Sales Invoice Subform N24" extends "Sales Invoice Subform"
                 begin
                     if LinePriceForCalc <> 0 then
                         Rec.Validate("Unit Price", Round(LinePriceForCalc / Rec.Quantity, 0.01, '='));
-                    
+
                     LinePriceForCalc := 0;
                 end;
             }

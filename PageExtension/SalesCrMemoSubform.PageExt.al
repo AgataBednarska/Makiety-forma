@@ -14,13 +14,13 @@ pageextension 50072 "Sales Cr. Memo Subform N24" extends "Sales Cr. Memo Subform
                 begin
                     if LinePriceForCalc <> 0 then
                         Rec.Validate("Unit Price", Round(LinePriceForCalc / Rec.Quantity, 0.01, '='));
-                    
+
                     LinePriceForCalc := 0;
                 end;
             }
         }
     }
-    
+
     var
         LinePriceForCalc: Decimal;
 }
