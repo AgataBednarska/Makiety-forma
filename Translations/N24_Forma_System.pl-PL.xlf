@@ -1257,6 +1257,12 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension Gen. Journal Line N24 - Field Exchange Rate Diff. N24 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="TableExtension 3064189823 - Field 893472558 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1806786327">
+          <source>Salespers./Purch. Code</source>
+          <target state="translated">Kod sprzedawcy/kupującego</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Gen. Journal Line N24 - Field Salespers./Purch. Code N24 - Property Caption</note>
+        </trans-unit>
         <trans-unit id="TableExtension 3434176079 - Field 221054621 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3276313895">
           <source>Inventory at Date</source>
           <target state="translated">Zapasy na dzień</target>
@@ -1494,7 +1500,6 @@
         <trans-unit id="ReportExtension 1334742164 - RequestPageExtension 3572606749 - Method 716454850 - NamedType 3941846598" size-unit="char" translate="yes" xml:space="preserve" al-object-target="ReportExtension 1334742164">
           <source>You cannot use IT Integro functionality because of installed NAV24 functionality</source>
           <target state="translated">Nie można użyć funkcjonalności IT Integro ze względu na zainstalowaną funkcjonalność NAV24.</target>
-          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">ReportExtension ITIAdjustBankAccExch N24 - RequestPageExtension RequestPageExtension - Method OnOpenPage - NamedType ErrorLbl</note>
         </trans-unit>

@@ -1048,6 +1048,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension Gen. Journal Line N24 - Field Exchange Rate Diff. N24 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="TableExtension 3064189823 - Field 893472558 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1806786327">
+          <source>Salespers./Purch. Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Gen. Journal Line N24 - Field Salespers./Purch. Code N24 - Property Caption</note>
+        </trans-unit>
         <trans-unit id="TableExtension 3434176079 - Field 221054621 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3276313895">
           <source>Inventory at Date</source>
           <note from="Developer" annotates="general" priority="2"></note>

@@ -31,4 +31,9 @@ codeunit 50008 "FinancialMgt N24"
 
         Rec := BankAccLedgEntry;
     end;
+
+    procedure TransferSalespersonCode(var GenJnlLine: Record "Gen. Journal Line")
+    begin
+        GenJnlLine."Salespers./Purch. Code" := GenJnlLine."Salespers./Purch. Code N24";
+    end;
 }
