@@ -1,4 +1,4 @@
-tableextension 50023 "Customer N24" extends Customer
+tableextension 50123 "Customer N24" extends Customer
 {
     fieldgroups
     {

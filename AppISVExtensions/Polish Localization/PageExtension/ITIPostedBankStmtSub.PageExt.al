@@ -1,4 +1,4 @@
-pageextension 50071 "ITI Posted Bank Stmt. Sub. N24" extends "ITI Posted Bank Stmt. Subform"
+pageextension 50171 "ITI Posted Bank Stmt. Sub. N24" extends "ITI Posted Bank Stmt. Subform"
 {
     layout
     {

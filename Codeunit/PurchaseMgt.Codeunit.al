@@ -1,4 +1,4 @@
-codeunit 50006 "PurchaseMgt N24"
+codeunit 50106 "PurchaseMgt N24"
 {
     procedure CheckPurchaseDocumentDimensions(PurchaseHeader: Record "Purchase Header")
     var

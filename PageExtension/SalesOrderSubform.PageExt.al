@@ -1,4 +1,4 @@
-pageextension 50002 "Sales Order Subform N24" extends "Sales Order Subform"
+pageextension 50102 "Sales Order Subform N24" extends "Sales Order Subform"
 {
     layout
     {
@@ -18,9 +18,9 @@ pageextension 50002 "Sales Order Subform N24" extends "Sales Order Subform"
         {
             field("Line Price for Unit Price Calculation N24"; LinePriceForCalc)
             {
-                Caption = 'Line Price for Unit Price Calculation';
                 ApplicationArea = All;
                 BlankZero = true;
+                Caption = 'Line Price for Unit Price Calculation';
 
                 trigger OnValidate()
                 begin

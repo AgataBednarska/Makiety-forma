@@ -1,4 +1,4 @@
-enum 50003 "BlankYesOption N24"
+enum 50103 "BlankYesOption N24"
 {
     Extensible = true;
 

@@ -1,4 +1,4 @@
-codeunit 50004 "Constants N24"
+codeunit 50104 "Constants N24"
 {
     SingleInstance = true;
 

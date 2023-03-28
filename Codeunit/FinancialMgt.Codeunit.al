@@ -1,4 +1,4 @@
-codeunit 50008 "FinancialMgt N24"
+codeunit 50108 "FinancialMgt N24"
 {
     Permissions = tabledata "Bank Account Ledger Entry" = m;
 

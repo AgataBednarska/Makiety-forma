@@ -1,4 +1,4 @@
-pageextension 50030 "Get Return Shipment Lines N24" extends "Get Return Shipment Lines"
+pageextension 50130 "Get Return Shipment Lines N24" extends "Get Return Shipment Lines"
 {
     layout
     {

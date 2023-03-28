@@ -1,4 +1,4 @@
-pageextension 50023 "Posted Sales Shipments N24" extends "Posted Sales Shipments"
+pageextension 50123 "Posted Sales Shipments N24" extends "Posted Sales Shipments"
 {
     layout
     {

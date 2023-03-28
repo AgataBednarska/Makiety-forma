@@ -1,4 +1,4 @@
-pageextension 50016 "Posted Sales Credit Memo N24" extends "Posted Sales Credit Memo"
+pageextension 50116 "Posted Sales Credit Memo N24" extends "Posted Sales Credit Memo"
 {
     layout
     {

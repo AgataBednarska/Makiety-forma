@@ -1,5 +1,6 @@
-page 50001 "Items by Location at Date N24"
+page 50101 "Items by Location at Date N24"
 {
+    ApplicationArea = All;
     Caption = 'Items by Location at Date';
     DataCaptionExpression = '';
     DeleteAllowed = false;
@@ -9,7 +10,6 @@ page 50001 "Items by Location at Date N24"
     SaveValues = true;
     SourceTable = Item;
     UsageCategory = ReportsAndAnalysis;
-    ApplicationArea = All;
 
     layout
     {
@@ -49,8 +49,8 @@ page 50001 "Items by Location at Date N24"
                 }
                 field(InventoryAtDate; InventoryAtDate)
                 {
-                    Caption = 'Inventory at Date';
                     ApplicationArea = Location;
+                    Caption = 'Inventory at Date';
 
                     trigger OnValidate();
                     var

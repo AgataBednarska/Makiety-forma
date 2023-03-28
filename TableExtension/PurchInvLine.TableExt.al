@@ -1,13 +1,13 @@
-tableextension 50014 "Purch. Inv. Line N24" extends "Purch. Inv. Line"
+tableextension 50114 "Purch. Inv. Line N24" extends "Purch. Inv. Line"
 {
     fields
     {
-        field(50000; "SAFT Ext. Document No. N24"; Code[250])
+        field(50100; "SAFT Ext. Document No. N24"; Code[250])
         {
+            CalcFormula = lookup("Purch. Inv. Header"."Vendor Invoice No." where("No." = field("Document No.")));
             Caption = 'SAFT Ext. Document No.';
             Editable = false;
             FieldClass = FlowField;
-            CalcFormula = lookup("Purch. Inv. Header"."Vendor Invoice No." where("No." = field("Document No.")));
         }
     }
 }

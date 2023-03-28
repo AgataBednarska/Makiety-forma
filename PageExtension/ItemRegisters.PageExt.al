@@ -1,4 +1,4 @@
-pageextension 50067 "Item Registers N24" extends "Item Registers"
+pageextension 50167 "Item Registers N24" extends "Item Registers"
 {
     actions
     {
@@ -6,8 +6,8 @@ pageextension 50067 "Item Registers N24" extends "Item Registers"
         {
             action("QuantityRegister N24")
             {
-                Caption = 'Item Register - Quantity';
                 ApplicationArea = All;
+                Caption = 'Item Register - Quantity';
                 Image = ItemRegisters;
                 Promoted = true;
                 PromotedCategory = Report;
@@ -24,8 +24,8 @@ pageextension 50067 "Item Registers N24" extends "Item Registers"
             }
             action("ValueRegister N24")
             {
-                Caption = 'Item Register - Value';
                 ApplicationArea = All;
+                Caption = 'Item Register - Value';
                 Image = JobRegisters;
                 Promoted = true;
                 PromotedCategory = Report;

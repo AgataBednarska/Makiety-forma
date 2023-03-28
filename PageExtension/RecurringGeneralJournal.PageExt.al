@@ -1,4 +1,4 @@
-pageextension 50033 "Recurring General Journal N24" extends "Recurring General Journal"
+pageextension 50133 "Recurring General Journal N24" extends "Recurring General Journal"
 {
     layout
     {

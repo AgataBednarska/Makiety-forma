@@ -1,4 +1,4 @@
-pageextension 50022 "Bank Account Card N24" extends "Bank Account Card"
+pageextension 50122 "Bank Account Card N24" extends "Bank Account Card"
 {
     actions
     {

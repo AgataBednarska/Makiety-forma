@@ -1,4 +1,4 @@
-codeunit 50011 "AssemblyMgt N24"
+codeunit 50110 "AssemblyMgt N24"
 {
     procedure SetNewResidueRecord(var ItemJnlLine: Record "Item Journal Line"; AssemblyHeader: Record "Assembly Header")
     var

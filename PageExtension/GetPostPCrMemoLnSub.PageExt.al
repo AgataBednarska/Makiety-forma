@@ -1,4 +1,4 @@
-pageextension 50056 "Get Post. P.Cr.MemoLn Sub. N24" extends "Get Post.Doc-P.Cr.MemoLn Sbfrm"
+pageextension 50156 "Get Post. P.Cr.MemoLn Sub. N24" extends "Get Post.Doc-P.Cr.MemoLn Sbfrm"
 {
     layout
     {

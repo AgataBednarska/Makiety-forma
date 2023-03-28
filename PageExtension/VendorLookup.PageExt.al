@@ -1,4 +1,4 @@
-pageextension 50068 "Vendor Lookup N24" extends "Vendor Lookup"
+pageextension 50168 "Vendor Lookup N24" extends "Vendor Lookup"
 {
     layout
     {

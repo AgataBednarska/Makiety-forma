@@ -1,4 +1,4 @@
-report 50002 "Compensation Proposal N24"
+report 50102 "Compensation Proposal N24"
 {
     DefaultLayout = RDLC;
     RDLCLayout = './Report/CompensationProposal/CompensationProposal.rdlc';

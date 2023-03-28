@@ -1,4 +1,4 @@
-pageextension 50034 "Payment Journal N24" extends "Payment Journal"
+pageextension 50134 "Payment Journal N24" extends "Payment Journal"
 {
     layout
     {
@@ -43,8 +43,8 @@ pageextension 50034 "Payment Journal N24" extends "Payment Journal"
         {
             action("CompensationProposal N24")
             {
-                Caption = 'Compensation Proposal';
                 ApplicationArea = All;
+                Caption = 'Compensation Proposal';
                 Image = PrintAcknowledgement;
                 Promoted = true;
                 PromotedCategory = Report;

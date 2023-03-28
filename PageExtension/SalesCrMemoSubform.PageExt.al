@@ -1,4 +1,4 @@
-pageextension 50072 "Sales Cr. Memo Subform N24" extends "Sales Cr. Memo Subform"
+pageextension 50172 "Sales Cr. Memo Subform N24" extends "Sales Cr. Memo Subform"
 {
     layout
     {
@@ -6,9 +6,9 @@ pageextension 50072 "Sales Cr. Memo Subform N24" extends "Sales Cr. Memo Subform
         {
             field("Line Price for Unit Price Calculation N24"; LinePriceForCalc)
             {
-                Caption = 'Line Price for Unit Price Calculation';
                 ApplicationArea = All;
                 BlankZero = true;
+                Caption = 'Line Price for Unit Price Calculation';
 
                 trigger OnValidate()
                 begin

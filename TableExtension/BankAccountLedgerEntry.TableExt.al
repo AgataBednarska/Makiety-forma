@@ -1,37 +1,37 @@
-tableextension 50030 "Bank Account Ledger Entry N24" extends "Bank Account Ledger Entry"
+tableextension 50130 "Bank Account Ledger Entry N24" extends "Bank Account Ledger Entry"
 {
     fields
     {
-        field(50000; "Applied Amount N24"; Decimal)
+        field(50100; "Applied Amount N24"; Decimal)
         {
-            DataClassification = CustomerContent;
             Caption = 'Applied Amount';
-        }
-        field(50001; "Difference Amount N24"; Decimal)
-        {
             DataClassification = CustomerContent;
+        }
+        field(50101; "Difference Amount N24"; Decimal)
+        {
             Caption = 'Difference Amount';
-        }
-        field(50002; "Applied to Entry N24"; Integer)
-        {
             DataClassification = CustomerContent;
+        }
+        field(50102; "Applied to Entry N24"; Integer)
+        {
             Caption = 'Applied to Entry';
+            DataClassification = CustomerContent;
             TableRelation = "Bank Account Ledger Entry"."Entry No.";
         }
-        field(50003; "Applied N24"; Boolean)
+        field(50103; "Applied N24"; Boolean)
         {
-            DataClassification = CustomerContent;
             Caption = 'Applied';
-        }
-        field(50004; "Difference Posted N24"; Boolean)
-        {
             DataClassification = CustomerContent;
+        }
+        field(50104; "Difference Posted N24"; Boolean)
+        {
             Caption = 'Difference Posted';
-        }
-        field(50005; "Skip in Difference Calc. N24"; Boolean)
-        {
             DataClassification = CustomerContent;
+        }
+        field(50105; "Skip in Difference Calc. N24"; Boolean)
+        {
             Caption = 'Skip in Difference Calc.';
+            DataClassification = CustomerContent;
 
             trigger OnValidate()
             var
@@ -59,25 +59,25 @@ tableextension 50030 "Bank Account Ledger Entry N24" extends "Bank Account Ledge
                 end;
             end;
         }
-        field(50006; "Skipped by UserID N24"; Code[30])
+        field(50106; "Skipped by UserID N24"; Code[30])
         {
-            DataClassification = CustomerContent;
             Caption = 'Skipped by UserID';
-        }
-        field(50007; "Skipped Date/Time N24"; DateTime)
-        {
             DataClassification = CustomerContent;
+        }
+        field(50107; "Skipped Date/Time N24"; DateTime)
+        {
             Caption = 'Skipped Date/Time';
-        }
-        field(50008; "Unskipped by UserID N24"; Code[30])
-        {
             DataClassification = CustomerContent;
+        }
+        field(50108; "Unskipped by UserID N24"; Code[30])
+        {
             Caption = 'Unskipped by UserID';
-        }
-        field(50009; "Unskipped Date/Time N24"; DateTime)
-        {
             DataClassification = CustomerContent;
+        }
+        field(50109; "Unskipped Date/Time N24"; DateTime)
+        {
             Caption = 'Unskipped Date/Time';
+            DataClassification = CustomerContent;
         }
     }
 }

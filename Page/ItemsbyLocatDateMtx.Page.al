@@ -1,4 +1,4 @@
-page 50002 "Items by Loc. at Date Mtx N24"
+page 50102 "Items by Loc. at Date Mtx N24"
 {
     Caption = 'Items by Location at Date Matrix';
     Editable = false;

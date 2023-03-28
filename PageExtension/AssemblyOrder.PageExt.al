@@ -1,4 +1,4 @@
-pageextension 50008 "Assembly Order N24" extends "Assembly Order"
+pageextension 50108 "Assembly Order N24" extends "Assembly Order"
 {
     layout
     {
@@ -22,8 +22,8 @@ pageextension 50008 "Assembly Order N24" extends "Assembly Order"
         {
             part(ResidueSubform; "AssyOrderResidueSubform N24")
             {
-                SubPageLink = "Document No." = field("No.");
                 ApplicationArea = All;
+                SubPageLink = "Document No." = field("No.");
             }
         }
         addafter("No.")
@@ -46,13 +46,13 @@ pageextension 50008 "Assembly Order N24" extends "Assembly Order"
         {
             action("PostExpenseAndRevenue N24")
             {
-                Caption = 'Post Expense and Revenue';
-                ToolTip = 'Post transfer of used items to in-production location and residue positive adjustment';
                 ApplicationArea = All;
+                Caption = 'Post Expense and Revenue';
                 Image = PostInventoryToGL;
                 Promoted = true;
                 PromotedCategory = Category6;
                 PromotedIsBig = true;
+                ToolTip = 'Post transfer of used items to in-production location and residue positive adjustment';
 
                 trigger OnAction()
                 var

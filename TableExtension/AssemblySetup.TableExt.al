@@ -1,8 +1,8 @@
-tableextension 50004 "Assembly Setup N24" extends "Assembly Setup"
+tableextension 50104 "Assembly Setup N24" extends "Assembly Setup"
 {
     fields
     {
-        field(50000; "Item Journal Batch Residue N24"; Code[10])
+        field(50100; "Item Journal Batch Residue N24"; Code[10])
         {
             Caption = 'Item Journal Batch for Residue';
             DataClassification = CustomerContent;
@@ -33,32 +33,32 @@ tableextension 50004 "Assembly Setup N24" extends "Assembly Setup"
             end;
         }
 
-        field(50001; "Def. Location for Residue N24"; Code[10])
+        field(50101; "Def. Location for Residue N24"; Code[10])
         {
             Caption = 'Default Location for Residue';
             DataClassification = CustomerContent;
             TableRelation = Location.Code;
         }
 
-        field(50002; "Item Journal Tmpl. Residue N24"; Code[10])
+        field(50102; "Item Journal Tmpl. Residue N24"; Code[10])
         {
             Caption = 'Item Journal Template for Residue';
             DataClassification = CustomerContent;
             Editable = false;
         }
-        field(50003; "Def. Location for Material N24"; Code[20])
+        field(50103; "Def. Location for Material N24"; Code[20])
         {
             Caption = 'Default Location for Material';
             DataClassification = CustomerContent;
             TableRelation = Location.Code;
         }
-        field(50004; "In-Production Location N24"; Code[20])
+        field(50104; "In-Production Location N24"; Code[20])
         {
             Caption = 'In-Production Location';
             DataClassification = CustomerContent;
             TableRelation = Location.Code;
         }
-        field(50005; "Def.Gen.Bus.Post.Gr. Adjmt N24"; Code[20])
+        field(50105; "Def.Gen.Bus.Post.Gr. Adjmt N24"; Code[20])
         {
             Caption = 'Def. Gen. Bus. Post. Gr. for Adjustments';
             DataClassification = CustomerContent;

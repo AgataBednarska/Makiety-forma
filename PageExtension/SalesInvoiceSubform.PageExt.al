@@ -1,4 +1,4 @@
-pageextension 50018 "Sales Invoice Subform N24" extends "Sales Invoice Subform"
+pageextension 50118 "Sales Invoice Subform N24" extends "Sales Invoice Subform"
 {
     layout
     {
@@ -14,9 +14,9 @@ pageextension 50018 "Sales Invoice Subform N24" extends "Sales Invoice Subform"
         {
             field("Line Price for Unit Price Calculation N24"; LinePriceForCalc)
             {
-                Caption = 'Line Price for Unit Price Calculation';
                 ApplicationArea = All;
                 BlankZero = true;
+                Caption = 'Line Price for Unit Price Calculation';
 
                 trigger OnValidate()
                 begin

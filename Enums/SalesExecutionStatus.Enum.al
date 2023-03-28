@@ -1,7 +1,7 @@
-enum 50001 "Sales Execution Status N24"
+enum 50101 "Sales Execution Status N24"
 {
-    Extensible = true;
     AssignmentCompatibility = true;
+    Extensible = true;
 
     value(0; PendingRealization) { Caption = 'Pending execution'; } //Oczekuje na realizacje
     value(1; AcceptedForRealization) { Caption = 'Accepted for execution'; } //Przyjęte do realizacji

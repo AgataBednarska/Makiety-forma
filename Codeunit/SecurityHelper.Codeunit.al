@@ -1,4 +1,4 @@
-codeunit 50001 "Security Helper N24"
+codeunit 50101 "Security Helper N24"
 {
     SingleInstance = true;
 

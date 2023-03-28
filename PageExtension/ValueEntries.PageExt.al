@@ -1,4 +1,4 @@
-pageextension 50040 "Value Entries N24" extends "Value Entries"
+pageextension 50140 "Value Entries N24" extends "Value Entries"
 {
     layout
     {

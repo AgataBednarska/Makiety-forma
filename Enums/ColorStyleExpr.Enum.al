@@ -1,4 +1,4 @@
-enum 50000 "Color Style Expr. N24"
+enum 50100 "Color Style Expr. N24"
 {
     Extensible = true;
     value(0; None)

@@ -1,4 +1,4 @@
-pageextension 50065 "Vendor Ledger Entries N24" extends "Vendor Ledger Entries"
+pageextension 50165 "Vendor Ledger Entries N24" extends "Vendor Ledger Entries"
 {
     layout
     {

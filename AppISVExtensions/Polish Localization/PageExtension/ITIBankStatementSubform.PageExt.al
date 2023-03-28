@@ -1,4 +1,4 @@
-pageextension 50070 "ITI Bank Statement Subform N24" extends "ITI Bank Statement Subform"
+pageextension 50170 "ITI Bank Statement Subform N24" extends "ITI Bank Statement Subform"
 {
     layout
     {

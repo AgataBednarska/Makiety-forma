@@ -1,4 +1,4 @@
-pageextension 50048 "Return Receipt Lines N24" extends "Return Receipt Lines"
+pageextension 50148 "Return Receipt Lines N24" extends "Return Receipt Lines"
 {
     layout
     {

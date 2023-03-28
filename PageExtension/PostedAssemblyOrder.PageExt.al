@@ -1,4 +1,4 @@
-pageextension 50060 "Posted Assembly Order N24" extends "Posted Assembly Order"
+pageextension 50160 "Posted Assembly Order N24" extends "Posted Assembly Order"
 {
     layout
     {

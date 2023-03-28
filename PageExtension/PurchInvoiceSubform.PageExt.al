@@ -1,4 +1,4 @@
-pageextension 50043 "Purch. Invoice Subform N24" extends "Purch. Invoice Subform"
+pageextension 50143 "Purch. Invoice Subform N24" extends "Purch. Invoice Subform"
 {
     layout
     {

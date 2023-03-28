@@ -1,4 +1,4 @@
-pageextension 50026 "Posted Return Receipts N24" extends "Posted Return Receipts"
+pageextension 50126 "Posted Return Receipts N24" extends "Posted Return Receipts"
 {
     layout
     {

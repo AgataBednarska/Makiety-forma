@@ -1,4 +1,4 @@
-codeunit 50000 "Custom Events N24"
+codeunit 50100 "Custom Events N24"
 {
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Approvals Mgmt.", 'OnSendPurchaseDocForApproval', '', false, false)]

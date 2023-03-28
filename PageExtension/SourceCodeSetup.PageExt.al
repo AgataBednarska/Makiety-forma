@@ -1,4 +1,4 @@
-pageextension 50020 "Source Code Setup N24" extends "Source Code Setup"
+pageextension 50120 "Source Code Setup N24" extends "Source Code Setup"
 {
     layout
     {

@@ -1,4 +1,4 @@
-pageextension 50032 "General Journal N24" extends "General Journal"
+pageextension 50132 "General Journal N24" extends "General Journal"
 {
     layout
     {
@@ -47,8 +47,8 @@ pageextension 50032 "General Journal N24" extends "General Journal"
         {
             action("CompensationProposal N24")
             {
-                Caption = 'Compensation Proposal';
                 ApplicationArea = All;
+                Caption = 'Compensation Proposal';
                 Image = PrintAcknowledgement;
                 Promoted = true;
                 PromotedCategory = Report;

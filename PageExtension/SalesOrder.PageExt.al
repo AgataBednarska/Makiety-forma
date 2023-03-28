@@ -1,4 +1,4 @@
-pageextension 50000 "Sales Order N24" extends "Sales Order"
+pageextension 50100 "Sales Order N24" extends "Sales Order"
 {
     layout
     {
@@ -14,8 +14,8 @@ pageextension 50000 "Sales Order N24" extends "Sales Order"
             field("Posting No. Series N24"; Rec."Posting No. Series")
             {
                 ApplicationArea = All;
-                Importance = Promoted;
                 Enabled = false;
+                Importance = Promoted;
             }
         }
         addafter("Work Description")

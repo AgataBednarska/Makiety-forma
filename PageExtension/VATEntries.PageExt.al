@@ -1,4 +1,4 @@
-pageextension 50066 "VAT Entries N24" extends "VAT Entries"
+pageextension 50166 "VAT Entries N24" extends "VAT Entries"
 {
     layout
     {

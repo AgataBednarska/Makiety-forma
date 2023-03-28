@@ -1,4 +1,4 @@
-report 50000 "Order Profitability N24"
+report 50100 "Order Profitability N24"
 {
     Caption = 'Order Profitability';
     DefaultLayout = RDLC;

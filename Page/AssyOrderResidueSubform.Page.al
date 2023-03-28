@@ -1,4 +1,4 @@
-page 50000 "AssyOrderResidueSubform N24"
+page 50100 "AssyOrderResidueSubform N24"
 {
 
     Caption = 'Item Journal (Revenue journal)';
@@ -19,8 +19,8 @@ page 50000 "AssyOrderResidueSubform N24"
                 field("Document Date"; Rec."Document Date")
                 {
                     ApplicationArea = Basic, Suite;
-                    Visible = false;
                     Editable = false;
+                    Visible = false;
                 }
                 field("Entry Type"; Rec."Entry Type")
                 {
@@ -29,20 +29,20 @@ page 50000 "AssyOrderResidueSubform N24"
                 }
                 field("Price Calculation Method"; Rec."Price Calculation Method")
                 {
-                    Visible = false;
                     ApplicationArea = Basic, Suite;
+                    Visible = false;
                 }
                 field("Document No."; Rec."Document No.")
                 {
                     ApplicationArea = Basic, Suite;
-                    ShowMandatory = true;
                     Editable = false;
+                    ShowMandatory = true;
                 }
                 field("External Document No."; Rec."External Document No.")
                 {
                     ApplicationArea = Basic, Suite;
-                    Visible = false;
                     Editable = false;
+                    Visible = false;
                 }
                 field("Item No."; Rec."Item No.")
                 {
@@ -258,10 +258,10 @@ page 50000 "AssyOrderResidueSubform N24"
 
                 action(GetResidueLines)
                 {
-                    Caption = 'Get residue lines';
-                    ToolTip = 'Creates new records per residue with unit amount (75% of material amount)';
                     ApplicationArea = All;
+                    Caption = 'Get residue lines';
                     Image = TransferToLines;
+                    ToolTip = 'Creates new records per residue with unit amount (75% of material amount)';
 
                     trigger OnAction()
                     var

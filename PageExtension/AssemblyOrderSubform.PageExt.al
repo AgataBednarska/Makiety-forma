@@ -1,4 +1,4 @@
-pageextension 50003 "Assembly Order Subform N24" extends "Assembly Order Subform"
+pageextension 50103 "Assembly Order Subform N24" extends "Assembly Order Subform"
 {
     layout
     {
@@ -36,8 +36,8 @@ pageextension 50003 "Assembly Order Subform N24" extends "Assembly Order Subform
         {
             field("InProduction N24"; IsInProduction())
             {
-                Caption = 'In production';
                 ApplicationArea = All;
+                Caption = 'In production';
                 Editable = false;
             }
         }

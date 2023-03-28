@@ -1,4 +1,4 @@
-codeunit 50498 "Upgrade Mgt. N24"
+codeunit 50112 "Upgrade Mgt. N24"
 {
     Subtype = Upgrade;
 

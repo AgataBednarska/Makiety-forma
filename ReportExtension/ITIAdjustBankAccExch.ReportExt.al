@@ -1,4 +1,4 @@
-reportextension 50000 "ITIAdjustBankAccExch N24" extends ITIAdjustBankAccExchangeRates
+reportextension 50100 "ITIAdjustBankAccExch N24" extends ITIAdjustBankAccExchangeRates
 {
     requestpage
     {

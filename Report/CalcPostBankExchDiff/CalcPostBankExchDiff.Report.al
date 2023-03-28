@@ -1,10 +1,10 @@
-report 50005 "Calc.Post Bank Exch. Diff. N24"
+report 50105 "Calc.Post Bank Exch. Diff. N24"
 {
-    DefaultLayout = RDLC;
-    RDLCLayout = './Report/CalcPostBankExchDiff/CalcPostBankExchDiff.rdlc';
-    Caption = 'Calc. & Post Bank Exch. Diff.';
-    Permissions = tabledata "Bank Account Ledger Entry" = m;
     ApplicationArea = Basic, Suite;
+    Caption = 'Calc. & Post Bank Exch. Diff.';
+    DefaultLayout = RDLC;
+    Permissions = tabledata "Bank Account Ledger Entry" = m;
+    RDLCLayout = './Report/CalcPostBankExchDiff/CalcPostBankExchDiff.rdlc';
     UsageCategory = Tasks;
 
     dataset

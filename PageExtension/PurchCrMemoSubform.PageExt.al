@@ -1,4 +1,4 @@
-pageextension 50042 "Purch. Cr. Memo Subform N24" extends "Purch. Cr. Memo Subform"
+pageextension 50142 "Purch. Cr. Memo Subform N24" extends "Purch. Cr. Memo Subform"
 {
     layout
     {

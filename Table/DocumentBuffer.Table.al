@@ -1,4 +1,4 @@
-table 50000 "Document Buffer N24"
+table 50100 "Document Buffer N24"
 {
     Caption = 'Document Buffer';
     DataClassification = CustomerContent;

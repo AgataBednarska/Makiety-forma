@@ -1,4 +1,4 @@
-pageextension 50021 "User Setup N24" extends "User Setup"
+pageextension 50121 "User Setup N24" extends "User Setup"
 {
     layout
     {

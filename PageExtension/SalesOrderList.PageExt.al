@@ -1,4 +1,4 @@
-pageextension 50001 "Sales Order List N24" extends "Sales Order List"
+pageextension 50101 "Sales Order List N24" extends "Sales Order List"
 {
     layout
     {

@@ -1,4 +1,4 @@
-pageextension 50010 "Item Journal N24" extends "Item Journal"
+pageextension 50110 "Item Journal N24" extends "Item Journal"
 {
     layout
     {

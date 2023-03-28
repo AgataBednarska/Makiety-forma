@@ -1,4 +1,4 @@
-pageextension 50052 "Get Pst. RtrnRcptLn Sub. N24" extends "Get Pst.Doc-RtrnRcptLn Subform"
+pageextension 50152 "Get Pst. RtrnRcptLn Sub. N24" extends "Get Pst.Doc-RtrnRcptLn Subform"
 {
     layout
     {

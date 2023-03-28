@@ -1,4 +1,4 @@
-pageextension 50019 "Bank Account Ledger Entries" extends "Bank Account Ledger Entries"
+pageextension 50119 "Bank Account Ledger Entries" extends "Bank Account Ledger Entries"
 {
     layout
     {

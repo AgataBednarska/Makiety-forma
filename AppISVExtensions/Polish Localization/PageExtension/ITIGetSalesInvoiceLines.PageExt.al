@@ -1,4 +1,4 @@
-pageextension 50049 "ITI Get Sales Invoice Lines" extends "ITI Get Sales Invoice Lines"
+pageextension 50149 "ITI Get Sales Invoice Lines" extends "ITI Get Sales Invoice Lines"
 {
     layout
     {

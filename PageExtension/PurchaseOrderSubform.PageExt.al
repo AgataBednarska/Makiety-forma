@@ -1,4 +1,4 @@
-pageextension 50041 "Purchase Order Subform N24" extends "Purchase Order Subform"
+pageextension 50141 "Purchase Order Subform N24" extends "Purchase Order Subform"
 {
     layout
     {

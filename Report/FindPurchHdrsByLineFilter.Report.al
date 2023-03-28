@@ -1,9 +1,9 @@
-report 50006 "FindPurchHdrsByLineFilter N24"
+report 50106 "FindPurchHdrsByLineFilter N24"
 {
     ApplicationArea = All;
     Caption = 'Find Purchase Headers by Line Filter';
-    UsageCategory = ReportsAndAnalysis;
     ProcessingOnly = true;
+    UsageCategory = ReportsAndAnalysis;
 
     dataset
     {

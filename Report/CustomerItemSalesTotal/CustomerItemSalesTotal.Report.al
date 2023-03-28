@@ -1,4 +1,4 @@
-report 50003 "Customer/Item Sales Total N24"
+report 50103 "Customer/Item Sales Total N24"
 {
     Caption = 'Customer/Item Sales with Total';
     DefaultLayout = RDLC;

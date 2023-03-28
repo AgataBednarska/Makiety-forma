@@ -1,4 +1,4 @@
-codeunit 50010 "ExternalDocumentNoMgt N24"
+codeunit 50109 "ExternalDocumentNoMgt N24"
 {
     procedure ExternalDocumentNoWasUsed(ExternalDocumentNo: Code[35]; ShowMessage: Boolean): Boolean
     var

@@ -1,4 +1,4 @@
-pageextension 50007 "Assemble-to-Order Lines N24" extends "Assemble-to-Order Lines"
+pageextension 50107 "Assemble-to-Order Lines N24" extends "Assemble-to-Order Lines"
 {
     layout
     {

@@ -1,9 +1,9 @@
-report 50001 "Order Profitability Excel N24"
+report 50101 "Order Profitability Excel N24"
 {
     ApplicationArea = All;
     Caption = 'Order Profitability - Excel';
-    UsageCategory = ReportsAndAnalysis;
     ProcessingOnly = true;
+    UsageCategory = ReportsAndAnalysis;
     UseRequestPage = false;
 
     trigger OnPostReport()

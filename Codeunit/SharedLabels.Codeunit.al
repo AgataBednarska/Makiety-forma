@@ -1,4 +1,4 @@
-codeunit 50005 "Shared Labels N24"
+codeunit 50105 "Shared Labels N24"
 {
     SingleInstance = true;
 

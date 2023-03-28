@@ -1,9 +1,9 @@
-report 50004 "Bank Exch. Diff. Report N24"
+report 50104 "Bank Exch. Diff. Report N24"
 {
+    ApplicationArea = Basic, Suite;
+    Caption = 'Bank Exch. Differences Report';
     DefaultLayout = RDLC;
     RDLCLayout = './Report/BankExchDifferences/BankExchDifferences.rdlc';
-    Caption = 'Bank Exch. Differences Report';
-    ApplicationArea = Basic, Suite;
     UsageCategory = ReportsAndAnalysis;
 
     dataset

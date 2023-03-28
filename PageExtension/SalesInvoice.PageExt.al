@@ -1,4 +1,4 @@
-pageextension 50005 "Sales Invoice N24" extends "Sales Invoice"
+pageextension 50105 "Sales Invoice N24" extends "Sales Invoice"
 {
     layout
     {

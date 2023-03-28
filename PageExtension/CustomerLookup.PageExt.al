@@ -1,4 +1,4 @@
-pageextension 50069 "Customer Lookup N24" extends "Customer Lookup"
+pageextension 50169 "Customer Lookup N24" extends "Customer Lookup"
 {
     layout
     {

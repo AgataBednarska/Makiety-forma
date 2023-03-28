@@ -1,8 +1,8 @@
-tableextension 50001 "Vendor N24" extends Vendor
+tableextension 50101 "Vendor N24" extends Vendor
 {
     fields
     {
-        field(50000; "Employee N24"; Boolean)
+        field(50100; "Employee N24"; Boolean)
         {
             Caption = 'Employee';
             DataClassification = CustomerContent;

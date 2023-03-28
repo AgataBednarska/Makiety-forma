@@ -1,4 +1,4 @@
-pageextension 50054 "Purch. Receipt Lines N24" extends "Purch. Receipt Lines"
+pageextension 50154 "Purch. Receipt Lines N24" extends "Purch. Receipt Lines"
 {
     layout
     {

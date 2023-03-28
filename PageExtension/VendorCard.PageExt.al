@@ -1,4 +1,4 @@
-pageextension 50006 "VendorCard N24" extends "Vendor Card"
+pageextension 50106 "VendorCard N24" extends "Vendor Card"
 {
     layout
     {

@@ -1,4 +1,4 @@
-pageextension 50047 "Sales Shipment Lines N24" extends "Sales Shipment Lines"
+pageextension 50147 "Sales Shipment Lines N24" extends "Sales Shipment Lines"
 {
     layout
     {

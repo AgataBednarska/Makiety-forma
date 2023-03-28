@@ -1,4 +1,4 @@
-pageextension 50037 "Item Reclass. Journal N24" extends "Item Reclass. Journal"
+pageextension 50137 "Item Reclass. Journal N24" extends "Item Reclass. Journal"
 {
     layout
     {

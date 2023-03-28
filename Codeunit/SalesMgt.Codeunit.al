@@ -1,4 +1,4 @@
-codeunit 50007 "SalesMgt N24"
+codeunit 50107 "SalesMgt N24"
 {
     procedure RemoveInvoicedOrdersOfPostedInvoice(SalesInvHdrNo: Code[20])
     var

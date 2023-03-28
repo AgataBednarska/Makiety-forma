@@ -1,4 +1,4 @@
-pageextension 50062 "Get Shipment Lines N24" extends "Get Shipment Lines"
+pageextension 50162 "Get Shipment Lines N24" extends "Get Shipment Lines"
 {
     layout
     {

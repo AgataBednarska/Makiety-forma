@@ -1,4 +1,4 @@
-pageextension 50057 "Get Post.Doc P.RcptLn Sbf. N24" extends "Get Post.Doc - P.RcptLn Sbfrm"
+pageextension 50157 "Get Post.Doc P.RcptLn Sbf. N24" extends "Get Post.Doc - P.RcptLn Sbfrm"
 {
     layout
     {

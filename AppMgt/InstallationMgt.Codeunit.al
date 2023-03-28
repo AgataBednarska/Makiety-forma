@@ -1,4 +1,4 @@
-codeunit 50497 "Installation Mgt. N24"
+codeunit 50111 "Installation Mgt. N24"
 {
     Subtype = Install;
 

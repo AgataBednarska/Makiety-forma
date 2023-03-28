@@ -1,4 +1,4 @@
-pageextension 50004 "General Ledger Entries N24" extends "General Ledger Entries"
+pageextension 50104 "General Ledger Entries N24" extends "General Ledger Entries"
 {
     layout
     {

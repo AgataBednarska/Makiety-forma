@@ -1,4 +1,4 @@
-pageextension 50035 "Assembly Setup N24" extends "Assembly Setup"
+pageextension 50135 "Assembly Setup N24" extends "Assembly Setup"
 {
     layout
     {

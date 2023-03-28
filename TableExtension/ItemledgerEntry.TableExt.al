@@ -1,4 +1,4 @@
-tableextension 50003 "Item ledger Entry N24" extends "Item ledger Entry"
+tableextension 50103 "Item ledger Entry N24" extends "Item ledger Entry"
 {
     keys
     {

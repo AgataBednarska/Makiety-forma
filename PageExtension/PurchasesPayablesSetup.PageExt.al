@@ -1,4 +1,4 @@
-pageextension 50036 "Purchases Payables Setup N24" extends "Purchases & Payables Setup"
+pageextension 50136 "Purchases Payables Setup N24" extends "Purchases & Payables Setup"
 {
     layout
     {
