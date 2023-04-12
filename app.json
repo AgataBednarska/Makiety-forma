@@ -35,7 +35,7 @@
   "application": "21.0.0.0",
   "idRanges": [{
       "from": 50100,
-      "to": 50999
+      "to": 50499
   }],
   "contextSensitiveHelpUrl": "https://nav24.pl",
   "resourceExposurePolicy": {
