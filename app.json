@@ -2,7 +2,7 @@
   "id": "d2b16d48-1842-473b-be64-5c4e8957d663",
   "name": "N24_Forma_System",
   "publisher": "NAV24 Sp. z o.o.",
-  "version": "21.9.0.0",
+  "version": "22.9.0.0",
   "brief": "https://nav24.pl",
   "privacyStatement": "https://nav24.pl",
   "EULA": "https://nav24.pl",
@@ -31,8 +31,8 @@
     }
   ],
   "screenshots": [],
-  "platform": "21.0.0.0",
-  "application": "21.0.0.0",
+  "platform": "22.0.0.0",
+  "application": "22.0.0.0",
   "idRanges": [{
       "from": 50100,
       "to": 50499
@@ -43,6 +43,6 @@
       "allowDownloadingSource": true,
       "includeSourceInSymbolFile": true
   },
-  "runtime": "10.0",
+  "runtime": "11.0",
   "features": ["TranslationFile"]
 }

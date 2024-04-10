@@ -1,0 +1,12 @@
+tableextension 50163 "Return Shipment Header N24" extends "Return Shipment Header"
+{
+    fields
+    {
+        field(50100; "SAFT Ext. Document No. N24"; Code[35])
+        {
+            Caption = 'SAFT Ext. Document No.';
+            DataClassification = CustomerContent;
+            Editable = false;
+        }
+    }
+}

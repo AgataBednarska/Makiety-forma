@@ -4,7 +4,7 @@ codeunit 50111 "Installation Mgt. N24"
 
     #region OnInstallAppPerDatabase
 
-    trigger OnInstallAppPerDatabase();
+    trigger OnInstallAppPerDatabase()
     var
         MyAppInfo: ModuleInfo;
     begin
@@ -16,7 +16,7 @@ codeunit 50111 "Installation Mgt. N24"
             HandleReinstallPerDatabase(); // If not a fresh install, then we are Re-installing the same version of the extension
     end;
 
-    local procedure HandleFreshInstallPerDatabase();
+    local procedure HandleFreshInstallPerDatabase()
     begin
         // Do work needed the first time this extension is ever installed for this tenant.
         // Some possible usages:
@@ -24,7 +24,7 @@ codeunit 50111 "Installation Mgt. N24"
         // - Initial data setup for use
     end;
 
-    local procedure HandleReinstallPerDatabase();
+    local procedure HandleReinstallPerDatabase()
     begin
         // Do work needed when reinstalling the same version of this extension back on this tenant.
         // Some possible usages:
@@ -49,7 +49,7 @@ codeunit 50111 "Installation Mgt. N24"
             HandleReinstallPerCompany(); // If not a fresh install, then we are Re-installing the same version of the extension
     end;
 
-    local procedure HandleFreshInstallPerCompany();
+    local procedure HandleFreshInstallPerCompany()
     begin
         // Do work needed the first time this extension is ever installed for this tenant.
         // Some possible usages:
@@ -57,7 +57,7 @@ codeunit 50111 "Installation Mgt. N24"
         // - Initial data setup for use
     end;
 
-    local procedure HandleReinstallPerCompany();
+    local procedure HandleReinstallPerCompany()
     begin
         // Do work needed when reinstalling the same version of this extension back on this tenant.
         // Some possible usages:

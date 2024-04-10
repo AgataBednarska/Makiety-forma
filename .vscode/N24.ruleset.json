@@ -4,9 +4,44 @@
     "generalAction": "Hidden",
     "rules": [
         {
+            "id": "AA0001",
+            "action": "Error",
+            "justification": "There must be exactly one space character on each side of a binary operator such as := + - AND OR =."
+        },
+        {
+            "id": "AA0008",
+            "action": "Error",
+            "justification": "Function calls should have parenthesis even if they do not have any parameters."
+        },
+        {
+            "id": "AA0013",
+            "action": "Error",
+            "justification": "When BEGIN follows THEN, ELSE, DO, it should be on the same line, preceded by one space character."
+        },
+        {
+            "id": "AA0018",
+            "action": "Error",
+            "justification": "The END, IF, REPEAT, UNTIL, FOR, WHILE, and CASE statement should always start a line."
+        },
+        {
             "id": "AA0072",
             "action": "Hidden",
             "justification": "The name of variable is not valid. The name of variables and parameters must be suffixed with the type or object name."
+        },
+        {
+            "id": "AA0074",
+            "action": "Error",
+            "justification": "Variable must have a suffix from list"
+        },
+        {
+            "id": "AA0136",
+            "action": "Error",
+            "justification": "Do not write code that will never be hit."
+        },
+        {
+            "id": "AA0198",
+            "action": "Error",
+            "justification": "Do not use identical names for local and global variables."
         },  
         {
             "id": "AA0215",
@@ -14,54 +49,38 @@
             "justification": "The file has an incorrect name. The valid name is ... (With postfix)"
         },
         {
+            "id": "AA0217",
+            "action": "Hidden",
+            "justification": "Use a text constant or label for format string in StrSubstNo."
+        },
+        {
             "id": "AA0218",
             "action": "Hidden",
             "justification": "N24 Tooltips must be filled."
-        },
-        {
-            "id": "AL0603",
-            "action": "Hidden",
-            "justification": "Enum conversion to integer in the TESTFIELD - it's broken https://github.com/microsoft/AL/issues/5693"
-        },
-        {
-            "id": "AS0084",
-            "action": "Hidden",
-            "justification": "The ID range '[50000..50999]' is not valid. It must be within the range allocated to the partner for AppSource, within the range '[1000000..75999999]' allocated to AppSource applications, and outside the range '[50000..99999]' allocated to per-tenant customizations"
-        },
-        {
-            "id": "AS0092",
-            "action": "Hidden",
-            "justification": "The app.json file must specify an Azure Application Insights resource with the property 'applicationInsightsConnectionString' for monitoring operations related to this extension. See https://docs.microsoft.com/dynamics365/business-central/dev-itpro/administration/telemetry-overview for additional information."
-        },
-        {
-            "id": "AS0054",
-            "action": "Hidden",
-            "justification": "The AppSourceCop configuration must specify one of the following properties: 'mandatorySuffix', 'mandatoryPrefix', or 'mandatoryAffixes'"
-        },
-        {
-            "id": "AS0016",
-            "action": "Hidden",
-            "justification": "Field with name 'Show Sell-To VAT Reg. No.' must use the DataClassification property and its value should be different from ToBeClassified."
         },
         {
             "id": "AA0470",
             "action": "Hidden",
             "justification": "Variable '' with placeholders should have a comment explaining their content."
         },
+
+
         {
-            "id": "LC0019",
+            "id": "AL0603",
             "action": "Hidden",
-            "justification": "Data Classification is equal to the Table. Remove to reduce redundancy."
+            "justification": "Enum conversion to integer in the TESTFIELD - it's broken https://github.com/microsoft/AL/issues/5693"
         },
         {
-            "id": "AW0005",
-            "action": "Hidden",
-            "justification": "Action with name 'XYZ' should have a value for the Image property."
+            "id": "AL0604",
+            "action": "Error",
+            "justification": "Use of implicit with"
         },
+
+
         {
-            "id": "LC0010",
+            "id": "AS0016",
             "action": "Hidden",
-            "justification": "Cyclomatic complexity: XX, Maintainability index: YY."
+            "justification": "Field with name 'Show Sell-To VAT Reg. No.' must use the DataClassification property and its value should be different from ToBeClassified."
         },
         {
             "id": "AS0051",
@@ -74,9 +93,103 @@
             "justification": "The property 'url' must be set to a valid URL."
         },
         {
+            "id": "AS0054",
+            "action": "Hidden",
+            "justification": "The AppSourceCop configuration must specify one of the following properties: 'mandatorySuffix', 'mandatoryPrefix', or 'mandatoryAffixes'"
+        },
+        {
+            "id": "AS0084",
+            "action": "Hidden",
+            "justification": "The ID range '[50000..50999]' is not valid. It must be within the range allocated to the partner for AppSource, within the range '[1000000..75999999]' allocated to AppSource applications, and outside the range '[50000..99999]' allocated to per-tenant customizations"
+        },
+        {
+            "id": "AS0092",
+            "action": "Hidden",
+            "justification": "The app.json file must specify an Azure Application Insights resource with the property 'applicationInsightsConnectionString' for monitoring operations related to this extension. See https://docs.microsoft.com/dynamics365/business-central/dev-itpro/administration/telemetry-overview for additional information."
+        },
+
+
+        {
+            "id": "AW0005",
+            "action": "Hidden",
+            "justification": "Action with name 'XYZ' should have a value for the Image property."
+        },
+        {
+            "id": "AW0006",
+            "action": "Error",
+            "justification": "Pages and reports should use the UsageCategory and ApplicationArea properties to be searchable."
+        },
+
+
+        {
+            "id": "LC0001",
+            "action": "Error",
+            "justification": "FlowFields should not be editable."
+        },
+        {
+            "id": "LC0002",
+            "action": "Error",
+            "justification": "Commit() needs a comment to justify its existence. Either a leading or a trailing comment."
+        },
+        {
+            "id": "LC0003",
+            "action": "Error",
+            "justification": "Do not use an Object ID for properties or variable declarations."
+        },
+        {
+            "id": "LC0004",
+            "action": "Error",
+            "justification": "LookupPageID Required"
+        },
+        {
+            "id": "LC0005",
+            "action": "Error",
+            "justification": "system function casing"
+        },
+        {
+            "id": "LC0010",
+            "action": "Hidden",
+            "justification": "Cyclomatic complexity: XX, Maintainability index: YY."
+        },
+        {
+            "id": "LC0012",
+            "action": "Error",
+            "justification": "Using hardcoded IDs in functions like Codeunit.Run() is not allowed."
+        },
+        {
+            "id": "LC0013",
+            "action": "Error",
+            "justification": "Any table with a single field in the PK of type code or text, should have set NotBlank on the PK field."
+        },
+        {
+            "id": "LC0015",
+            "action": "Error",
+            "justification": "Application object is not covered by any permission set"
+        },
+        {
+            "id": "LC0016",
+            "action": "Error",
+            "justification": "Caption Required"
+        },
+        {
+            "id": "LC0019",
+            "action": "Hidden",
+            "justification": "Data Classification is equal to the Table. Remove to reduce redundancy."
+        },
+        {
             "id": "LC0023",
             "action": "Hidden",
             "justification": "Fieldgroup Brick or DropDown is missing on table"
+        },
+        {
+            "id": "LC0044",
+            "action": "Error",
+            "justification": "Conflicting ID, Name or Type for Transferfields."
+        },
+        {
+            "id": "LC0040",
+            "action": "Hidden",
+            "justification": "Explicitly set the RunTrigger parameter on build-in methods."
         }
     ]
 }
