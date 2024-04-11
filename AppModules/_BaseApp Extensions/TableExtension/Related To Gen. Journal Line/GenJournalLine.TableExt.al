@@ -2,7 +2,7 @@ tableextension 50173 "Gen. Journal Line N24" extends "Gen. Journal Line"
 {
     fields
     {
-        field(50100; "Exchange Rate Diff. N24"; Boolean)
+        field(50102; "Exchange Rate Diff. N24"; Boolean)
         {
             Caption = 'Exchange Rate Difference';
             DataClassification = CustomerContent;
@@ -12,7 +12,7 @@ tableextension 50173 "Gen. Journal Line N24" extends "Gen. Journal Line"
             Caption = 'Applied to Bank Entry No.';
             DataClassification = CustomerContent;
         }
-        field(50102; "Salespers./Purch. Code N24"; Code[20])
+        field(50100; "Salespers./Purch. Code N24"; Code[20])
         {
             Caption = 'Salespers./Purch. Code';
             DataClassification = CustomerContent;
