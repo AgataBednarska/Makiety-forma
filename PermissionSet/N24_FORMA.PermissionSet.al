@@ -24,7 +24,6 @@ permissionset 50100 "N24_FORMA N24"
          page "Items by Location at Date N24" = X,
          page "N24_Forma_System N24" = X,
          report "Bank Exch. Diff. Report N24" = X,
-         report "Calc.Post Bank Exch. Diff. N24" = X,
          report "Compensation Proposal N24" = X,
          report "Customer/Item Sales Total N24" = X,
          report "FindPurchHdrsByLineFilter N24" = X,
