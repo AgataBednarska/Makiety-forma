@@ -849,6 +849,12 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension Sales Invoice N24 - Control CommentsGroup N24 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="PageExtension 3988455021 - Action 3179166139 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3689007477">
+          <source>Add Prepayment Lines</source>
+          <target state="translated">Dodaj wiersz zaliczki</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension Sales Invoice Subform N24 - Action AddPrepaymentLines N24 - Property Caption</note>
+        </trans-unit>
         <trans-unit id="PageExtension 3988455021 - Control 3211716062 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3689007477">
           <source>Line Price for Unit Price Calculation</source>
           <target state="translated">Cena wiersza do obliczenia ceny jednostkowej</target>
@@ -860,6 +866,12 @@
           <target state="translated">Uwagi</target>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension Sales Order N24 - Control CommentsGroup N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 3271611584 - Action 3179166139 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2026081320">
+          <source>Add Prepayment Lines</source>
+          <target state="translated">Dodaj wiersz zaliczki</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension Sales Order Subform N24 - Action AddPrepaymentLines N24 - Property Caption</note>
         </trans-unit>
         <trans-unit id="PageExtension 3271611584 - Control 3211716062 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2026081320">
           <source>Line Price for Unit Price Calculation</source>

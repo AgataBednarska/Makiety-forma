@@ -34,6 +34,27 @@ pageextension 50158 "Sales Invoice Subform N24" extends "Sales Invoice Subform"
         }
     }
 
+    actions
+    {
+        addafter(SelectMultiItems)
+        {
+            action("AddPrepaymentLines N24")
+            {
+                ApplicationArea = All;
+                Caption = 'Add Prepayment Lines';
+                Image = Prepayment;
+
+                trigger OnAction()
+                var
+                    AddPrepaymentLines: Codeunit "Add Prepayment Lines N24";
+                begin
+                    AddPrepaymentLines.SelectMultipleItems(Rec);
+                end;
+            }
+        }
+    }
+
+
     var
         LinePriceForCalc: Decimal;
 }

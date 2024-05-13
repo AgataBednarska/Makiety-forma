@@ -19,6 +19,7 @@ permissionset 50100 "N24_FORMA N24"
          codeunit "Shared Labels N24" = X,
          codeunit "Single Instance N24" = X,
          codeunit "Upgrade Mgt. N24" = X,
+         codeunit "Add Prepayment Lines N24" = X,
          page "AssyOrderResidueSubform N24" = X,
          page "Items by Loc. at Date Mtx N24" = X,
          page "Items by Location at Date N24" = X,
