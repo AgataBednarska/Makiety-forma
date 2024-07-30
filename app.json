@@ -12,10 +12,10 @@
   "description": "Forma System Extension",
   "dependencies": [
     {
-        "id": "a41facb4-aa1f-4f4b-a6d5-a574d9a33911",
-        "publisher": "IT.integro sp. z o.o.",
-        "name": "Polish Localization",
-        "version": "2.6.0.3"
+      "id": "a41facb4-aa1f-4f4b-a6d5-a574d9a33911",
+      "publisher": "IT.integro sp. z o.o.",
+      "name": "Polish Localization",
+      "version": "2.6.0.3"
     },
     {
       "id": "814e15ad-69eb-43cc-ac3f-4f0f3d10ff3c",
@@ -33,16 +33,20 @@
   "screenshots": [],
   "platform": "22.0.0.0",
   "application": "22.0.0.0",
-  "idRanges": [{
+  "idRanges": [
+    {
       "from": 50100,
       "to": 50499
-  }],
+    }
+  ],
   "contextSensitiveHelpUrl": "https://nav24.pl",
   "resourceExposurePolicy": {
-      "allowDebugging": true,
-      "allowDownloadingSource": true,
-      "includeSourceInSymbolFile": true
+    "allowDebugging": false,
+    "allowDownloadingSource": false,
+    "includeSourceInSymbolFile": false
   },
   "runtime": "11.0",
-  "features": ["TranslationFile"]
+  "features": [
+    "TranslationFile"
+  ]
 }
