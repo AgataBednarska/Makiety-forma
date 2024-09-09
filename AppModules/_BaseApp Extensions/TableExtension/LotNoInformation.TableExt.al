@@ -1,4 +1,4 @@
-tableextension 50142 "Reservation Entry N24" extends "Reservation Entry"
+tableextension 50161 "Lot No. Information N24" extends "Lot No. Information"
 {
     fields
     {
@@ -7,51 +7,43 @@ tableextension 50142 "Reservation Entry N24" extends "Reservation Entry"
             Caption = 'Length';
             DataClassification = CustomerContent;
             DecimalPlaces = 0 : 3;
-            Editable = false;
         }
         field(50101; "Width N24"; Decimal)
         {
             Caption = 'Width';
             DataClassification = CustomerContent;
             DecimalPlaces = 0 : 3;
-            Editable = false;
         }
         field(50102; "Cubic Meters N24"; Decimal)
         {
             Caption = 'Cubic Meters';
             DataClassification = CustomerContent;
             DecimalPlaces = 0 : 5;
-            Editable = false;
         }
         field(50103; "Comments N24"; Text[100])
         {
             Caption = 'Comments';
             DataClassification = CustomerContent;
-            Editable = false;
         }
         field(50104; "Vendor N24"; Text[100])
         {
             Caption = 'Vendor';
             DataClassification = CustomerContent;
-            Editable = false;
         }
         field(50105; "Size N24"; Boolean)
         {
             Caption = 'Size';
             DataClassification = CustomerContent;
-            Editable = false;
         }
         field(50106; "Shade N24"; Text[6])
         {
             Caption = 'Shade';
             DataClassification = CustomerContent;
-            Editable = false;
         }
         field(50107; "Storage Place N24"; Text[16])
         {
             Caption = 'Storage Place';
             DataClassification = CustomerContent;
-            Editable = false;
         }
     }
 }

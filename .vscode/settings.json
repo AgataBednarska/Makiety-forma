@@ -11,7 +11,8 @@
         "${analyzerFolder}BusinessCentral.LinterCop.dll"
     ],
     "al.ruleSetPath": ".vscode/N24.ruleset.json",
-    
+    //"al.browser": "Chrome",
+    //"al.incognito": true,
     "CRS.OnSaveAlFileAction": "Rename",
     "CRS.FileNamePattern": "<ObjectNameShort>.<ObjectTypeShortPascalCase>.al",
     "CRS.FileNamePatternExtensions": "<ObjectNameShort>.<ObjectTypeShortPascalCase>.al",

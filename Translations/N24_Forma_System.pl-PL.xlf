@@ -1065,6 +1065,54 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension ITI Posted Bank Stmt. Line N24 - Field Salespers./Purch. Code N24 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="TableExtension 2551347960 - Field 3806772324 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3361278800">
+          <source>Comments</source>
+          <target state="translated">Uwagi</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Lot No. Information N24 - Field Comments N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2551347960 - Field 2558791490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3361278800">
+          <source>Cubic Meters</source>
+          <target state="translated">Metry kwadratowe</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Lot No. Information N24 - Field Cubic Meters N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2551347960 - Field 521205856 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3361278800">
+          <source>Length</source>
+          <target state="translated">Długość</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Lot No. Information N24 - Field Length N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2551347960 - Field 3831133541 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3361278800">
+          <source>Shade</source>
+          <target state="translated">Odcień</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Lot No. Information N24 - Field Shade N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2551347960 - Field 1614462039 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3361278800">
+          <source>Size</source>
+          <target state="translated">Rozmiar</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Lot No. Information N24 - Field Size N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2551347960 - Field 3623024566 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3361278800">
+          <source>Storage Place</source>
+          <target state="translated">Miejsce składowania</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Lot No. Information N24 - Field Storage Place N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2551347960 - Field 2264335520 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3361278800">
+          <source>Vendor</source>
+          <target state="translated">Dostawca</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Lot No. Information N24 - Field Vendor N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2551347960 - Field 4214389130 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3361278800">
+          <source>Width</source>
+          <target state="translated">Szerokość</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Lot No. Information N24 - Field Width N24 - Property Caption</note>
+        </trans-unit>
         <trans-unit id="TableExtension 879203516 - Field 1699349807 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 12946132">
           <source>External Document No.</source>
           <target state="translated">Nr dokumentu zewnętrznego</target>
@@ -1125,6 +1173,54 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension Purchases &amp; Payables Setup N24 - Field GLAcc. Line Post. Desc. N24 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="TableExtension 1727925424 - Field 3806772324 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4086595800">
+          <source>Comments</source>
+          <target state="translated">Uwagi</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Reservation Entry N24 - Field Comments N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1727925424 - Field 2558791490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4086595800">
+          <source>Cubic Meters</source>
+          <target state="translated">Metry kwadratowe</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Reservation Entry N24 - Field Cubic Meters N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1727925424 - Field 521205856 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4086595800">
+          <source>Length</source>
+          <target state="translated">Długość</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Reservation Entry N24 - Field Length N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1727925424 - Field 3831133541 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4086595800">
+          <source>Shade</source>
+          <target state="translated">Odcień</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Reservation Entry N24 - Field Shade N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1727925424 - Field 1614462039 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4086595800">
+          <source>Size</source>
+          <target state="translated">Rozmiar</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Reservation Entry N24 - Field Size N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1727925424 - Field 3623024566 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4086595800">
+          <source>Storage Place</source>
+          <target state="translated">Miejsce składowania</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Reservation Entry N24 - Field Storage Place N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1727925424 - Field 2264335520 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4086595800">
+          <source>Vendor</source>
+          <target state="translated">Dostawca</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Reservation Entry N24 - Field Vendor N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1727925424 - Field 4214389130 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4086595800">
+          <source>Width</source>
+          <target state="translated">Szerokość</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Reservation Entry N24 - Field Width N24 - Property Caption</note>
+        </trans-unit>
         <trans-unit id="TableExtension 1037204828 - Field 1699349807 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1173465396">
           <source>External Document No.</source>
           <target state="translated">Nr dokumentu zewnętrznego</target>
@@ -1179,6 +1275,54 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension Source Code Setup N24 - Field Bank Trans. Recalculation N24 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="TableExtension 3061336454 - Field 3806772324 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1470081326">
+          <source>Comments</source>
+          <target state="translated">Uwagi</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Tracking Specification N24 - Field Comments N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 3061336454 - Field 2558791490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1470081326">
+          <source>Cubic Meters</source>
+          <target state="translated">Metry kwadratowe</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Tracking Specification N24 - Field Cubic Meters N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 3061336454 - Field 521205856 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1470081326">
+          <source>Length</source>
+          <target state="translated">Długość</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Tracking Specification N24 - Field Length N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 3061336454 - Field 3831133541 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1470081326">
+          <source>Shade</source>
+          <target state="translated">Odcień</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Tracking Specification N24 - Field Shade N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 3061336454 - Field 1614462039 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1470081326">
+          <source>Size</source>
+          <target state="translated">Rozmiar</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Tracking Specification N24 - Field Size N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 3061336454 - Field 3623024566 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1470081326">
+          <source>Storage Place</source>
+          <target state="translated">Miejsce składowania</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Tracking Specification N24 - Field Storage Place N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 3061336454 - Field 2264335520 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1470081326">
+          <source>Vendor</source>
+          <target state="translated">Dostawca</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Tracking Specification N24 - Field Vendor N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 3061336454 - Field 4214389130 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1470081326">
+          <source>Width</source>
+          <target state="translated">Szerokość</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Tracking Specification N24 - Field Width N24 - Property Caption</note>
+        </trans-unit>
         <trans-unit id="TableExtension 677125098 - Field 3478694149 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 337631938">
           <source>Allow Skip Bank Ledger Entry</source>
           <target state="translated">Zezwalaj na pominięcie zapisów ksiegi banku</target>
@@ -1196,6 +1340,54 @@
           <target state="translated">Pracownik</target>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension Vendor N24 - Field Employee N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1419014429 - Field 3806772324 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 945707429">
+          <source>Comments</source>
+          <target state="translated">Uwagi</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Whse. Item Tracking Line N24 - Field Comments N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1419014429 - Field 2558791490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 945707429">
+          <source>Cubic Meters</source>
+          <target state="translated">Metry kwadratowe</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Whse. Item Tracking Line N24 - Field Cubic Meters N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1419014429 - Field 521205856 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 945707429">
+          <source>Length</source>
+          <target state="translated">Długość</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Whse. Item Tracking Line N24 - Field Length N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1419014429 - Field 3831133541 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 945707429">
+          <source>Shade</source>
+          <target state="translated">Odcień</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Whse. Item Tracking Line N24 - Field Shade N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1419014429 - Field 1614462039 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 945707429">
+          <source>Size</source>
+          <target state="translated">Rozmiar</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Whse. Item Tracking Line N24 - Field Size N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1419014429 - Field 3623024566 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 945707429">
+          <source>Storage Place</source>
+          <target state="translated">Miejsce składowania</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Whse. Item Tracking Line N24 - Field Storage Place N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1419014429 - Field 2264335520 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 945707429">
+          <source>Vendor</source>
+          <target state="translated">Dostawca</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Whse. Item Tracking Line N24 - Field Vendor N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1419014429 - Field 4214389130 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 945707429">
+          <source>Width</source>
+          <target state="translated">Szerokość</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Whse. Item Tracking Line N24 - Field Width N24 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 1104935218 - EnumValue 1517371649 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Yes</source>
