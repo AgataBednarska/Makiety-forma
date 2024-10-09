@@ -10,7 +10,7 @@ codeunit 50100 "Custom Events N24"
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Assemble-to-Order Link", OnAfterUpdateAsm, '', false, false)]
-    local procedure AssembletoOrderLink_OnAfterUpdateAsm(AsmHeader: Record "Assembly Header")
+    local procedure AssembletoOrderLink_OnAfterUpdateAsm(var AsmHeader: Record "Assembly Header")
     var
         AssemblyMgtN24: Codeunit "AssemblyMgt N24";
     begin
@@ -121,7 +121,7 @@ codeunit 50100 "Custom Events N24"
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Purchase Header", OnBeforeConfirmUpdateCurrencyFactor, '', false, false)]
-    local procedure PurchaseHeader_OnBeforeConfirmUpdateCurrencyFactor(PurchaseHeader: Record "Purchase Header"; var HideValidationDialog: Boolean)
+    local procedure PurchaseHeader_OnBeforeConfirmUpdateCurrencyFactor(var PurchaseHeader: Record "Purchase Header"; var HideValidationDialog: Boolean)
     begin
         HideValidationDialog := true;
     end;

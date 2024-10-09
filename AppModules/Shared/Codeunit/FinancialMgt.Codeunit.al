@@ -20,7 +20,8 @@ codeunit 50108 "FinancialMgt N24"
         BankAccLedgEntry: Record "Bank Account Ledger Entry";
     begin
         BankAccLedgEntry := Rec;
-        BankAccLedgEntry.LockTable();
+        BankAccLedgEntry.ReadIsolation := IsolationLevel::UpdLock;
+
         BankAccLedgEntry.Find();
         if not BankAccLedgEntry."Difference Posted N24" then
             BankAccLedgEntry."Skip in Difference Calc. N24" := Rec."Skip in Difference Calc. N24"

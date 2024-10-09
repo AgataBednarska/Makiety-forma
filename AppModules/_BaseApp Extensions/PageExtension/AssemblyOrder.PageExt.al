@@ -52,7 +52,7 @@ pageextension 50148 "Assembly Order N24" extends "Assembly Order"
                 Promoted = true;
                 PromotedCategory = Category6;
                 PromotedIsBig = true;
-                ToolTip = 'Post transfer of used items to in-production location and residue positive adjustment';
+                ToolTip = 'Post transfer of used items to in-production location and residue positive adjustment.';
 
                 trigger OnAction()
                 var

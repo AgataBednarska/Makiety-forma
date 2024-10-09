@@ -1,5 +1,6 @@
 codeunit 50112 "Upgrade Mgt. N24"
 {
+    Access = Internal;
     Subtype = Upgrade;
 
     #region OnUpgradePerDatabase

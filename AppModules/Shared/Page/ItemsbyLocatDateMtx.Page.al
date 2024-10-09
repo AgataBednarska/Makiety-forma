@@ -638,13 +638,15 @@ page 50102 "Items by Loc. at Date Mtx N24"
     end;
 
     local procedure MatrixOnDrillDown(ColumnID: Integer)
+    var
+        PageManagement: Codeunit "Page Management";
     begin
         ItemLedgerEntry.SetCurrentKey(
           "Item No.", "Entry Type", "Variant Code", "Drop Shipment", "Location Code", "Posting Date");
         ItemLedgerEntry.SetRange("Item No.", Rec."No.");
         ItemLedgerEntry.SetRange("Location Code", MatrixRecords[ColumnID].Code);
         ItemLedgerEntry.SetFilter("Posting Date", gDateFilter);
-        Page.Run(0, ItemLedgerEntry);
+        PageManagement.PageRun(ItemLedgerEntry);
     end;
 
     procedure SetVisible()

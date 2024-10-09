@@ -114,7 +114,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page AssyOrderResidueSubform N24 - Action Residue - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2181108671 - Action 3973421190 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Creates new records per residue with unit amount (75% of material amount)</source>
+          <source>Creates new records per residue with unit amount (75% of material amount).</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page AssyOrderResidueSubform N24 - Action GetResidueLines - Property ToolTip</note>
         </trans-unit>
@@ -619,7 +619,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">Report Order Profitability N24 - ReportLabel ShipmentLbl</note>
         </trans-unit>
         <trans-unit id="PageExtension 872741964 - Action 3890335003 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1662713252">
-          <source>Post transfer of used items to in-production location and residue positive adjustment</source>
+          <source>Post transfer of used items to in-production location and residue positive adjustment.</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension Assembly Order N24 - Action PostExpenseAndRevenue N24 - Property ToolTip</note>
         </trans-unit>

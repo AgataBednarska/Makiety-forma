@@ -1,5 +1,6 @@
 codeunit 50111 "Installation Mgt. N24"
 {
+    Access = Internal;
     Subtype = Install;
 
     #region OnInstallAppPerDatabase

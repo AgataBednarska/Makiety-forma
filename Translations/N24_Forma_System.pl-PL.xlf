@@ -136,8 +136,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page AssyOrderResidueSubform N24 - Action Residue - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2181108671 - Action 3973421190 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Creates new records per residue with unit amount (75% of material amount)</source>
-          <target state="translated">Tworzy nowe wiersze dla odpadu z określoną kwotą za jednostkę (75% kwoty materiału)</target>
+          <source>Creates new records per residue with unit amount (75% of material amount).</source>
+          <target state="translated">Tworzy nowe wiersze dla odpadu z określoną kwotą za jednostkę (75% kwoty materiału).</target>
+          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Page AssyOrderResidueSubform N24 - Action GetResidueLines - Property ToolTip</note>
         </trans-unit>
@@ -742,8 +743,9 @@
           <note from="Xliff Generator" annotates="general" priority="3">Report Order Profitability N24 - ReportLabel ShipmentLbl</note>
         </trans-unit>
         <trans-unit id="PageExtension 872741964 - Action 3890335003 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1662713252">
-          <source>Post transfer of used items to in-production location and residue positive adjustment</source>
+          <source>Post transfer of used items to in-production location and residue positive adjustment.</source>
           <target state="translated">Księguj przesunięcie zużytych materiałów do magazunu produkcyjnego oraz przyjęcie odpadów</target>
+          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension Assembly Order N24 - Action PostExpenseAndRevenue N24 - Property ToolTip</note>
         </trans-unit>

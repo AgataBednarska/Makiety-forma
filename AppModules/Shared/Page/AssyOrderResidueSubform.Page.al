@@ -261,7 +261,7 @@ page 50100 "AssyOrderResidueSubform N24"
                     ApplicationArea = All;
                     Caption = 'Get residue lines';
                     Image = TransferToLines;
-                    ToolTip = 'Creates new records per residue with unit amount (75% of material amount)';
+                    ToolTip = 'Creates new records per residue with unit amount (75% of material amount).';
 
                     trigger OnAction()
                     var
