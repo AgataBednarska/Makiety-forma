@@ -1,6 +1,5 @@
 codeunit 50100 "Custom Events N24"
 {
-
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Approvals Mgmt.", OnSendPurchaseDocForApproval, '', false, false)]
     local procedure ApprovalsMgmt_OnSendPurchaseDocForApproval(var PurchaseHeader: Record "Purchase Header")
     var
@@ -304,5 +303,11 @@ codeunit 50100 "Custom Events N24"
     local procedure WhsePostShipment_OnBeforePostedWhseShptHeaderInsert(var PostedWhseShipmentHeader: Record "Posted Whse. Shipment Header"; WarehouseShipmentHeader: Record "Warehouse Shipment Header")
     begin
         PostedWhseShipmentHeader.AddAdditionalInformationToPostedWhseShipmentHeader(PostedWhseShipmentHeader, WarehouseShipmentHeader);
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Tracking Specification", OnAfterValidateEvent, "Quantity (Base)", false, false)]
+    local procedure TrackingSpecification_OnAfterCopyTrackingFromReservEntry(var Rec: Record "Tracking Specification")
+    begin
+        Rec.SetVendorBasedOnPurchaseHeader();
     end;
 }

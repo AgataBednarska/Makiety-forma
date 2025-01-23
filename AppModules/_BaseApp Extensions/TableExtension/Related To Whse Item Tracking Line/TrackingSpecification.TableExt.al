@@ -7,18 +7,40 @@ tableextension 50143 "Tracking Specification N24" extends "Tracking Specificatio
             Caption = 'Length';
             DataClassification = CustomerContent;
             DecimalPlaces = 0 : 3;
+            trigger OnValidate()
+            begin
+                if (Rec."Length N24" = 0) or (Rec."Width N24" = 0) then
+                    exit;
+
+                Rec.Validate("Cubic Meters N24", Rec."Length N24" * Rec."Width N24");
+            end;
         }
         field(50101; "Width N24"; Decimal)
         {
             Caption = 'Width';
             DataClassification = CustomerContent;
             DecimalPlaces = 0 : 3;
+            trigger OnValidate()
+            begin
+                if (Rec."Length N24" = 0) or (Rec."Width N24" = 0) then
+                    exit;
+
+                Rec.Validate("Cubic Meters N24", Rec."Length N24" * Rec."Width N24");
+            end;
         }
         field(50102; "Cubic Meters N24"; Decimal)
         {
             Caption = 'Cubic Meters';
             DataClassification = CustomerContent;
             DecimalPlaces = 0 : 5;
+
+            trigger OnValidate()
+            begin
+                if Rec."Cubic Meters N24" = 0 then
+                    exit;
+
+                Rec.Validate("Quantity (Base)", "Cubic Meters N24");
+            end;
         }
         field(50103; "Comments N24"; Text[100])
         {
@@ -29,6 +51,8 @@ tableextension 50143 "Tracking Specification N24" extends "Tracking Specificatio
         {
             Caption = 'Vendor';
             DataClassification = CustomerContent;
+            TableRelation = Vendor.Name;
+            ValidateTableRelation = false;
         }
         field(50105; "Size N24"; Boolean)
         {
@@ -46,4 +70,23 @@ tableextension 50143 "Tracking Specification N24" extends "Tracking Specificatio
             DataClassification = CustomerContent;
         }
     }
+    procedure SetVendorBasedOnPurchaseHeader()
+    var
+        PurchaseHeader: Record "Purchase Header";
+    begin
+        if Rec."Vendor N24" <> '' then
+            exit;
+
+        if Rec."Source Type" <> Database::"Purchase Line" then
+            exit;
+
+        PurchaseHeader.SetLoadFields("Buy-from Vendor Name");
+        if not PurchaseHeader.Get(Rec."Source Subtype", Rec."Source ID") then
+            exit;
+
+        if PurchaseHeader."Buy-from Vendor Name" = '' then
+            exit;
+
+        Rec."Vendor N24" := PurchaseHeader."Buy-from Vendor Name";
+    end;
 }

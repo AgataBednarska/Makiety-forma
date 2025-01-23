@@ -68,6 +68,21 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit AssemblyMgt N24 - Method ValidateInProdAssemblyLine - NamedType UpdateFieldQst</note>
         </trans-unit>
+        <trans-unit id="Codeunit 891346827 - Method 2128189086 - NamedType 2481248209" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Excel Imported Sucessfully</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Competitiv. Item Mgt. N24 - Method ImportExcelData - NamedType ExcelImportedSuccLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 891346827 - Method 3848482430 - NamedType 3658621520" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No excel file found.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Competitiv. Item Mgt. N24 - Method ReadExcelSheet - NamedType NoExcelFileFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 891346827 - Method 3848482430 - NamedType 4273853447" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Choose excel file to upload (.xlsx, .xls)</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Competitiv. Item Mgt. N24 - Method ReadExcelSheet - NamedType UploadExcelMsg</note>
+        </trans-unit>
         <trans-unit id="Codeunit 915385999 - Method 2110094099 - NamedType 163307534" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ext. Document No. %1:</source>
           <note from="Developer" annotates="general" priority="2">%1 - Ext. Document No.</note>
@@ -668,6 +683,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension Item Registers N24 - Action ValueRegister N24 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="PageExtension 807390954 - Action 1928253076 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3901500866">
+          <source>Import Lot No. Information From Excel</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension Lot No. Information List N24 - Action Import Lot No. Information From Excel N24 - Property Caption</note>
+        </trans-unit>
         <trans-unit id="PageExtension 436547093 - Action 1590438532 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3196174509">
           <source>Compensation Proposal</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -902,6 +922,11 @@
           <source>Length</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension Lot No. Information N24 - Field Length N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2551347960 - Field 2078605797 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3361278800">
+          <source>No. Of Original SLAB</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Lot No. Information N24 - Field No. Of Original SLAB N24 - Property Caption</note>
         </trans-unit>
         <trans-unit id="TableExtension 2551347960 - Field 3831133541 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3361278800">
           <source>Shade</source>

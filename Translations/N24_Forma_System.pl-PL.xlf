@@ -81,6 +81,24 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit AssemblyMgt N24 - Method ValidateInProdAssemblyLine - NamedType UpdateFieldQst</note>
         </trans-unit>
+        <trans-unit id="Codeunit 891346827 - Method 2128189086 - NamedType 2481248209" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Excel Imported Sucessfully</source>
+          <target state="translated">Zaimportowano pomyślnie</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Competitiv. Item Mgt. N24 - Method ImportExcelData - NamedType ExcelImportedSuccLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 891346827 - Method 3848482430 - NamedType 3658621520" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No excel file found.</source>
+          <target state="translated">Nie znaleziono pliku excel</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Competitiv. Item Mgt. N24 - Method ReadExcelSheet - NamedType NoExcelFileFoundLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 891346827 - Method 3848482430 - NamedType 4273853447" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Choose excel file to upload (.xlsx, .xls)</source>
+          <target state="translated">Wybierz plik excel do importu (formaty .xlsx, .xls)</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Competitiv. Item Mgt. N24 - Method ReadExcelSheet - NamedType UploadExcelMsg</note>
+        </trans-unit>
         <trans-unit id="Codeunit 915385999 - Method 2110094099 - NamedType 163307534" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ext. Document No. %1:</source>
           <target state="translated">Nr dokumentu zewn. %1:</target>
@@ -138,7 +156,6 @@
         <trans-unit id="Page 2181108671 - Action 3973421190 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Creates new records per residue with unit amount (75% of material amount).</source>
           <target state="translated">Tworzy nowe wiersze dla odpadu z określoną kwotą za jednostkę (75% kwoty materiału).</target>
-          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Page AssyOrderResidueSubform N24 - Action GetResidueLines - Property ToolTip</note>
         </trans-unit>
@@ -745,7 +762,6 @@
         <trans-unit id="PageExtension 872741964 - Action 3890335003 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1662713252">
           <source>Post transfer of used items to in-production location and residue positive adjustment.</source>
           <target state="translated">Księguj przesunięcie zużytych materiałów do magazunu produkcyjnego oraz przyjęcie odpadów</target>
-          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension Assembly Order N24 - Action PostExpenseAndRevenue N24 - Property ToolTip</note>
         </trans-unit>
@@ -802,6 +818,12 @@
           <target state="translated">Rejestr zapasu - wartość</target>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension Item Registers N24 - Action ValueRegister N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 807390954 - Action 1928253076 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3901500866">
+          <source>Import Lot No. Information From Excel</source>
+          <target state="transalted">Importuj informacje o numerach partii z Excel</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension Lot No. Information List N24 - Action Import Lot No. Information From Excel N24 - Property Caption</note>
         </trans-unit>
         <trans-unit id="PageExtension 436547093 - Action 1590438532 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3196174509">
           <source>Compensation Proposal</source>
@@ -1084,6 +1106,12 @@
           <target state="translated">Długość</target>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension Lot No. Information N24 - Field Length N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2551347960 - Field 2078605797 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3361278800">
+          <source>No. Of Original SLAB</source>
+          <target state="translated">Nr początkowej płyty</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Lot No. Information N24 - Field No. Of Original SLAB N24 - Property Caption</note>
         </trans-unit>
         <trans-unit id="TableExtension 2551347960 - Field 3831133541 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3361278800">
           <source>Shade</source>

@@ -36,6 +36,10 @@ pageextension 50213 "Lot No. Information Card N24" extends "Lot No. Information 
             {
                 ApplicationArea = All;
             }
+            field("No. Of Original SLAB N24"; Rec."No. Of Original SLAB N24")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 }

@@ -37,6 +37,30 @@ pageextension 50215 "Lot No. Information List N24" extends "Lot No. Information 
             {
                 ApplicationArea = All;
             }
+            field("No. Of Original SLAB N24"; Rec."No. Of Original SLAB N24")
+            {
+                ApplicationArea = All;
+            }
+        }
+    }
+    actions
+    {
+        addlast(navigation)
+        {
+            action("Import Lot No. Information From Excel N24")
+            {
+                ApplicationArea = All;
+                Caption = 'Import Lot No. Information From Excel';
+                Image = ImportExcel;
+                trigger OnAction()
+                var
+                    TempExcelBuff: Record "Excel Buffer" temporary;
+                    CompetitivItemMgt: Codeunit "Competitiv. Item Mgt. N24";
+                begin
+                    CompetitivItemMgt.ReadExcelSheet(TempExcelBuff);
+                    CompetitivItemMgt.ImportExcelData(TempExcelBuff);
+                end;
+            }
         }
     }
 }

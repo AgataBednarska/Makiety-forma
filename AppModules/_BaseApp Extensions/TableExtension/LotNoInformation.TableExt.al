@@ -45,5 +45,11 @@ tableextension 50161 "Lot No. Information N24" extends "Lot No. Information"
             Caption = 'Storage Place';
             DataClassification = CustomerContent;
         }
+        //Narazie bez przenoszenia informacji gdziekowliek - pole tylko informacyjnie na liscie inf o nr partii
+        field(50108; "No. Of Original SLAB N24"; Code[50])
+        {
+            Caption = 'No. Of Original SLAB';
+            DataClassification = CustomerContent;
+        }
     }
 }
