@@ -1154,7 +1154,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension Vendor N24 - Field Employee N24 - Property Caption</note>
         </trans-unit>
         <trans-unit id="TableExtension 2264335520 - Field 63386317 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1936001480">
-          <source>Rounding square meters</source>
+          <source>Rounding Square Meters</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension Vendor N24 - Field Square Meters Rounding N24 - Property Caption</note>
         </trans-unit>
