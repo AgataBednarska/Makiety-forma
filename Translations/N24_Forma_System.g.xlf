@@ -758,6 +758,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension Sales Quote N24 - Control CommentsGroup N24 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="PageExtension 3601358012 - Control 63386317 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 4055858012">
+          <source>Accepted Values: 0.1, 0.01, 0.001, 0.0001.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension VendorCard N24 - Control Square Meters Rounding N24 - Property ToolTip</note>
+        </trans-unit>
         <trans-unit id="TableExtension 3467505379 - Field 1699349807 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2091775483">
           <source>External Document No.</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1123,6 +1128,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension Tracking Specification N24 - Field Vendor N24 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="TableExtension 3061336454 - Field 967866589 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1470081326">
+          <source>Vendor No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Tracking Specification N24 - Field Vendor No. N24 - Property Caption</note>
+        </trans-unit>
         <trans-unit id="TableExtension 3061336454 - Field 4214389130 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1470081326">
           <source>Width</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1142,6 +1152,11 @@
           <source>Employee</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension Vendor N24 - Field Employee N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2264335520 - Field 63386317 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1936001480">
+          <source>Rounding square meters</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Vendor N24 - Field Square Meters Rounding N24 - Property Caption</note>
         </trans-unit>
         <trans-unit id="TableExtension 1419014429 - Field 3806772324 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 945707429">
           <source>Comments</source>
