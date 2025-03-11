@@ -35,21 +35,8 @@ tableextension 50143 "Tracking Specification N24" extends "Tracking Specificatio
             DecimalPlaces = 0 : 5;
 
             trigger OnValidate()
-            var
-                Vendor: Record Vendor;
-                RoundFactor: Decimal;
             begin
-                if Rec."Cubic Meters N24" = 0 then
-                    exit;
-                    
-                if not Vendor.Get("Vendor No. N24") then
-                    exit;
-
-                if Vendor.Get("Vendor No. N24") then
-                    RoundFactor := Vendor."Square Meters Rounding N24";
-
-                if RoundFactor > 0 then
-                    "Cubic Meters N24" := Round("Cubic Meters N24", RoundFactor);
+                RoundCubicMeters();
 
                 Rec.Validate("Quantity (Base)", "Cubic Meters N24");
             end;
@@ -81,12 +68,6 @@ tableextension 50143 "Tracking Specification N24" extends "Tracking Specificatio
             Caption = 'Storage Place';
             DataClassification = CustomerContent;
         }
-        field(50108; "Vendor No. N24"; Code[20])
-        {
-            Caption = 'Vendor No.';
-            DataClassification = CustomerContent;
-            TableRelation = Vendor."No.";
-        }
     }
     procedure SetVendorBasedOnPurchaseHeader()
     var
@@ -106,6 +87,29 @@ tableextension 50143 "Tracking Specification N24" extends "Tracking Specificatio
             exit;
 
         Rec."Vendor N24" := PurchaseHeader."Buy-from Vendor Name";
-        Rec."Vendor No. N24" := PurchaseHeader."Buy-from Vendor No.";
+    end;
+
+    local procedure RoundCubicMeters()
+    var
+        PurchaseHeader: Record "Purchase Header";
+        Vendor: Record Vendor;
+    begin
+        if Rec."Cubic Meters N24" = 0 then
+            exit;
+
+        if Rec."Source Type" <> Database::"Purchase Line" then
+            exit;
+
+        PurchaseHeader.SetLoadFields("Buy-from Vendor No.");
+        if not PurchaseHeader.Get(Rec."Source Subtype", Rec."Source ID") then
+            exit;
+
+        if not Vendor.Get(PurchaseHeader."Buy-from Vendor No.") then
+            exit;
+
+        if Vendor."Square Meters Rounding N24" = 0 then
+            exit;
+
+        Rec."Cubic Meters N24" := Round(Rec."Cubic Meters N24", Vendor."Square Meters Rounding N24");
     end;
 }

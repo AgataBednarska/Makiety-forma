@@ -1353,12 +1353,6 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension Tracking Specification N24 - Field Vendor N24 - Property Caption</note>
         </trans-unit>
-        <trans-unit id="TableExtension 3061336454 - Field 967866589 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1470081326">
-          <source>Vendor No.</source>
-          <target state="translated">Numer Dostawcy</target>
-          <note from="Developer" annotates="general" priority="2"/>
-          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Tracking Specification N24 - Field Vendor No. N24 - Property Caption</note>
-        </trans-unit>
         <trans-unit id="TableExtension 3061336454 - Field 4214389130 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1470081326">
           <source>Width</source>
           <target state="translated">Szerokość</target>
@@ -1386,7 +1380,6 @@
         <trans-unit id="TableExtension 2264335520 - Field 63386317 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1936001480">
           <source>Rounding Square Meters</source>
           <target state="translated">Zaokrąglanie metrów kwadratowych</target>
-          <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension Vendor N24 - Field Square Meters Rounding N24 - Property Caption</note>
         </trans-unit>

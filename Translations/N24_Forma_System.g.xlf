@@ -1128,11 +1128,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension Tracking Specification N24 - Field Vendor N24 - Property Caption</note>
         </trans-unit>
-        <trans-unit id="TableExtension 3061336454 - Field 967866589 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1470081326">
-          <source>Vendor No.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Tracking Specification N24 - Field Vendor No. N24 - Property Caption</note>
-        </trans-unit>
         <trans-unit id="TableExtension 3061336454 - Field 4214389130 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1470081326">
           <source>Width</source>
           <note from="Developer" annotates="general" priority="2"></note>
