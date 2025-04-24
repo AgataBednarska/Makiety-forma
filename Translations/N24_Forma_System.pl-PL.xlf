@@ -57,6 +57,12 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">Table Document Buffer N24 - Field Quantity - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Codeunit 73535267 - Method 380932842 - NamedType 4117224762" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Do you want to create a prepayment for VAT 23% or VAT 8%?</source>
+          <target state="translated">Czy chcesz utworzyć zaliczkę na VAT 23% czy VAT 8%?</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Add Prepayment Lines N24 - Method SelectMultipleItems - NamedType PrepmtLineTypeQst</note>
+        </trans-unit>
         <trans-unit id="Codeunit 1503456484 - Method 3634580255 - NamedType 3646957145" size-unit="char" translate="yes" xml:space="preserve">
           <source>Field %1 will not be updated on related assembly orders.\Do you want to continue?</source>
           <target state="translated">Pole %1 nie zostanie zaktualizowane na powiązanych zleceniach kompletacji.\Czy chcesz kontynuować?</target>
@@ -855,6 +861,12 @@
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension Posted Sales Invoice N24 - Control CommentsGroup N24 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="PageExtension 712533090 - Control 3145039738 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 4145206282">
+          <source>Prepayments</source>
+          <target state="translated">Zaliczki</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension Sales &amp; Receivables Setup N24 - Control Prepayments N24 - Property Caption</note>
+        </trans-unit>
         <trans-unit id="PageExtension 472243321 - Control 3211716062 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1056066689">
           <source>Line Price for Unit Price Calculation</source>
           <target state="translated">Cena wiersza do obliczenia ceny jednostkowej</target>
@@ -1274,6 +1286,18 @@
           <target state="translated">Nr dok. zewn. JPK</target>
           <note from="Developer" annotates="general" priority="2"/>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension Return Shipment Line N24 - Field SAFT Ext. Document No. N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 712533090 - Field 743329807 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4145206282">
+          <source>Prepayment VAT 23% Account</source>
+          <target state="translated">Konto zaliczki VAT 23%</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Sales &amp; Receivables Setup N24 - Field Prepmt VAT23 Account N24 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 712533090 - Field 179231488 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4145206282">
+          <source>Prepayment VAT 8% Account</source>
+          <target state="translated">Konto zaliczki VAT 8%</target>
+          <note from="Developer" annotates="general" priority="2"/>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension Sales &amp; Receivables Setup N24 - Field Prepmt VAT8 Account N24 - Property Caption</note>
         </trans-unit>
         <trans-unit id="TableExtension 2369753805 - Field 1699349807 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3059602325">
           <source>External Document No.</source>
