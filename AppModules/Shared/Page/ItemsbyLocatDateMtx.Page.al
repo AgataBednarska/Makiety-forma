@@ -460,8 +460,10 @@ page 50102 "Items by Loc. at Date Mtx N24"
                         Image = "Event";
 
                         trigger OnAction()
+                        var
+                            AvailabilityType: Enum "Item Availability Type";
                         begin
-                            ItemAvailFormsMgt.ShowItemAvailFromItem(Rec, ItemAvailFormsMgt.ByEvent());
+                            ItemAvailFormsMgt.ShowItemAvailabilityFromItem(Rec, AvailabilityType::"Event");
                         end;
                     }
                     action(Period)
@@ -510,8 +512,10 @@ page 50102 "Items by Loc. at Date Mtx N24"
                         Image = BOMLevel;
 
                         trigger OnAction()
+                        var
+                            AvailabilityType: Enum "Item Availability Type";
                         begin
-                            ItemAvailFormsMgt.ShowItemAvailFromItem(Rec, ItemAvailFormsMgt.ByEvent());
+                            ItemAvailFormsMgt.ShowItemAvailabilityFromItem(Rec, AvailabilityType::"Event");
                         end;
                     }
                 }

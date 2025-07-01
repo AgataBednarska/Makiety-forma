@@ -48,31 +48,31 @@ codeunit 50116 "Competitiv. Item Mgt. N24"
 
             if LotNoInformation.IsEmpty() then begin
                 LotNoInformation.Init();
-                LotNoInformation.Validate("Item No.", GetValueAtCell(TempExcelBuff, RowNo, 2));
-                LotNoInformation.Validate("Lot No.", GetValueAtCell(TempExcelBuff, RowNo, 1));
+                LotNoInformation.Validate("Item No.", CopyStr(GetValueAtCell(TempExcelBuff, RowNo, 2), 1, MaxStrLen(LotNoInformation."Item No.")));
+                LotNoInformation.Validate("Lot No.", CopyStr(GetValueAtCell(TempExcelBuff, RowNo, 1), 1, MaxStrLen(LotNoInformation."Lot No.")));
                 Evaluate(LotNoInformation."Length N24", GetValueAtCell(TempExcelBuff, RowNo, 3));
                 Evaluate(LotNoInformation."Width N24", GetValueAtCell(TempExcelBuff, RowNo, 4));
                 Evaluate(LotNoInformation."Cubic Meters N24", GetValueAtCell(TempExcelBuff, RowNo, 5));
-                LotNoInformation.Validate("Comments N24", GetValueAtCell(TempExcelBuff, RowNo, 6));
-                LotNoInformation.Validate("Vendor N24", GetValueAtCell(TempExcelBuff, RowNo, 7));
+                LotNoInformation.Validate("Comments N24", CopyStr(GetValueAtCell(TempExcelBuff, RowNo, 6), 1, MaxStrLen(LotNoInformation."Comments N24")));
+                LotNoInformation.Validate("Vendor N24", CopyStr(GetValueAtCell(TempExcelBuff, RowNo, 7), 1, MaxStrLen(LotNoInformation."Vendor N24")));
                 Evaluate(LotNoInformation."Size N24", GetValueAtCell(TempExcelBuff, RowNo, 8));
-                LotNoInformation.Validate("Shade N24", GetValueAtCell(TempExcelBuff, RowNo, 9));
-                LotNoInformation.Validate("No. Of Original SLAB N24", GetValueAtCell(TempExcelBuff, RowNo, 10));
+                LotNoInformation.Validate("Shade N24", CopyStr(GetValueAtCell(TempExcelBuff, RowNo, 9), 1, MaxStrLen(LotNoInformation."Shade N24")));
+                LotNoInformation.Validate("No. Of Original SLAB N24", CopyStr(GetValueAtCell(TempExcelBuff, RowNo, 10), 1, MaxStrLen(LotNoInformation."No. Of Original SLAB N24")));
 
                 LotNoInformation.Insert(true);
             end
             else begin
                 LotNoInformation.FindFirst();
-                LotNoInformation.Validate("Item No.", GetValueAtCell(TempExcelBuff, RowNo, 2));
-                LotNoInformation.Validate("Lot No.", GetValueAtCell(TempExcelBuff, RowNo, 1));
+                LotNoInformation.Validate("Item No.", CopyStr(GetValueAtCell(TempExcelBuff, RowNo, 2), 1, MaxStrLen(LotNoInformation."Item No.")));
+                LotNoInformation.Validate("Lot No.", CopyStr(GetValueAtCell(TempExcelBuff, RowNo, 1), 1, MaxStrLen(LotNoInformation."Lot No.")));
                 Evaluate(LotNoInformation."Length N24", GetValueAtCell(TempExcelBuff, RowNo, 3));
                 Evaluate(LotNoInformation."Width N24", GetValueAtCell(TempExcelBuff, RowNo, 4));
                 Evaluate(LotNoInformation."Cubic Meters N24", GetValueAtCell(TempExcelBuff, RowNo, 5));
-                LotNoInformation.Validate("Comments N24", GetValueAtCell(TempExcelBuff, RowNo, 6));
-                LotNoInformation.Validate("Vendor N24", GetValueAtCell(TempExcelBuff, RowNo, 7));
+                LotNoInformation.Validate("Comments N24", CopyStr(GetValueAtCell(TempExcelBuff, RowNo, 6), 1, MaxStrLen(LotNoInformation."Comments N24")));
+                LotNoInformation.Validate("Vendor N24", CopyStr(GetValueAtCell(TempExcelBuff, RowNo, 7), 1, MaxStrLen(LotNoInformation."Vendor N24")));
                 Evaluate(LotNoInformation."Size N24", GetValueAtCell(TempExcelBuff, RowNo, 8));
-                LotNoInformation.Validate("Shade N24", GetValueAtCell(TempExcelBuff, RowNo, 9));
-                LotNoInformation.Validate("No. Of Original SLAB N24", GetValueAtCell(TempExcelBuff, RowNo, 10));
+                LotNoInformation.Validate("Shade N24", CopyStr(GetValueAtCell(TempExcelBuff, RowNo, 9), 1, MaxStrLen(LotNoInformation."Shade N24")));
+                LotNoInformation.Validate("No. Of Original SLAB N24", CopyStr(GetValueAtCell(TempExcelBuff, RowNo, 10), 1, MaxStrLen(LotNoInformation."No. Of Original SLAB N24")));
 
                 LotNoInformation.Modify(true);
             end;

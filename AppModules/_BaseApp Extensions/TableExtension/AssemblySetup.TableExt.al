@@ -46,13 +46,13 @@ tableextension 50149 "Assembly Setup N24" extends "Assembly Setup"
             DataClassification = CustomerContent;
             Editable = false;
         }
-        field(50103; "Def. Location for Material N24"; Code[20])
+        field(50103; "Def. Location for Material N24"; Code[10])
         {
             Caption = 'Default Location for Material';
             DataClassification = CustomerContent;
             TableRelation = Location.Code;
         }
-        field(50104; "In-Production Location N24"; Code[20])
+        field(50104; "In-Production Location N24"; Code[10])
         {
             Caption = 'In-Production Location';
             DataClassification = CustomerContent;
