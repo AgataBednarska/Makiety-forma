@@ -532,6 +532,8 @@ page 50102 "Items by Loc. at Date Mtx N24"
             repeat
                 MATRIX_CurrentColumnOrdinal := MATRIX_CurrentColumnOrdinal + 1;
                 MATRIX_OnAfterGetRecord(MATRIX_CurrentColumnOrdinal);
+
+                SetVisible();
             until (TempMatrixLocation.Next() = 0) or (MATRIX_CurrentColumnOrdinal = MATRIX_NoOfMatrixColumns);
     end;
 
@@ -623,14 +625,17 @@ page 50102 "Items by Loc. at Date Mtx N24"
     var
         TempItem: Record Item temporary;
     begin
+        if Rec.Type <> "Item Type"::Inventory then begin
+            MATRIX_CellData[ColumnID] := 0;
+            exit;
+        end;
+
         TempItem.Copy(Rec);
         TempItem.SetRange("Location Filter", MatrixRecords[ColumnID].Code);
         TempItem.SetFilter("Date Filter", gDateFilter);
         TempItem.CalcFields("Inventory at Date N24");
 
         MATRIX_CellData[ColumnID] := TempItem."Inventory at Date N24";
-
-        SetVisible();
     end;
 
     procedure Load(MatrixColumns1: array[32] of Text[1024]; var MatrixRecords1: array[32] of Record Location; var MatrixRecord1: Record Location; CurrSetLength: Integer)
