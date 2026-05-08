@@ -72,15 +72,13 @@ codeunit 50100 "Custom Events N24"
     begin
         PurchHeader.TestField("ITI SAFT Ext. Document No.");
     end;
-    //TODO Table 'Invoice Post. Buffer' is marked for removal. Reason: This table will be replaced by table Invoice Posting Buffer in new Invoice Posting implementation.. Tag: 20.0.
-    //TODO Method 'OnAfterInvPostBufferPreparePurchase' is marked for removal. Reason: Replaced by event in table Invoice Posting Buffer. Tag: 20.0.
-    [EventSubscriber(ObjectType::Table, Database::"Invoice Post. Buffer", OnAfterInvPostBufferPreparePurchase, '', false, false)]
-    //TODO Table 'Invoice Post. Buffer' is marked for removal. Reason: This table will be replaced by table Invoice Posting Buffer in new Invoice Posting implementation.. Tag: 20.0.
-    local procedure OnAfterInvPostBufferPreparePurchase(var PurchaseLine: Record "Purchase Line"; var InvoicePostBuffer: Record "Invoice Post. Buffer")
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Purch. Post Invoice Events", OnAfterPrepareInvoicePostingBuffer, '', false, false)]
+    local procedure OnAfterPrepareInvoicePostingBuffer(var PurchaseLine: Record "Purchase Line"; var InvoicePostingBuffer: Record "Invoice Posting Buffer")
     var
         FinancialMgt: Codeunit "FinancialMgt N24";
     begin
-        FinancialMgt.AssignPostingDescriptionToGLFromPurchaseLine(PurchaseLine, InvoicePostBuffer);
+        FinancialMgt.AssignPostingDescriptionToGLFromPurchaseLine(PurchaseLine, InvoicePostingBuffer);
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"ITI Post Bank Statement", OnBeforeGenJnlPostlineRunWithCheck, '', false, false)]
@@ -195,7 +193,7 @@ codeunit 50100 "Custom Events N24"
         ExternalDocumentNoMgt.InsertSalesLineForExternalDocumentNo(SalesLine, ReturnReceiptLine."External Document No. N24", NextLineNo);
     end;
 
-    [EventSubscriber(ObjectType::Table, Database::"Assembly Header", OnAfterValidateEvent, "ITI Gen. Bus. Posting Group", false, false)]
+    [EventSubscriber(ObjectType::Table, Database::"Assembly Header", OnAfterValidateEvent, "Gen. Bus. Posting Group", false, false)]
     local procedure RunOnAfterValidateGenBusPostingGroup(var Rec: Record "Assembly Header")
     var
         AssemblyMgtN24: Codeunit "AssemblyMgt N24";

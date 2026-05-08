@@ -21,7 +21,7 @@ pageextension 50175 "Assembly Setup N24" extends "Assembly Setup"
                 ApplicationArea = All;
             }
         }
-        addlast("ITI Posting")
+        addlast(General)
         {
             field("Def.Gen.Bus.Post.Gr. for Adjmt N24"; Rec."Def.Gen.Bus.Post.Gr. Adjmt N24")
             {

@@ -345,7 +345,7 @@ codeunit 50110 "AssemblyMgt N24"
         if (not GLAccount.Get(GLAccount2Tok)) and (not GLAccount.Get(GLAccountTok)) then
             exit;
 
-        if GenPostSetup.Get(AssemblyHeader."ITI Gen. Bus. Posting Group", AssemblyHeader."Gen. Prod. Posting Group") then
+        if GenPostSetup.Get(AssemblyHeader."Gen. Bus. Posting Group", AssemblyHeader."Gen. Prod. Posting Group") then
             GLAccount.Get(GenPostSetup."Inventory Adjmt. Account");
 
         exit(GLAccount."No.");

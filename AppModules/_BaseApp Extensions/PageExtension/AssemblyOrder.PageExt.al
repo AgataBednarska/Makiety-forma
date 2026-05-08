@@ -34,7 +34,7 @@ pageextension 50148 "Assembly Order N24" extends "Assembly Order"
                 Editable = not Rec."Assemble to Order";
             }
         }
-        modify("ITI Gen. Bus. Posting Group")
+        modify("Gen. Bus. Posting Group")
         {
             Editable = false;
         }

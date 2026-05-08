@@ -31,11 +31,14 @@ codeunit 50112 "Upgrade Mgt. N24"
 
     trigger OnUpgradePerCompany()
     var
+        AppMgtShared: Codeunit "App Mgt. Shared N24";
         CurrentModuleInfo: ModuleInfo;
     begin
         // Code to perform company related table upgrade tasks
         if not NavApp.GetCurrentModuleInfo(CurrentModuleInfo) then
             exit;
+
+        AppMgtShared.MoveITIGenBusPostingGroupToBC();
     end;
 
     trigger OnValidateUpgradePerCompany()
