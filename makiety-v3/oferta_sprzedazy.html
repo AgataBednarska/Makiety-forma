@@ -255,6 +255,7 @@
     .field-control,
     .field-input,
     .field-select,
+    .line-select,
     .line-input,
     .field-textarea {
       min-height: 24px;
@@ -284,6 +285,7 @@
 
     .field-input:focus,
     .field-select:focus,
+    .line-select:focus,
     .field-textarea:focus,
     .line-input:focus {
       outline: none;
@@ -524,6 +526,13 @@
       padding: 4px 6px;
     }
 
+    .line-select {
+      min-height: 24px;
+      border-width: 0;
+      background: transparent;
+      padding: 2px 4px;
+    }
+
     .line-input--compact {
       text-align: right;
     }
@@ -532,7 +541,6 @@
       width: 14px;
       height: 14px;
       accent-color: #605e5c;
-      pointer-events: none;
     }
 
     .qty-alert {
@@ -809,7 +817,7 @@
         <button class="workspace-tab" type="button" data-workspace-tab="funkcje">Funkcje</button>
       </div>
       <div class="subtoolbar" id="managePanel">
-        <button class="subtoolbar-link" type="button">Nowy wiersz</button>
+        <button class="subtoolbar-link" type="button" id="addLineButton">Nowy wiersz</button>
         <button class="subtoolbar-link" type="button">Usun wiersz</button>
         <button class="subtoolbar-link" type="button">Wybierz zapasy...</button>
         <button class="subtoolbar-link" type="button">Wstaw teksty dodatk.</button>
@@ -915,6 +923,7 @@
     const linePanel = document.querySelector("#linePanel");
     const functionPanel = document.querySelector("#functionPanel");
     const lineBody = document.querySelector("#lineBody");
+    const addLineButton = document.querySelector("#addLineButton");
 
     const netTotalValue = document.querySelector("#netTotalValue");
     const vatTotalValue = document.querySelector("#vatTotalValue");
@@ -1051,6 +1060,65 @@
     const formatDecimal = (value) => value.toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const formatInteger = (value) => value.toLocaleString("pl-PL", { maximumFractionDigits: 0 });
 
+    function createLineByType(type = "Koszt dodatkowy") {
+      const isAdditionalCost = type === "Koszt dodatkowy";
+
+      return {
+        type,
+        itemNo: isAdditionalCost ? "TR-000" : "ZAP-000",
+        jumbo: false,
+        description: isAdditionalCost ? "transport" : "Nowy zapas",
+        locationCode: "M02",
+        quantity: "1",
+        assembleQty: isAdditionalCost ? "0" : "1",
+        unitOfMeasureCode: isAdditionalCost ? "usl." : "M2",
+        unitPriceNet: "0,00",
+        taxGroupCode: "",
+        lineDiscountPct: "0,00",
+        lineAmountNet: "0,00",
+        availability: "",
+        billable: true
+      };
+    }
+
+    function normalizeLineByType(line) {
+      const isAdditionalCost = line.type === "Koszt dodatkowy";
+
+      if (isAdditionalCost) {
+        if (!line.description || line.description === "Nowy zapas") {
+          line.description = "transport";
+        }
+
+        if (!line.itemNo || line.itemNo === "ZAP-000") {
+          line.itemNo = "TR-000";
+        }
+
+        line.assembleQty = "0";
+
+        if (!line.unitOfMeasureCode || line.unitOfMeasureCode === "M2") {
+          line.unitOfMeasureCode = "usl.";
+        }
+
+        return;
+      }
+
+      if (!line.description || line.description === "transport") {
+        line.description = "Nowy zapas";
+      }
+
+      if (!line.itemNo || line.itemNo === "TR-000") {
+        line.itemNo = "ZAP-000";
+      }
+
+      if (parseLocaleNumber(line.assembleQty) === 0) {
+        line.assembleQty = "1";
+      }
+
+      if (!line.unitOfMeasureCode || line.unitOfMeasureCode === "usl.") {
+        line.unitOfMeasureCode = "M2";
+      }
+    }
+
     function renderRows() {
       lineBody.innerHTML = "";
 
@@ -1071,13 +1139,29 @@
           ? `<input class="line-input line-input--compact" data-field="lineDiscountPct" data-row-index="${index}" value="${line.lineDiscountPct}">`
           : `<div class="cell cell-right">${line.lineDiscountPct}</div>`;
 
+        const typeCell = line.billable
+          ? `<select class="line-select" data-field="type" data-row-index="${index}"><option value="Koszt dodatkowy" ${line.type === "Koszt dodatkowy" || line.type === "Koszt doda..." ? "selected" : ""}>Koszt dodatkowy</option><option value="Zapas" ${line.type === "Zapas" ? "selected" : ""}>Zapas</option></select>`
+          : `<div class="cell">${line.type}</div>`;
+
+        const itemNoCell = line.billable
+          ? `<input class="line-input" data-field="itemNo" data-row-index="${index}" value="${line.itemNo}" placeholder="${(line.type === "Koszt dodatkowy" || line.type === "Koszt doda...") ? "Nr transportu" : "Nr zapasu"}">`
+          : `<div class="cell">${line.itemNo}</div>`;
+
+        const descriptionCell = line.billable
+          ? `<input class="line-input" data-field="description" data-row-index="${index}" value="${line.description}">`
+          : `<div class="cell">${line.description}</div>`;
+
+        const jumboCell = line.billable
+          ? `<div class="cell cell-center"><input class="jumbo-check" type="checkbox" data-field="jumbo" data-row-index="${index}" ${line.jumbo ? "checked" : ""}></div>`
+          : `<div class="cell cell-center"><input class="jumbo-check" type="checkbox" ${line.jumbo ? "checked" : ""}></div>`;
+
         const cells = [
           `<td class="selection-cell"><button class="row-marker" type="button" data-row-index="${index}">${index === activeRowIndex ? "→" : ""}</button></td>`,
           `<td class="menu-cell"><button class="row-menu" type="button" aria-label="Menu wiersza">⋮</button></td>`,
-          `<td><div class="cell">${line.type}</div></td>`,
-          `<td><div class="cell">${line.itemNo}</div></td>`,
-          `<td><div class="cell cell-center"><input class="jumbo-check" type="checkbox" ${line.jumbo ? "checked" : ""}></div></td>`,
-          `<td><div class="cell">${line.description}</div></td>`,
+          `<td>${typeCell}</td>`,
+          `<td>${itemNoCell}</td>`,
+          `<td>${jumboCell}</td>`,
+          `<td>${descriptionCell}</td>`,
           `<td><div class="cell">${line.locationCode}</div></td>`,
           `<td>${quantityCell}</td>`,
           `<td><div class="cell cell-right ${parseLocaleNumber(line.assembleQty) === 0 ? "qty-alert" : ""}">${line.assembleQty}</div></td>`,
@@ -1172,14 +1256,54 @@
           return;
         }
 
+        if (node.matches(".jumbo-check")) {
+          node.addEventListener("change", (event) => {
+            const index = Number.parseInt(event.target.dataset.rowIndex, 10);
+            lineData[index].jumbo = event.target.checked;
+          });
+
+          return;
+        }
+
         node.addEventListener("input", (event) => {
           const index = Number.parseInt(event.target.dataset.rowIndex, 10);
           const fieldName = event.target.dataset.field;
           lineData[index][fieldName] = event.target.value;
+
+          if (fieldName === "type") {
+            normalizeLineByType(lineData[index]);
+            renderRows();
+          }
+
+          recalculateSummary();
+        });
+
+        node.addEventListener("change", (event) => {
+          const index = Number.parseInt(event.target.dataset.rowIndex, 10);
+          const fieldName = event.target.dataset.field;
+
+          if (!fieldName || fieldName === "jumbo") {
+            return;
+          }
+
+          lineData[index][fieldName] = event.target.value;
+
+          if (fieldName === "type") {
+            normalizeLineByType(lineData[index]);
+            renderRows();
+          }
+
           recalculateSummary();
         });
       });
     }
+
+    addLineButton.addEventListener("click", () => {
+      lineData.push(createLineByType());
+      activeRowIndex = lineData.length - 1;
+      renderRows();
+      recalculateSummary();
+    });
 
     customerSelect.addEventListener("change", () => {
       customerName.textContent = customerSelect.value;
