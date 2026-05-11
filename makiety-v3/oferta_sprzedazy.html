@@ -581,13 +581,31 @@
       align-items: center;
     }
       .template-drawer {
-        padding: 14px 16px 16px;
-        border-bottom: 1px solid var(--line);
-        background: #fcfbfa;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(32, 31, 30, 0.42);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
       }
 
       .template-drawer[hidden] {
         display: none;
+      }
+
+      .template-drawer::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+      }
+
+      .template-drawer-header,
+      .template-grid,
+      .template-actions {
+        position: relative;
+        z-index: 1;
       }
 
       .template-drawer-header {
@@ -611,18 +629,171 @@
         color: var(--muted);
       }
 
-    .template-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-    .template-card { padding: 12px; border: 1px solid var(--line-soft); border-radius: 2px; background: #faf9f8; cursor: pointer; }
-    .template-card.is-selected { background: #eff6fc; border-color: var(--accent); }
-    .template-name { font-size: 12px; font-weight: 600; color: var(--text); margin: 0 0 6px; }
-    .template-desc { font-size: 11px; color: var(--muted); margin: 0; }
-    .template-price { font-size: 12px; font-weight: 600; color: var(--accent-strong); margin-top: 8px; }
+      .template-drawer-modal {
+        width: min(600px, calc(100vw - 40px));
+        background: #ffffff;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .template-drawer > .template-drawer-header {
+        background: #ffffff;
+        border-bottom: 1px solid var(--line);
+        padding: 16px;
+        border-radius: 4px 4px 0 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .template-drawer > .template-grid {
+        background: #ffffff;
+        border-left: 1px solid var(--line);
+        border-right: 1px solid var(--line);
+        padding: 12px 16px;
+        max-height: calc(60vh - 120px);
+        overflow-y: auto;
+      }
+
+      .template-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .template-section {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .template-section:last-child {
+        border-bottom: none;
+      }
+
+      .template-section-header {
+        padding: 12px;
+        cursor: pointer;
+        background: #f9f8f7;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        transition: background-color 0.2s ease;
+        border: none;
+        width: 100%;
+        text-align: left;
+      }
+
+      .template-section-header:hover {
+        background: #f3f2f1;
+      }
+
+      .template-section.expanded .template-section-header {
+        background: #eff6fc;
+      }
+
+      .template-section-header-left {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        flex: 1;
+      }
+
+      .template-section-header-left .template-name {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .template-section-header-left .template-desc {
+        margin: 0;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .template-section-header-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+      }
+
+      .template-price {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--accent-strong);
+        white-space: nowrap;
+      }
+
+      .template-expand-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        font-size: 14px;
+        transition: transform 0.2s ease;
+      }
+
+      .template-section.expanded .template-expand-icon {
+        transform: rotate(180deg);
+      }
+
+      .template-section-content {
+        display: none;
+        padding: 12px;
+        background: #ffffff;
+        border-top: 1px solid #eff6fc;
+      }
+
+      .template-section.expanded .template-section-content {
+        display: block;
+      }
+
+      .template-items-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .template-item {
+        padding: 8px;
+        background: #faf9f8;
+        border: 1px solid #e1dfdd;
+        border-radius: 2px;
+        font-size: 11px;
+      }
+
+      .template-item-type {
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .template-item-desc {
+        color: var(--muted);
+        margin-top: 2px;
+      }
+
+      .template-item-price {
+        color: var(--accent-strong);
+        margin-top: 2px;
+        font-weight: 600;
+      }
+
+      .template-drawer > .template-actions {
+        background: #ffffff;
+        border: 1px solid var(--line);
+        border-top: 0;
+        border-radius: 0 0 4px 4px;
+        padding: 12px 16px;
+      }
 
       .template-actions {
         display: flex;
         justify-content: flex-end;
         gap: 8px;
-        margin-top: 12px;
       }
 
       .template-button {
@@ -2171,18 +2342,39 @@
       const renderTemplatePanel = () => {
         templateGridNode.innerHTML = templateDefinitions.map((template) => {
           const total = template.items.reduce((sum, item) => sum + parseNumber(item.unitPriceNet), 0);
+          const isExpanded = selectedTemplateId === template.id;
           return `
-            <div class="template-card ${selectedTemplateId === template.id ? "is-selected" : ""}" data-template-id="${template.id}">
-              <p class="template-name">${template.name}</p>
-              <p class="template-desc">${template.description}</p>
-              <p class="template-price">${formatDecimal(total)} PLN</p>
+            <div class="template-section ${isExpanded ? "expanded" : ""}" data-template-id="${template.id}">
+              <button class="template-section-header" type="button">
+                <div class="template-section-header-left">
+                  <p class="template-name">${template.name}</p>
+                  <p class="template-desc">${template.description}</p>
+                </div>
+                <div class="template-section-header-right">
+                  <p class="template-price">${formatDecimal(total)} PLN</p>
+                  <span class="template-expand-icon">▼</span>
+                </div>
+              </button>
+              <div class="template-section-content">
+                <div class="template-items-list">
+                  ${template.items.map(item => `
+                    <div class="template-item">
+                      <div class="template-item-type">${item.type}</div>
+                      <div class="template-item-desc">${item.description}</div>
+                      <div class="template-item-price">Ilość: ${item.quantity}, Cena: ${item.unitPriceNet} PLN</div>
+                    </div>
+                  `).join("")}
+                </div>
+              </div>
             </div>
           `;
         }).join("");
 
-        templateGridNode.querySelectorAll(".template-card").forEach((card) => {
-          card.addEventListener("click", () => {
-            selectedTemplateId = card.dataset.templateId;
+        templateGridNode.querySelectorAll(".template-section-header").forEach((header) => {
+          header.addEventListener("click", () => {
+            const section = header.closest(".template-section");
+            const templateId = section.dataset.templateId;
+            selectedTemplateId = selectedTemplateId === templateId ? null : templateId;
             renderTemplatePanel();
           });
         });
@@ -2191,6 +2383,11 @@
       const closeTemplatePanel = () => {
         templatePanelNode.hidden = true;
         selectedTemplateId = null;
+        renderTemplatePanel();
+      };
+
+      const openTemplatePanel = () => {
+        templatePanelNode.hidden = false;
         renderTemplatePanel();
       };
 
@@ -2221,10 +2418,15 @@
         renderRows();
       });
 
-      openTemplateBtn.addEventListener("click", () => {
-        templatePanelNode.hidden = !templatePanelNode.hidden;
-        if (!templatePanelNode.hidden) {
-          renderTemplatePanel();
+      openTemplateBtn.addEventListener("click", openTemplatePanel);
+      templatePanelNode.addEventListener("click", (event) => {
+        if (event.target === templatePanelNode) {
+          closeTemplatePanel();
+        }
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !templatePanelNode.hidden) {
+          closeTemplatePanel();
         }
       });
 
