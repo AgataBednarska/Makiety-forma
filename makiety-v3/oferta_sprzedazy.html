@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
@@ -580,6 +580,68 @@
       display: inline-flex;
       align-items: center;
     }
+      .template-drawer {
+        padding: 14px 16px 16px;
+        border-bottom: 1px solid var(--line);
+        background: #fcfbfa;
+      }
+
+      .template-drawer[hidden] {
+        display: none;
+      }
+
+      .template-drawer-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 12px;
+      }
+
+      .template-drawer-title {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .template-drawer-copy {
+        margin: 4px 0 0;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+    .template-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .template-card { padding: 12px; border: 1px solid var(--line-soft); border-radius: 2px; background: #faf9f8; cursor: pointer; }
+    .template-card.is-selected { background: #eff6fc; border-color: var(--accent); }
+    .template-name { font-size: 12px; font-weight: 600; color: var(--text); margin: 0 0 6px; }
+    .template-desc { font-size: 11px; color: var(--muted); margin: 0; }
+    .template-price { font-size: 12px; font-weight: 600; color: var(--accent-strong); margin-top: 8px; }
+
+      .template-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .template-button {
+        min-height: 32px;
+        padding: 6px 16px;
+        border: 1px solid var(--line);
+        border-radius: 2px;
+        background: #ffffff;
+        color: var(--text);
+        font: inherit;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      .template-button--primary {
+        background: var(--accent);
+        color: #ffffff;
+        border-color: var(--accent);
+      }
 
     @media (max-width: 1180px) {
       .general-grid,
@@ -651,20 +713,20 @@
     <div class="doc-title">
       <div class="doc-toolbar">
         <div class="doc-toolbar-left">
-          <span class="icon-circle">←</span>
+          <span class="icon-circle">â†</span>
           <span class="doc-caption">Oferta sprzedazy</span>
         </div>
         <div class="doc-toolbar-right">
-          <span class="icon-circle">✎</span>
-          <span class="icon-ghost">⤴</span>
-          <span class="icon-ghost">＋</span>
-          <span class="icon-ghost">🗑</span>
-          <span class="doc-caption">✓ Zapisano roboczo</span>
-          <span class="icon-ghost">⤢</span>
+          <span class="icon-circle">âśŽ</span>
+          <span class="icon-ghost">â¤´</span>
+          <span class="icon-ghost">ďĽ‹</span>
+          <span class="icon-ghost">đź—‘</span>
+          <span class="doc-caption">âś“ Zapisano roboczo</span>
+          <span class="icon-ghost">â¤˘</span>
         </div>
       </div>
       <p class="doc-kicker">Oferta sprzedazy</p>
-      <h1 id="documentHeading">OS/26/05/0002 · NAV24 SPOLKA Z OGRANICZONA ODPOWIEDZIALNOSCIA (LIVE)</h1>
+      <h1 id="documentHeading">OS/26/05/0002 Â· NAV24 SPOLKA Z OGRANICZONA ODPOWIEDZIALNOSCIA (LIVE)</h1>
     </div>
 
     <section class="section">
@@ -823,8 +885,22 @@
         <button class="subtoolbar-link" type="button">Wstaw teksty dodatk.</button>
         <button class="subtoolbar-link" type="button">Wymiary</button>
         <button class="subtoolbar-link" type="button">Atrybuty VAT</button>
-        <button class="subtoolbar-link" type="button">Linie JUMBO</button>
-        <button class="subtoolbar-link" type="button">Zastosuj wzor JUMBO</button>
+        <button class="subtoolbar-link" type="button" id="showOfferRowsButton">Wiersze oferty</button>
+        <button class="subtoolbar-link" type="button" id="openTemplatePanelButton">Zastosuj szablon</button>
+      </div>
+      <div class="template-drawer" id="templatePanel" hidden>
+        <div class="template-drawer-header">
+          <div>
+            <p class="template-drawer-title">Kalkulacja oferty z szablonami</p>
+            <p class="template-drawer-copy">Wybierz wariant i zastosuj go do wierszy oferty.</p>
+          </div>
+          <button class="template-button" type="button" id="closeTemplatePanelButton">Zamknij</button>
+        </div>
+        <div class="template-grid" id="templateGrid"></div>
+        <div class="template-actions">
+          <button class="template-button" type="button" id="cancelTemplateButton">Anuluj</button>
+          <button class="template-button template-button--primary" type="button" id="applyTemplateButton">Zastosuj</button>
+        </div>
       </div>
       <div class="subtoolbar-panel" id="linePanel" hidden>
         <button class="subtoolbar-link" type="button">Zwolnij</button>
@@ -912,7 +988,7 @@
         </div>
       </div>
     </section>
-  </main>
+  <div id="templateModal" class="modal-overlay"><div class="modal-dialog"><div class="modal-header"><h2 class="modal-title">Zastosuj szablon oferty</h2><button class="modal-close" id="modalCloseButton">✕</button></div><div class="modal-body"><div class="template-grid" id="templateGrid"></div></div><div class="modal-footer"><button class="modal-button" id="modalCancelButton">Anuluj</button><button class="modal-button modal-button--primary" id="modalApplyButton">Zastosuj</button></div></div></div></main>
 
   <script>
     const customerSelect = document.querySelector("#customerSelect");
@@ -924,6 +1000,7 @@
     const functionPanel = document.querySelector("#functionPanel");
     const lineBody = document.querySelector("#lineBody");
     const addLineButton = document.querySelector("#addLineButton");
+    const showOfferRowsButton = document.querySelector("#showOfferRowsButton");
 
     const netTotalValue = document.querySelector("#netTotalValue");
     const vatTotalValue = document.querySelector("#vatTotalValue");
@@ -935,11 +1012,12 @@
     const weightTotalValue = document.querySelector("#weightTotalValue");
 
     let activeRowIndex = 0;
+    let showAllOfferRows = false;
 
     const lineData = [
       {
         type: "Koszt doda...",
-        itemNo: "MONTAZ",
+        itemNo: "montaz",
         jumbo: false,
         description: "montaz",
         locationCode: "M02",
@@ -1065,7 +1143,7 @@
 
       return {
         type,
-        itemNo: isAdditionalCost ? "TR-000" : "ZAP-000",
+        itemNo: isAdditionalCost ? "montaz" : "ZAP-000",
         jumbo: false,
         description: isAdditionalCost ? "transport" : "Nowy zapas",
         locationCode: "M02",
@@ -1090,7 +1168,7 @@
         }
 
         if (!line.itemNo || line.itemNo === "ZAP-000") {
-          line.itemNo = "TR-000";
+          line.itemNo = "montaz";
         }
 
         line.assembleQty = "0";
@@ -1106,7 +1184,7 @@
         line.description = "Nowy zapas";
       }
 
-      if (!line.itemNo || line.itemNo === "TR-000") {
+      if (!line.itemNo || line.itemNo === "montaz" || line.itemNo === "opĹ‚ata" || line.itemNo === "transport") {
         line.itemNo = "ZAP-000";
       }
 
@@ -1119,10 +1197,28 @@
       }
     }
 
+    function getVisibleLineIndexes() {
+      if (showAllOfferRows) {
+        return lineData.map((_, index) => index);
+      }
+
+      return lineData
+        .map((line, index) => ({ line, index }))
+        .filter(({ line }) => line.type === "Zapas")
+        .map(({ index }) => index);
+    }
+
     function renderRows() {
       lineBody.innerHTML = "";
 
-      lineData.forEach((line, index) => {
+      const visibleIndexes = getVisibleLineIndexes();
+
+      if (!visibleIndexes.includes(activeRowIndex)) {
+        activeRowIndex = visibleIndexes.length ? visibleIndexes[0] : -1;
+      }
+
+      visibleIndexes.forEach((index) => {
+        const line = lineData[index];
         const row = document.createElement("tr");
         row.classList.toggle("is-active", index === activeRowIndex);
         row.classList.toggle("comment-row", Boolean(line.isComment));
@@ -1144,7 +1240,9 @@
           : `<div class="cell">${line.type}</div>`;
 
         const itemNoCell = line.billable
-          ? `<input class="line-input" data-field="itemNo" data-row-index="${index}" value="${line.itemNo}" placeholder="${(line.type === "Koszt dodatkowy" || line.type === "Koszt doda...") ? "Nr transportu" : "Nr zapasu"}">`
+          ? (line.type === "Koszt dodatkowy" || line.type === "Koszt doda...")
+            ? `<select class="line-select" data-field="itemNo" data-row-index="${index}"><option value="montaz" ${line.itemNo === "montaz" ? "selected" : ""}>montaz</option><option value="opĹ‚ata" ${line.itemNo === "opĹ‚ata" ? "selected" : ""}>opĹ‚ata</option><option value="transport" ${line.itemNo === "transport" ? "selected" : ""}>transport</option></select>`
+            : `<input class="line-input" data-field="itemNo" data-row-index="${index}" value="${line.itemNo}" placeholder="Nr zapasu">`
           : `<div class="cell">${line.itemNo}</div>`;
 
         const descriptionCell = line.billable
@@ -1156,8 +1254,8 @@
           : `<div class="cell cell-center"><input class="jumbo-check" type="checkbox" ${line.jumbo ? "checked" : ""}></div>`;
 
         const cells = [
-          `<td class="selection-cell"><button class="row-marker" type="button" data-row-index="${index}">${index === activeRowIndex ? "→" : ""}</button></td>`,
-          `<td class="menu-cell"><button class="row-menu" type="button" aria-label="Menu wiersza">⋮</button></td>`,
+          `<td class="selection-cell"><button class="row-marker" type="button" data-row-index="${index}">${index === activeRowIndex ? "â†’" : ""}</button></td>`,
+          `<td class="menu-cell"><button class="row-menu" type="button" aria-label="Menu wiersza">â‹®</button></td>`,
           `<td>${typeCell}</td>`,
           `<td>${itemNoCell}</td>`,
           `<td>${jumboCell}</td>`,
@@ -1249,6 +1347,76 @@
         if (node.matches(".row-marker")) {
           node.addEventListener("click", () => {
             activeRowIndex = Number.parseInt(node.dataset.rowIndex, 10);
+                const templateModal = document.querySelector("#templateModal");
+    const modalCloseButton = document.querySelector("#modalCloseButton");
+    const modalCancelButton = document.querySelector("#modalCancelButton");
+    const modalApplyButton = document.querySelector("#modalApplyButton");
+    const templateGrid = document.querySelector("#templateGrid");
+
+    let selectedTemplate = null;
+
+    const templates = [
+      { id: "premium", name: "Premium", description: "Pełny pakiet z wszytskich usługami", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "450,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" },
+        { type: "Koszt dodatkowy", itemNo: "transport", quantity: "1", unitPrice: "150,00" }
+      ]},
+      { id: "standard", name: "Standard", description: "Pakiet podstawowy bez dodatkowych usług", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "300,00" }
+      ]},
+      { id: "with-assembly", name: "Z montażem", description: "Zapas z usługą montażu", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "350,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" }
+      ]},
+      { id: "with-cuts", name: "Wycięcia", description: "Zapas z usługą wycinania i obróbki", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "400,00" },
+        { type: "Koszt dodatkowy", itemNo: "opłata", quantity: "1", unitPrice: "120,00" }
+      ]}
+    ];
+
+    function renderTemplateModal() {
+      templateGrid.innerHTML = templates.map(template => `
+        <div class="template-card ${selectedTemplate?.id === template.id ? "is-selected" : ""}" data-template-id="${template.id}">
+          <p class="template-name">${template.name}</p>
+          <p class="template-desc">${template.description}</p>
+          <p class="template-price">${template.items.reduce((s, i) => s + parseLocaleNumber(i.unitPrice), 0).toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} PLN</p>
+        </div>
+      `).join("");
+
+      document.querySelectorAll(".template-card").forEach(card => {
+        card.addEventListener("click", () => {
+          selectedTemplate = templates.find(t => t.id === card.dataset.templateId);
+          renderTemplateModal();
+        });
+      });
+    }
+
+    function applyTemplate() {
+      if (!selectedTemplate) { alert("Proszę wybrać szablon."); return; }
+      lineData.splice(0, lineData.length - lineData.filter(l => l.isComment).length);
+      selectedTemplate.items.forEach(item => {
+        lineData.push({
+          type: item.type, itemNo: item.itemNo, jumbo: false, description: item.type === "Zapas" ? "Zapas z szablonu" : item.itemNo,
+          locationCode: "M02", quantity: item.quantity, assembleQty: item.type === "Zapas" ? item.quantity : "0",
+          unitOfMeasureCode: item.type === "Zapas" ? "M2" : "usl.", unitPriceNet: item.unitPrice, taxGroupCode: "", lineDiscountPct: "0,00",
+          lineAmountNet: item.unitPrice, availability: "", billable: true
+        });
+      });
+      selectedTemplate = null; showAllOfferRows = true; closeTemplateModal(); renderRows(); recalculateSummary();
+    }
+
+    function openTemplateModal() { selectedTemplate = null; renderTemplateModal(); templateModal.classList.add("is-open"); }
+    function closeTemplateModal() { templateModal.classList.remove("is-open"); selectedTemplate = null; }
+
+    document.querySelectorAll("button.subtoolbar-link").forEach(btn => {
+      if (btn.textContent.trim() === "Zastosuj szablon") btn.addEventListener("click", openTemplateModal);
+    });
+
+    modalCloseButton.addEventListener("click", closeTemplateModal);
+    modalCancelButton.addEventListener("click", closeTemplateModal);
+    modalApplyButton.addEventListener("click", applyTemplate);
+    templateModal.addEventListener("click", (e) => { if (e.target === templateModal) closeTemplateModal(); });
+
             renderRows();
             recalculateSummary();
           });
@@ -1272,6 +1440,76 @@
 
           if (fieldName === "type") {
             normalizeLineByType(lineData[index]);
+                const templateModal = document.querySelector("#templateModal");
+    const modalCloseButton = document.querySelector("#modalCloseButton");
+    const modalCancelButton = document.querySelector("#modalCancelButton");
+    const modalApplyButton = document.querySelector("#modalApplyButton");
+    const templateGrid = document.querySelector("#templateGrid");
+
+    let selectedTemplate = null;
+
+    const templates = [
+      { id: "premium", name: "Premium", description: "Pełny pakiet z wszytskich usługami", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "450,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" },
+        { type: "Koszt dodatkowy", itemNo: "transport", quantity: "1", unitPrice: "150,00" }
+      ]},
+      { id: "standard", name: "Standard", description: "Pakiet podstawowy bez dodatkowych usług", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "300,00" }
+      ]},
+      { id: "with-assembly", name: "Z montażem", description: "Zapas z usługą montażu", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "350,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" }
+      ]},
+      { id: "with-cuts", name: "Wycięcia", description: "Zapas z usługą wycinania i obróbki", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "400,00" },
+        { type: "Koszt dodatkowy", itemNo: "opłata", quantity: "1", unitPrice: "120,00" }
+      ]}
+    ];
+
+    function renderTemplateModal() {
+      templateGrid.innerHTML = templates.map(template => `
+        <div class="template-card ${selectedTemplate?.id === template.id ? "is-selected" : ""}" data-template-id="${template.id}">
+          <p class="template-name">${template.name}</p>
+          <p class="template-desc">${template.description}</p>
+          <p class="template-price">${template.items.reduce((s, i) => s + parseLocaleNumber(i.unitPrice), 0).toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} PLN</p>
+        </div>
+      `).join("");
+
+      document.querySelectorAll(".template-card").forEach(card => {
+        card.addEventListener("click", () => {
+          selectedTemplate = templates.find(t => t.id === card.dataset.templateId);
+          renderTemplateModal();
+        });
+      });
+    }
+
+    function applyTemplate() {
+      if (!selectedTemplate) { alert("Proszę wybrać szablon."); return; }
+      lineData.splice(0, lineData.length - lineData.filter(l => l.isComment).length);
+      selectedTemplate.items.forEach(item => {
+        lineData.push({
+          type: item.type, itemNo: item.itemNo, jumbo: false, description: item.type === "Zapas" ? "Zapas z szablonu" : item.itemNo,
+          locationCode: "M02", quantity: item.quantity, assembleQty: item.type === "Zapas" ? item.quantity : "0",
+          unitOfMeasureCode: item.type === "Zapas" ? "M2" : "usl.", unitPriceNet: item.unitPrice, taxGroupCode: "", lineDiscountPct: "0,00",
+          lineAmountNet: item.unitPrice, availability: "", billable: true
+        });
+      });
+      selectedTemplate = null; showAllOfferRows = true; closeTemplateModal(); renderRows(); recalculateSummary();
+    }
+
+    function openTemplateModal() { selectedTemplate = null; renderTemplateModal(); templateModal.classList.add("is-open"); }
+    function closeTemplateModal() { templateModal.classList.remove("is-open"); selectedTemplate = null; }
+
+    document.querySelectorAll("button.subtoolbar-link").forEach(btn => {
+      if (btn.textContent.trim() === "Zastosuj szablon") btn.addEventListener("click", openTemplateModal);
+    });
+
+    modalCloseButton.addEventListener("click", closeTemplateModal);
+    modalCancelButton.addEventListener("click", closeTemplateModal);
+    modalApplyButton.addEventListener("click", applyTemplate);
+    templateModal.addEventListener("click", (e) => { if (e.target === templateModal) closeTemplateModal(); });
+
             renderRows();
           }
 
@@ -1290,6 +1528,76 @@
 
           if (fieldName === "type") {
             normalizeLineByType(lineData[index]);
+                const templateModal = document.querySelector("#templateModal");
+    const modalCloseButton = document.querySelector("#modalCloseButton");
+    const modalCancelButton = document.querySelector("#modalCancelButton");
+    const modalApplyButton = document.querySelector("#modalApplyButton");
+    const templateGrid = document.querySelector("#templateGrid");
+
+    let selectedTemplate = null;
+
+    const templates = [
+      { id: "premium", name: "Premium", description: "Pełny pakiet z wszytskich usługami", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "450,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" },
+        { type: "Koszt dodatkowy", itemNo: "transport", quantity: "1", unitPrice: "150,00" }
+      ]},
+      { id: "standard", name: "Standard", description: "Pakiet podstawowy bez dodatkowych usług", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "300,00" }
+      ]},
+      { id: "with-assembly", name: "Z montażem", description: "Zapas z usługą montażu", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "350,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" }
+      ]},
+      { id: "with-cuts", name: "Wycięcia", description: "Zapas z usługą wycinania i obróbki", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "400,00" },
+        { type: "Koszt dodatkowy", itemNo: "opłata", quantity: "1", unitPrice: "120,00" }
+      ]}
+    ];
+
+    function renderTemplateModal() {
+      templateGrid.innerHTML = templates.map(template => `
+        <div class="template-card ${selectedTemplate?.id === template.id ? "is-selected" : ""}" data-template-id="${template.id}">
+          <p class="template-name">${template.name}</p>
+          <p class="template-desc">${template.description}</p>
+          <p class="template-price">${template.items.reduce((s, i) => s + parseLocaleNumber(i.unitPrice), 0).toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} PLN</p>
+        </div>
+      `).join("");
+
+      document.querySelectorAll(".template-card").forEach(card => {
+        card.addEventListener("click", () => {
+          selectedTemplate = templates.find(t => t.id === card.dataset.templateId);
+          renderTemplateModal();
+        });
+      });
+    }
+
+    function applyTemplate() {
+      if (!selectedTemplate) { alert("Proszę wybrać szablon."); return; }
+      lineData.splice(0, lineData.length - lineData.filter(l => l.isComment).length);
+      selectedTemplate.items.forEach(item => {
+        lineData.push({
+          type: item.type, itemNo: item.itemNo, jumbo: false, description: item.type === "Zapas" ? "Zapas z szablonu" : item.itemNo,
+          locationCode: "M02", quantity: item.quantity, assembleQty: item.type === "Zapas" ? item.quantity : "0",
+          unitOfMeasureCode: item.type === "Zapas" ? "M2" : "usl.", unitPriceNet: item.unitPrice, taxGroupCode: "", lineDiscountPct: "0,00",
+          lineAmountNet: item.unitPrice, availability: "", billable: true
+        });
+      });
+      selectedTemplate = null; showAllOfferRows = true; closeTemplateModal(); renderRows(); recalculateSummary();
+    }
+
+    function openTemplateModal() { selectedTemplate = null; renderTemplateModal(); templateModal.classList.add("is-open"); }
+    function closeTemplateModal() { templateModal.classList.remove("is-open"); selectedTemplate = null; }
+
+    document.querySelectorAll("button.subtoolbar-link").forEach(btn => {
+      if (btn.textContent.trim() === "Zastosuj szablon") btn.addEventListener("click", openTemplateModal);
+    });
+
+    modalCloseButton.addEventListener("click", closeTemplateModal);
+    modalCancelButton.addEventListener("click", closeTemplateModal);
+    modalApplyButton.addEventListener("click", applyTemplate);
+    templateModal.addEventListener("click", (e) => { if (e.target === templateModal) closeTemplateModal(); });
+
             renderRows();
           }
 
@@ -1301,13 +1609,160 @@
     addLineButton.addEventListener("click", () => {
       lineData.push(createLineByType());
       activeRowIndex = lineData.length - 1;
+      showAllOfferRows = true;
+          const templateModal = document.querySelector("#templateModal");
+    const modalCloseButton = document.querySelector("#modalCloseButton");
+    const modalCancelButton = document.querySelector("#modalCancelButton");
+    const modalApplyButton = document.querySelector("#modalApplyButton");
+    const templateGrid = document.querySelector("#templateGrid");
+
+    let selectedTemplate = null;
+
+    const templates = [
+      { id: "premium", name: "Premium", description: "Pełny pakiet z wszytskich usługami", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "450,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" },
+        { type: "Koszt dodatkowy", itemNo: "transport", quantity: "1", unitPrice: "150,00" }
+      ]},
+      { id: "standard", name: "Standard", description: "Pakiet podstawowy bez dodatkowych usług", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "300,00" }
+      ]},
+      { id: "with-assembly", name: "Z montażem", description: "Zapas z usługą montażu", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "350,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" }
+      ]},
+      { id: "with-cuts", name: "Wycięcia", description: "Zapas z usługą wycinania i obróbki", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "400,00" },
+        { type: "Koszt dodatkowy", itemNo: "opłata", quantity: "1", unitPrice: "120,00" }
+      ]}
+    ];
+
+    function renderTemplateModal() {
+      templateGrid.innerHTML = templates.map(template => `
+        <div class="template-card ${selectedTemplate?.id === template.id ? "is-selected" : ""}" data-template-id="${template.id}">
+          <p class="template-name">${template.name}</p>
+          <p class="template-desc">${template.description}</p>
+          <p class="template-price">${template.items.reduce((s, i) => s + parseLocaleNumber(i.unitPrice), 0).toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} PLN</p>
+        </div>
+      `).join("");
+
+      document.querySelectorAll(".template-card").forEach(card => {
+        card.addEventListener("click", () => {
+          selectedTemplate = templates.find(t => t.id === card.dataset.templateId);
+          renderTemplateModal();
+        });
+      });
+    }
+
+    function applyTemplate() {
+      if (!selectedTemplate) { alert("Proszę wybrać szablon."); return; }
+      lineData.splice(0, lineData.length - lineData.filter(l => l.isComment).length);
+      selectedTemplate.items.forEach(item => {
+        lineData.push({
+          type: item.type, itemNo: item.itemNo, jumbo: false, description: item.type === "Zapas" ? "Zapas z szablonu" : item.itemNo,
+          locationCode: "M02", quantity: item.quantity, assembleQty: item.type === "Zapas" ? item.quantity : "0",
+          unitOfMeasureCode: item.type === "Zapas" ? "M2" : "usl.", unitPriceNet: item.unitPrice, taxGroupCode: "", lineDiscountPct: "0,00",
+          lineAmountNet: item.unitPrice, availability: "", billable: true
+        });
+      });
+      selectedTemplate = null; showAllOfferRows = true; closeTemplateModal(); renderRows(); recalculateSummary();
+    }
+
+    function openTemplateModal() { selectedTemplate = null; renderTemplateModal(); templateModal.classList.add("is-open"); }
+    function closeTemplateModal() { templateModal.classList.remove("is-open"); selectedTemplate = null; }
+
+    document.querySelectorAll("button.subtoolbar-link").forEach(btn => {
+      if (btn.textContent.trim() === "Zastosuj szablon") btn.addEventListener("click", openTemplateModal);
+    });
+
+    modalCloseButton.addEventListener("click", closeTemplateModal);
+    modalCancelButton.addEventListener("click", closeTemplateModal);
+    modalApplyButton.addEventListener("click", applyTemplate);
+    templateModal.addEventListener("click", (e) => { if (e.target === templateModal) closeTemplateModal(); });
+
+      renderRows();
+      recalculateSummary();
+    });
+
+    showOfferRowsButton.addEventListener("click", () => {
+      showAllOfferRows = true;
+          const templateModal = document.querySelector("#templateModal");
+    const modalCloseButton = document.querySelector("#modalCloseButton");
+    const modalCancelButton = document.querySelector("#modalCancelButton");
+    const modalApplyButton = document.querySelector("#modalApplyButton");
+    const templateGrid = document.querySelector("#templateGrid");
+
+    let selectedTemplate = null;
+
+    const templates = [
+      { id: "premium", name: "Premium", description: "Pełny pakiet z wszytskich usługami", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "450,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" },
+        { type: "Koszt dodatkowy", itemNo: "transport", quantity: "1", unitPrice: "150,00" }
+      ]},
+      { id: "standard", name: "Standard", description: "Pakiet podstawowy bez dodatkowych usług", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "300,00" }
+      ]},
+      { id: "with-assembly", name: "Z montażem", description: "Zapas z usługą montażu", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "350,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" }
+      ]},
+      { id: "with-cuts", name: "Wycięcia", description: "Zapas z usługą wycinania i obróbki", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "400,00" },
+        { type: "Koszt dodatkowy", itemNo: "opłata", quantity: "1", unitPrice: "120,00" }
+      ]}
+    ];
+
+    function renderTemplateModal() {
+      templateGrid.innerHTML = templates.map(template => `
+        <div class="template-card ${selectedTemplate?.id === template.id ? "is-selected" : ""}" data-template-id="${template.id}">
+          <p class="template-name">${template.name}</p>
+          <p class="template-desc">${template.description}</p>
+          <p class="template-price">${template.items.reduce((s, i) => s + parseLocaleNumber(i.unitPrice), 0).toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} PLN</p>
+        </div>
+      `).join("");
+
+      document.querySelectorAll(".template-card").forEach(card => {
+        card.addEventListener("click", () => {
+          selectedTemplate = templates.find(t => t.id === card.dataset.templateId);
+          renderTemplateModal();
+        });
+      });
+    }
+
+    function applyTemplate() {
+      if (!selectedTemplate) { alert("Proszę wybrać szablon."); return; }
+      lineData.splice(0, lineData.length - lineData.filter(l => l.isComment).length);
+      selectedTemplate.items.forEach(item => {
+        lineData.push({
+          type: item.type, itemNo: item.itemNo, jumbo: false, description: item.type === "Zapas" ? "Zapas z szablonu" : item.itemNo,
+          locationCode: "M02", quantity: item.quantity, assembleQty: item.type === "Zapas" ? item.quantity : "0",
+          unitOfMeasureCode: item.type === "Zapas" ? "M2" : "usl.", unitPriceNet: item.unitPrice, taxGroupCode: "", lineDiscountPct: "0,00",
+          lineAmountNet: item.unitPrice, availability: "", billable: true
+        });
+      });
+      selectedTemplate = null; showAllOfferRows = true; closeTemplateModal(); renderRows(); recalculateSummary();
+    }
+
+    function openTemplateModal() { selectedTemplate = null; renderTemplateModal(); templateModal.classList.add("is-open"); }
+    function closeTemplateModal() { templateModal.classList.remove("is-open"); selectedTemplate = null; }
+
+    document.querySelectorAll("button.subtoolbar-link").forEach(btn => {
+      if (btn.textContent.trim() === "Zastosuj szablon") btn.addEventListener("click", openTemplateModal);
+    });
+
+    modalCloseButton.addEventListener("click", closeTemplateModal);
+    modalCancelButton.addEventListener("click", closeTemplateModal);
+    modalApplyButton.addEventListener("click", applyTemplate);
+    templateModal.addEventListener("click", (e) => { if (e.target === templateModal) closeTemplateModal(); });
+
       renderRows();
       recalculateSummary();
     });
 
     customerSelect.addEventListener("change", () => {
       customerName.textContent = customerSelect.value;
-      documentHeading.textContent = `OS/26/05/0002 · ${customerSelect.value}`;
+      documentHeading.textContent = `OS/26/05/0002 Â· ${customerSelect.value}`;
     });
 
     workspaceTabs.forEach((tab) => {
@@ -1322,8 +1777,495 @@
       });
     });
 
+        const templateModal = document.querySelector("#templateModal");
+    const modalCloseButton = document.querySelector("#modalCloseButton");
+    const modalCancelButton = document.querySelector("#modalCancelButton");
+    const modalApplyButton = document.querySelector("#modalApplyButton");
+    const templateGrid = document.querySelector("#templateGrid");
+
+    let selectedTemplate = null;
+
+    const templates = [
+      { id: "premium", name: "Premium", description: "Pełny pakiet z wszytskich usługami", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "450,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" },
+        { type: "Koszt dodatkowy", itemNo: "transport", quantity: "1", unitPrice: "150,00" }
+      ]},
+      { id: "standard", name: "Standard", description: "Pakiet podstawowy bez dodatkowych usług", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "300,00" }
+      ]},
+      { id: "with-assembly", name: "Z montażem", description: "Zapas z usługą montażu", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "350,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" }
+      ]},
+      { id: "with-cuts", name: "Wycięcia", description: "Zapas z usługą wycinania i obróbki", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "400,00" },
+        { type: "Koszt dodatkowy", itemNo: "opłata", quantity: "1", unitPrice: "120,00" }
+      ]}
+    ];
+
+    function renderTemplateModal() {
+      templateGrid.innerHTML = templates.map(template => `
+        <div class="template-card ${selectedTemplate?.id === template.id ? "is-selected" : ""}" data-template-id="${template.id}">
+          <p class="template-name">${template.name}</p>
+          <p class="template-desc">${template.description}</p>
+          <p class="template-price">${template.items.reduce((s, i) => s + parseLocaleNumber(i.unitPrice), 0).toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} PLN</p>
+        </div>
+      `).join("");
+
+      document.querySelectorAll(".template-card").forEach(card => {
+        card.addEventListener("click", () => {
+          selectedTemplate = templates.find(t => t.id === card.dataset.templateId);
+          renderTemplateModal();
+        });
+      });
+    }
+
+    function applyTemplate() {
+      if (!selectedTemplate) { alert("Proszę wybrać szablon."); return; }
+      lineData.splice(0, lineData.length - lineData.filter(l => l.isComment).length);
+      selectedTemplate.items.forEach(item => {
+        lineData.push({
+          type: item.type, itemNo: item.itemNo, jumbo: false, description: item.type === "Zapas" ? "Zapas z szablonu" : item.itemNo,
+          locationCode: "M02", quantity: item.quantity, assembleQty: item.type === "Zapas" ? item.quantity : "0",
+          unitOfMeasureCode: item.type === "Zapas" ? "M2" : "usl.", unitPriceNet: item.unitPrice, taxGroupCode: "", lineDiscountPct: "0,00",
+          lineAmountNet: item.unitPrice, availability: "", billable: true
+        });
+      });
+      selectedTemplate = null; showAllOfferRows = true; closeTemplateModal(); renderRows(); recalculateSummary();
+    }
+
+    function openTemplateModal() { selectedTemplate = null; renderTemplateModal(); templateModal.classList.add("is-open"); }
+    function closeTemplateModal() { templateModal.classList.remove("is-open"); selectedTemplate = null; }
+
+    document.querySelectorAll("button.subtoolbar-link").forEach(btn => {
+      if (btn.textContent.trim() === "Zastosuj szablon") btn.addEventListener("click", openTemplateModal);
+    });
+
+    modalCloseButton.addEventListener("click", closeTemplateModal);
+    modalCancelButton.addEventListener("click", closeTemplateModal);
+    modalApplyButton.addEventListener("click", applyTemplate);
+    templateModal.addEventListener("click", (e) => { if (e.target === templateModal) closeTemplateModal(); });
+
+
     renderRows();
     recalculateSummary();
   </script>
+  <script>
+    (() => {
+      const modalNode = document.querySelector("#templateModal");
+      if (modalNode) {
+        modalNode.remove();
+      }
+
+      const replaceButton = (selector) => {
+        const original = document.querySelector(selector);
+        if (!original || !original.parentNode) {
+          return original;
+        }
+
+        const clone = original.cloneNode(true);
+        original.parentNode.replaceChild(clone, original);
+        return clone;
+      };
+
+      const lineBodyNode = document.querySelector("#lineBody");
+      const netNode = document.querySelector("#netTotalValue");
+      const vatNode = document.querySelector("#vatTotalValue");
+      const grossNode = document.querySelector("#grossTotalValue");
+      const conversionNode = document.querySelector("#conversionValue");
+      const lineCountNode = document.querySelector("#lineCountValue");
+      const piecesNode = document.querySelector("#piecesTotalValue");
+      const discountNode = document.querySelector("#discountAvgValue");
+      const weightNode = document.querySelector("#weightTotalValue");
+      const templatePanelNode = document.querySelector("#templatePanel");
+      const templateGridNode = document.querySelector("#templateGrid");
+
+      const addLineBtn = replaceButton("#addLineButton");
+      const showRowsBtn = replaceButton("#showOfferRowsButton");
+      const openTemplateBtn = replaceButton("#openTemplatePanelButton");
+      const closeTemplateBtn = replaceButton("#closeTemplatePanelButton");
+      const cancelTemplateBtn = replaceButton("#cancelTemplateButton");
+      const applyTemplateBtn = replaceButton("#applyTemplateButton");
+
+      const parseNumber = (value) => Number.parseFloat(String(value ?? "").replace(/\s/g, "").replace(",", ".")) || 0;
+      const formatDecimal = (value) => value.toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const formatInteger = (value) => value.toLocaleString("pl-PL", { maximumFractionDigits: 0 });
+
+      const templateDefinitions = [
+        {
+          id: "premium",
+          name: "Premium",
+          description: "Pełny pakiet z montażem i transportem.",
+          items: [
+            { type: "Zapas", itemNo: "B-000001", description: "Blat Premium", quantity: "1", unitPriceNet: "450,00" },
+            { type: "Koszt dodatkowy", itemNo: "montaz", description: "Montaż", quantity: "1", unitPriceNet: "200,00" },
+            { type: "Koszt dodatkowy", itemNo: "transport", description: "Transport", quantity: "1", unitPriceNet: "150,00" }
+          ]
+        },
+        {
+          id: "standard",
+          name: "Standard",
+          description: "Pakiet podstawowy bez usług dodatkowych.",
+          items: [
+            { type: "Zapas", itemNo: "B-000001", description: "Blat Standard", quantity: "1", unitPriceNet: "300,00" }
+          ]
+        },
+        {
+          id: "with-assembly",
+          name: "Z montażem",
+          description: "Zapas z pełną usługą montażu.",
+          items: [
+            { type: "Zapas", itemNo: "B-000001", description: "Blat z montażem", quantity: "1", unitPriceNet: "350,00" },
+            { type: "Koszt dodatkowy", itemNo: "montaz", description: "Montaż", quantity: "1", unitPriceNet: "200,00" }
+          ]
+        },
+        {
+          id: "cuts",
+          name: "Wycięcia",
+          description: "Zapas z dodatkowymi wycięciami i obróbką.",
+          items: [
+            { type: "Zapas", itemNo: "B-000001", description: "Blat z wycięciami", quantity: "1", unitPriceNet: "400,00" },
+            { type: "Koszt dodatkowy", itemNo: "opłata", description: "Opłata za wycięcia", quantity: "1", unitPriceNet: "120,00" }
+          ]
+        }
+      ];
+
+      const baseLines = [
+        {
+          type: "Koszt dodatkowy",
+          itemNo: "montaz",
+          jumbo: false,
+          description: "Montaż",
+          locationCode: "M02",
+          quantity: "1",
+          assembleQty: "0",
+          unitOfMeasureCode: "usl.",
+          unitPriceNet: "500,00",
+          taxGroupCode: "",
+          lineDiscountPct: "0,00",
+          lineAmountNet: "500,00",
+          availability: "",
+          billable: true
+        },
+        {
+          type: "Zapas",
+          itemNo: "B-000001",
+          jumbo: true,
+          description: "Blat Absolut Black Granit antyczny 2 cm",
+          locationCode: "M02",
+          quantity: "1",
+          assembleQty: "1",
+          unitOfMeasureCode: "M2",
+          unitPriceNet: "275,00",
+          taxGroupCode: "",
+          lineDiscountPct: "0,00",
+          lineAmountNet: "275,00",
+          availability: "",
+          billable: true
+        },
+        {
+          type: "",
+          itemNo: "",
+          jumbo: false,
+          description: "2 x P-000001 | Płyta Absolut Black Granit antyczny 2 cm",
+          locationCode: "",
+          quantity: "",
+          assembleQty: "0",
+          unitOfMeasureCode: "",
+          unitPriceNet: "",
+          taxGroupCode: "",
+          lineDiscountPct: "",
+          lineAmountNet: "",
+          availability: "",
+          billable: false,
+          isComment: true
+        },
+        {
+          type: "",
+          itemNo: "",
+          jumbo: false,
+          description: "KOMENTARZ: 2 x P-000001 | Płyta Absolut Black Granit antyczny 2 cm",
+          locationCode: "",
+          quantity: "",
+          assembleQty: "0",
+          unitOfMeasureCode: "",
+          unitPriceNet: "",
+          taxGroupCode: "",
+          lineDiscountPct: "",
+          lineAmountNet: "",
+          availability: "",
+          billable: false,
+          isComment: true
+        }
+      ];
+
+      let stateLines = baseLines.map((line) => ({ ...line }));
+      let stateActiveRow = 1;
+      let stateShowAll = false;
+      let selectedTemplateId = null;
+
+      const normalizeLine = (line) => {
+        if (line.type === "Koszt dodatkowy") {
+          if (!["montaz", "opłata", "transport"].includes(line.itemNo)) {
+            line.itemNo = "montaz";
+          }
+          line.description = line.itemNo === "montaz" ? "Montaż" : line.itemNo === "opłata" ? "Opłata" : "Transport";
+          line.assembleQty = "0";
+          line.unitOfMeasureCode = "usl.";
+          return;
+        }
+
+        if (!line.itemNo || ["montaz", "opłata", "transport"].includes(line.itemNo)) {
+          line.itemNo = "ZAP-000";
+        }
+        if (!line.description || ["Montaż", "Opłata", "Transport"].includes(line.description)) {
+          line.description = "Nowy zapas";
+        }
+        if (parseNumber(line.assembleQty) === 0) {
+          line.assembleQty = "1";
+        }
+        line.unitOfMeasureCode = "M2";
+      };
+
+      const recalculateLine = (line) => {
+        if (!line.billable) {
+          return;
+        }
+        const amount = parseNumber(line.quantity) * parseNumber(line.unitPriceNet) * (1 - parseNumber(line.lineDiscountPct) / 100);
+        line.lineAmountNet = formatDecimal(amount);
+      };
+
+      const updateSummary = () => {
+        let net = 0;
+        let vat = 0;
+        let gross = 0;
+        let pieces = 0;
+        let discount = 0;
+        let active = 0;
+
+        stateLines.forEach((line) => {
+          recalculateLine(line);
+          if (!line.billable) {
+            return;
+          }
+          const lineNet = parseNumber(line.lineAmountNet);
+          const lineGross = lineNet * 1.23;
+          net += lineNet;
+          vat += lineGross - lineNet;
+          gross += lineGross;
+          pieces += parseNumber(line.quantity);
+          discount += parseNumber(line.lineDiscountPct);
+          active += 1;
+        });
+
+        netNode.textContent = formatDecimal(net);
+        vatNode.textContent = formatDecimal(vat);
+        grossNode.textContent = formatDecimal(gross);
+        conversionNode.textContent = `${formatInteger(active ? 100 : 0)}%`;
+        lineCountNode.textContent = formatInteger(active);
+        piecesNode.textContent = formatInteger(pieces);
+        discountNode.textContent = `${formatDecimal(active ? discount / active : 0)}%`;
+        weightNode.textContent = `${formatInteger(0)} kg`;
+      };
+
+      const getVisibleIndexes = () => stateShowAll
+        ? stateLines.map((_, index) => index)
+        : stateLines.map((line, index) => ({ line, index })).filter(({ line }) => line.type === "Zapas").map(({ index }) => index);
+
+      const bindRowEvents = () => {
+        lineBodyNode.querySelectorAll("[data-row-index]").forEach((node) => {
+          if (node.matches(".row-marker")) {
+            node.addEventListener("click", () => {
+              stateActiveRow = Number.parseInt(node.dataset.rowIndex, 10);
+              renderRows();
+            });
+            return;
+          }
+
+          if (node.matches(".jumbo-check")) {
+            node.addEventListener("change", (event) => {
+              const index = Number.parseInt(event.target.dataset.rowIndex, 10);
+              stateLines[index].jumbo = event.target.checked;
+            });
+            return;
+          }
+
+          const syncField = (event) => {
+            const index = Number.parseInt(event.target.dataset.rowIndex, 10);
+            const field = event.target.dataset.field;
+            if (!field) {
+              return;
+            }
+            stateLines[index][field] = event.target.value;
+            if (field === "type") {
+              normalizeLine(stateLines[index]);
+              renderRows();
+              return;
+            }
+            if (field === "itemNo" && stateLines[index].type === "Koszt dodatkowy") {
+              normalizeLine(stateLines[index]);
+              renderRows();
+              return;
+            }
+            updateSummary();
+          };
+
+          node.addEventListener("input", syncField);
+          node.addEventListener("change", syncField);
+        });
+      };
+
+      function renderRows() {
+        lineBodyNode.innerHTML = "";
+        const visibleIndexes = getVisibleIndexes();
+        if (!visibleIndexes.includes(stateActiveRow)) {
+          stateActiveRow = visibleIndexes.length ? visibleIndexes[0] : -1;
+        }
+
+        visibleIndexes.forEach((index) => {
+          const line = stateLines[index];
+          const row = document.createElement("tr");
+          row.classList.toggle("is-active", index === stateActiveRow);
+          row.classList.toggle("comment-row", Boolean(line.isComment));
+
+          const typeCell = line.billable
+            ? `<select class="line-select" data-field="type" data-row-index="${index}"><option value="Koszt dodatkowy" ${line.type === "Koszt dodatkowy" ? "selected" : ""}>Koszt dodatkowy</option><option value="Zapas" ${line.type === "Zapas" ? "selected" : ""}>Zapas</option></select>`
+            : `<div class="cell">${line.type}</div>`;
+
+          const itemCell = line.billable
+            ? line.type === "Koszt dodatkowy"
+              ? `<select class="line-select" data-field="itemNo" data-row-index="${index}"><option value="montaz" ${line.itemNo === "montaz" ? "selected" : ""}>montaz</option><option value="opłata" ${line.itemNo === "opłata" ? "selected" : ""}>opłata</option><option value="transport" ${line.itemNo === "transport" ? "selected" : ""}>transport</option></select>`
+              : `<input class="line-input" data-field="itemNo" data-row-index="${index}" value="${line.itemNo}" placeholder="Nr zapasu">`
+            : `<div class="cell">${line.itemNo}</div>`;
+
+          const descriptionCell = line.billable
+            ? `<input class="line-input" data-field="description" data-row-index="${index}" value="${line.description}">`
+            : `<div class="cell">${line.description}</div>`;
+
+          row.innerHTML = [
+            `<td class="selection-cell"><button class="row-marker" type="button" data-row-index="${index}">${index === stateActiveRow ? "→" : ""}</button></td>`,
+            `<td class="menu-cell"><button class="row-menu" type="button" aria-label="Menu wiersza">⋮</button></td>`,
+            `<td>${typeCell}</td>`,
+            `<td>${itemCell}</td>`,
+            `<td><div class="cell cell-center"><input class="jumbo-check" type="checkbox" data-field="jumbo" data-row-index="${index}" ${line.jumbo ? "checked" : ""} ${line.billable ? "" : "disabled"}></div></td>`,
+            `<td>${descriptionCell}</td>`,
+            `<td><div class="cell">${line.locationCode}</div></td>`,
+            `<td>${line.billable ? `<input class="line-input line-input--compact" data-field="quantity" data-row-index="${index}" value="${line.quantity}">` : `<div class="cell cell-right">${line.quantity}</div>`}</td>`,
+            `<td><div class="cell cell-right ${parseNumber(line.assembleQty) === 0 ? "qty-alert" : ""}">${line.assembleQty}</div></td>`,
+            `<td><div class="cell">${line.unitOfMeasureCode}</div></td>`,
+            `<td>${line.billable ? `<input class="line-input line-input--compact" data-field="unitPriceNet" data-row-index="${index}" value="${line.unitPriceNet}">` : `<div class="cell cell-right">${line.unitPriceNet}</div>`}</td>`,
+            `<td><div class="cell">${line.taxGroupCode}</div></td>`,
+            `<td>${line.billable ? `<input class="line-input line-input--compact" data-field="lineDiscountPct" data-row-index="${index}" value="${line.lineDiscountPct}">` : `<div class="cell cell-right">${line.lineDiscountPct}</div>`}</td>`,
+            `<td><div class="cell">${line.lineAmountNet}</div></td>`,
+            `<td><div class="cell cell-center">${line.availability}</div></td>`
+          ].join("");
+
+          lineBodyNode.appendChild(row);
+        });
+
+        bindRowEvents();
+        updateSummary();
+      }
+
+      const renderTemplatePanel = () => {
+        templateGridNode.innerHTML = templateDefinitions.map((template) => {
+          const total = template.items.reduce((sum, item) => sum + parseNumber(item.unitPriceNet), 0);
+          return `
+            <div class="template-card ${selectedTemplateId === template.id ? "is-selected" : ""}" data-template-id="${template.id}">
+              <p class="template-name">${template.name}</p>
+              <p class="template-desc">${template.description}</p>
+              <p class="template-price">${formatDecimal(total)} PLN</p>
+            </div>
+          `;
+        }).join("");
+
+        templateGridNode.querySelectorAll(".template-card").forEach((card) => {
+          card.addEventListener("click", () => {
+            selectedTemplateId = card.dataset.templateId;
+            renderTemplatePanel();
+          });
+        });
+      };
+
+      const closeTemplatePanel = () => {
+        templatePanelNode.hidden = true;
+        selectedTemplateId = null;
+        renderTemplatePanel();
+      };
+
+      addLineBtn.addEventListener("click", () => {
+        stateLines.push({
+          type: "Koszt dodatkowy",
+          itemNo: "montaz",
+          jumbo: false,
+          description: "Montaż",
+          locationCode: "M02",
+          quantity: "1",
+          assembleQty: "0",
+          unitOfMeasureCode: "usl.",
+          unitPriceNet: "0,00",
+          taxGroupCode: "",
+          lineDiscountPct: "0,00",
+          lineAmountNet: "0,00",
+          availability: "",
+          billable: true
+        });
+        stateShowAll = true;
+        stateActiveRow = stateLines.length - 1;
+        renderRows();
+      });
+
+      showRowsBtn.addEventListener("click", () => {
+        stateShowAll = true;
+        renderRows();
+      });
+
+      openTemplateBtn.addEventListener("click", () => {
+        templatePanelNode.hidden = !templatePanelNode.hidden;
+        if (!templatePanelNode.hidden) {
+          renderTemplatePanel();
+        }
+      });
+
+      closeTemplateBtn.addEventListener("click", closeTemplatePanel);
+      cancelTemplateBtn.addEventListener("click", closeTemplatePanel);
+      applyTemplateBtn.addEventListener("click", () => {
+        const selectedTemplate = templateDefinitions.find((template) => template.id === selectedTemplateId);
+        if (!selectedTemplate) {
+          alert("Proszę wybrać szablon.");
+          return;
+        }
+
+        stateLines = selectedTemplate.items.map((item) => ({
+          type: item.type,
+          itemNo: item.itemNo,
+          jumbo: false,
+          description: item.description,
+          locationCode: "M02",
+          quantity: item.quantity,
+          assembleQty: item.type === "Zapas" ? item.quantity : "0",
+          unitOfMeasureCode: item.type === "Zapas" ? "M2" : "usl.",
+          unitPriceNet: item.unitPriceNet,
+          taxGroupCode: "",
+          lineDiscountPct: "0,00",
+          lineAmountNet: item.unitPriceNet,
+          availability: "",
+          billable: true
+        }));
+        stateShowAll = true;
+        stateActiveRow = 0;
+        closeTemplatePanel();
+        renderRows();
+      });
+
+      renderTemplatePanel();
+      renderRows();
+    })();
+  </script>
 </body>
 </html>
+</body>
+</html>
+
+
