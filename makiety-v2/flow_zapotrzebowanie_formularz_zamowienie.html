@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flow zapotrzebowanie do zamowienia zakupu</title>
+  <style>
+    :root {
+      --bg: #f3f2f1;
+      --panel: #ffffff;
+      --line: #d2d0ce;
+      --text: #201f1e;
+      --muted: #605e5c;
+      --accent: #0078d4;
+      --accent-strong: #106ebe;
+      --overlay: rgba(32, 31, 30, 0.38);
+      --font: "Segoe UI", "Segoe WP", Segoe, device-segoe, Tahoma, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .top-shell {
+      height: 48px;
+      background: #201f1e;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-size: 14px;
+    }
+
+    .top-shell-title {
+      font-weight: 600;
+    }
+
+    .top-shell-meta {
+      display: flex;
+      gap: 12px;
+      color: #d2d0ce;
+      font-size: 12px;
+    }
+
+    .page {
+      width: min(1720px, calc(100vw - 24px));
+      margin: 8px auto 20px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .flow-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #faf9f8;
+      flex-wrap: wrap;
+    }
+
+    .flow-title {
+      display: grid;
+      gap: 4px;
+    }
+
+    .flow-kicker {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .flow-heading {
+      font-size: 24px;
+      font-weight: 300;
+      color: #323130;
+    }
+
+    .flow-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .flow-button {
+      min-height: 32px;
+      padding: 0 12px;
+      border: 1px solid #8a8886;
+      background: #ffffff;
+      color: var(--text);
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .flow-button--primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .flow-button[hidden] {
+      display: none;
+    }
+
+    .flow-select {
+      min-height: 32px;
+      min-width: 240px;
+      border: 1px solid #8a8886;
+      background: #ffffff;
+      color: var(--text);
+      font: inherit;
+      font-size: 12px;
+      padding: 0 8px;
+    }
+
+    .flow-select[hidden] {
+      display: none;
+    }
+
+    .status-bar {
+      min-height: 34px;
+      display: flex;
+      align-items: center;
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--line);
+      font-size: 12px;
+      color: var(--accent-strong);
+      background: #ffffff;
+    }
+
+    .frame-wrap {
+      position: relative;
+      background: #ffffff;
+    }
+
+    .flow-frame {
+      width: 100%;
+      height: calc(100vh - 170px);
+      min-height: 860px;
+      border: 0;
+      display: block;
+      background: #ffffff;
+    }
+
+    .dialog-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: var(--overlay);
+      z-index: 50;
+    }
+
+    .dialog-backdrop.is-visible {
+      display: flex;
+    }
+
+    .dialog {
+      width: min(460px, 100%);
+      border: 1px solid var(--line);
+      background: #ffffff;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    .dialog-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      font-weight: 700;
+      background: #faf9f8;
+    }
+
+    .dialog-body {
+      padding: 18px 16px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 0 16px 16px;
+    }
+
+    .dialog-button {
+      min-width: 88px;
+      min-height: 32px;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #ffffff;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: calc(100vw - 12px);
+      }
+
+      .top-shell-meta {
+        display: none;
+      }
+
+      .flow-frame {
+        min-height: 760px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-shell">
+    <div class="top-shell-title">Dynamics 365 Business Central</div>
+    <div class="top-shell-meta">
+      <span>FORMA SYSTEM</span>
+      <span>SANDBOX</span>
+    </div>
+  </div>
+
+  <main class="page">
+    <div class="flow-header">
+      <div class="flow-title">
+        <span class="flow-kicker">Flow</span>
+        <span class="flow-heading" id="flowHeading">Zapotrzebowanie formularz</span>
+      </div>
+      <div class="flow-actions">
+        <select class="flow-select" id="orderSelect" hidden></select>
+        <button class="flow-button" id="backToDemandBtn" type="button" hidden>Powrot do zapotrzebowania</button>
+        <button class="flow-button flow-button--primary" id="openPurchaseBtn" type="button" hidden>Przejdz do zamowienia zakupu</button>
+      </div>
+    </div>
+    <div class="status-bar" id="statusBar">Otwarta makieta zapotrzebowania formularz. Uzyj akcji Utworz zamowienie zakupu w samej makiecie.</div>
+    <div class="frame-wrap">
+      <iframe
+        class="flow-frame"
+        id="flowFrame"
+        title="Flow zapotrzebowanie do zamowienia zakupu"
+        src="./zapotrzebowanie_formularz.html"></iframe>
+    </div>
+  </main>
+
+  <div class="dialog-backdrop" id="dialogBackdrop" aria-hidden="true">
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+      <div class="dialog-header" id="dialogTitle">Informacja</div>
+      <div class="dialog-body" id="dialogBody">Utworzono zamowienie zakupu. Kliknij OK, aby przejsc do makiety zamowienia zakupu.</div>
+      <div class="dialog-actions">
+        <button class="dialog-button" id="dialogOkBtn" type="button">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DEMAND_URL = "./zapotrzebowanie_formularz.html";
+    const PURCHASE_URL = "./zamowienie_zakupu.html";
+
+    const flowFrame = document.getElementById("flowFrame");
+    const statusBar = document.getElementById("statusBar");
+    const flowHeading = document.getElementById("flowHeading");
+    const orderSelect = document.getElementById("orderSelect");
+    const openPurchaseBtn = document.getElementById("openPurchaseBtn");
+    const backToDemandBtn = document.getElementById("backToDemandBtn");
+    const dialogBackdrop = document.getElementById("dialogBackdrop");
+    const dialogOkBtn = document.getElementById("dialogOkBtn");
+
+    let currentView = "demand";
+  let pendingOrders = [];
+  let activeOrderIndex = 0;
+
+    function setStatus(text) {
+      statusBar.textContent = text;
+    }
+
+    function openDialog() {
+      dialogBackdrop.classList.add("is-visible");
+      dialogBackdrop.setAttribute("aria-hidden", "false");
+      dialogOkBtn.focus();
+    }
+
+    function closeDialog() {
+      dialogBackdrop.classList.remove("is-visible");
+      dialogBackdrop.setAttribute("aria-hidden", "true");
+    }
+
+    function switchToDemand() {
+      currentView = "demand";
+      flowHeading.textContent = "Zapotrzebowanie formularz";
+      backToDemandBtn.hidden = true;
+      openPurchaseBtn.hidden = true;
+      orderSelect.hidden = true;
+      flowFrame.src = DEMAND_URL;
+      setStatus("Otwarta makieta zapotrzebowania formularz. Uzyj akcji Utworz zamowienie zakupu w samej makiecie.");
+    }
+
+    function switchToPurchase() {
+      currentView = "purchase";
+      flowHeading.textContent = "Zamowienie zakupu";
+      backToDemandBtn.hidden = false;
+      openPurchaseBtn.hidden = true;
+      orderSelect.hidden = pendingOrders.length <= 1;
+      flowFrame.src = PURCHASE_URL;
+      setStatus("Makieta zamowienia zakupu zostala otwarta z flow po wybraniu akcji w zapotrzebowaniu.");
+    }
+
+    function populateOrderSelect() {
+      orderSelect.innerHTML = "";
+
+      pendingOrders.forEach((order, index) => {
+        const option = document.createElement("option");
+        option.value = String(index);
+        option.textContent = order.orderNo + " · " + order.supplier;
+        orderSelect.appendChild(option);
+      });
+
+      orderSelect.value = String(activeOrderIndex);
+      orderSelect.hidden = pendingOrders.length <= 1;
+    }
+
+    function parseLocalizedNumber(value) {
+      const normalized = String(value || "").replace(/\s+/g, "").replace(",", ".");
+      const parsed = Number(normalized);
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+
+    function formatLocalizedNumber(value, fractionDigits) {
+      return value.toLocaleString("pl-PL", {
+        minimumFractionDigits: fractionDigits,
+        maximumFractionDigits: fractionDigits
+      });
+    }
+
+    function buildOrdersFromDemandRows(selectedRows) {
+      const ordersBySupplier = new Map();
+
+      selectedRows.forEach((row) => {
+        if (!ordersBySupplier.has(row.supplier)) {
+          ordersBySupplier.set(row.supplier, []);
+        }
+
+        ordersBySupplier.get(row.supplier).push(row);
+      });
+
+      return [...ordersBySupplier.entries()].map(([supplier, rows], index) => ({
+        orderNo: "ZZ/24/" + String(82 + index).padStart(6, "0"),
+        supplier,
+        vendorNo: supplier,
+        transportType: [...new Set(rows.map((row) => row.transportType).filter(Boolean))].join(", "),
+        lines: rows.map((row) => {
+          const quantityM2 = row.quantity || row.orderQty || row.suggestedQty || "0,00";
+          const unitCost = row.directUnitCostNet || "0,00";
+          return {
+            itemNo: row.itemNo || "",
+            stockMark: row.stockMark || "",
+            description: row.itemName || row.description || "",
+            locationCode: row.locationCode || "",
+            binCode: row.binCode || "",
+            quantity: quantityM2,
+            reservedQuantity: row.reservedQuantity || "0,00",
+            unitOfMeasureCode: row.unitOfMeasureCode || "m²",
+            directUnitCostNet: unitCost,
+            lineAmountNet: formatLocalizedNumber(parseLocalizedNumber(quantityM2) * parseLocalizedNumber(unitCost), 2),
+            quantityToReceive: quantityM2,
+            quantityReceived: row.quantityReceived || "0,00",
+            quantityToInvoice: quantityM2,
+            quantityInvoiced: row.quantityInvoiced || "0,00",
+            quantityToAssign: quantityM2,
+            additionalCostToHandleQuantity: row.additionalCostToHandleQuantity || "0,00",
+            assignedQuantity: row.assignedQuantity || "0,00",
+            orderQtyPieces: row.piecesQty || row.orderQtyPieces || "0",
+            orderQtySquareMeters: row.orderQty || row.orderQtySquareMeters || quantityM2,
+            weight: row.weight || "0 kg",
+            type: row.lineType || row.type || "Zapas"
+          };
+        })
+      }));
+    }
+
+    function collectSelectedDemandRows(frameWindow) {
+      try {
+        const raw = frameWindow.eval(`JSON.stringify(rows.filter((row) => row.selected))`);
+        return JSON.parse(raw);
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function updateSummaryTransportType(frameDocument, transportType) {
+      const labels = [...frameDocument.querySelectorAll(".field-label")];
+      const transportLabel = labels.find((label) => label.textContent.trim() === "Typ transportu");
+
+      if (!transportLabel) {
+        return;
+      }
+
+      const fieldContainer = transportLabel.closest(".field");
+      if (!fieldContainer) {
+        return;
+      }
+
+      const value = fieldContainer.querySelector(".field-control");
+      if (value) {
+        value.textContent = transportType;
+      }
+    }
+
+    function hidePurchaseColumns(frameDocument) {
+      const hiddenHeaders = ["Ilosc", "Ilosc zarezerwowana"];
+      const headerCells = [...frameDocument.querySelectorAll("thead th")];
+      const hiddenIndexes = [];
+
+      headerCells.forEach((headerCell, index) => {
+        const headerText = headerCell.textContent.trim();
+        if (hiddenHeaders.includes(headerText)) {
+          headerCell.style.display = "none";
+          hiddenIndexes.push(index);
+        }
+      });
+
+      frameDocument.querySelectorAll("tbody tr").forEach((row) => {
+        const cells = [...row.children];
+        hiddenIndexes.forEach((cellIndex) => {
+          if (cells[cellIndex]) {
+            cells[cellIndex].style.display = "none";
+          }
+        });
+      });
+    }
+
+    function injectPurchaseOrderData() {
+      const order = pendingOrders[activeOrderIndex];
+      if (!order) {
+        return;
+      }
+
+      let frameDocument;
+      let frameWindow;
+
+      try {
+        frameWindow = flowFrame.contentWindow;
+        frameDocument = flowFrame.contentDocument || (frameWindow && frameWindow.document);
+      } catch (error) {
+        setStatus("Nie udalo sie zasilic makiety zamowienia danymi z zapotrzebowania.");
+        return;
+      }
+
+      if (!frameDocument) {
+        setStatus("Nie udalo sie odczytac makiety zamowienia zakupu.");
+        return;
+      }
+
+      try {
+        frameWindow.eval(`
+          lineData.splice(0, lineData.length, ...${JSON.stringify(order.lines)});
+          if (![...vendorSelect.options].some((option) => option.value === ${JSON.stringify(order.supplier)})) {
+            const option = document.createElement("option");
+            option.value = ${JSON.stringify(order.supplier)};
+            option.textContent = ${JSON.stringify(order.supplier)};
+            vendorSelect.appendChild(option);
+          }
+          vendorSelect.value = ${JSON.stringify(order.supplier)};
+          vendorName.textContent = ${JSON.stringify(order.supplier)};
+          documentHeading.textContent = ${JSON.stringify(order.orderNo + " · " + order.supplier.toUpperCase())};
+          if (typeof syncVendorLabels === "function") {
+            syncVendorLabels();
+          }
+          renderLines();
+        `);
+
+        const vendorControl = frameDocument.getElementById("vendorName");
+        const heading = frameDocument.getElementById("documentHeading");
+        if (vendorControl) {
+          vendorControl.textContent = order.supplier;
+        }
+        if (heading) {
+          heading.textContent = order.orderNo + " · " + order.supplier.toUpperCase();
+        }
+
+        updateSummaryTransportType(frameDocument, order.transportType || "");
+        hidePurchaseColumns(frameDocument);
+        flowHeading.textContent = "Zamowienie zakupu · " + order.supplier;
+        setStatus("Otwarto zamowienie zakupu dla dostawcy: " + order.supplier + ". Pozycje: " + order.lines.length + ".");
+      } catch (error) {
+        setStatus("Nie udalo sie podstawic dostawcy i wierszy do makiety zamowienia zakupu.");
+      }
+    }
+
+    function attachDemandActionHook() {
+      let frameDocument;
+      let frameWindow;
+
+      try {
+        frameWindow = flowFrame.contentWindow;
+        frameDocument = flowFrame.contentDocument || (frameWindow && frameWindow.document);
+      } catch (error) {
+        setStatus("Nie udalo sie podlaczyc akcji w iframe. Uzyj przycisku Przejdz do zamowienia zakupu jako obejscia.");
+        openPurchaseBtn.hidden = false;
+        return;
+      }
+
+      if (!frameDocument) {
+        setStatus("Nie udalo sie odczytac makiety formularza. Uzyj przycisku Przejdz do zamowienia zakupu jako obejscia.");
+        openPurchaseBtn.hidden = false;
+        return;
+      }
+
+      const actionButton = frameDocument.querySelector('[data-action="create-purchase-order"]');
+      const addRecordButton = frameDocument.getElementById("addRecordBtn");
+      const calculateButton = frameDocument.getElementById("calculateBtn");
+      const modalConfirmButton = frameDocument.getElementById("modalConfirmBtn");
+      const toolbarGroup = addRecordButton ? addRecordButton.parentElement : null;
+      const actionsMenu = actionButton ? actionButton.parentElement : null;
+
+      if (!actionButton) {
+        setStatus("Nie znaleziono akcji Utworz zamowienie zakupu w makiecie formularza.");
+        openPurchaseBtn.hidden = false;
+        return;
+      }
+
+      if (addRecordButton) {
+        addRecordButton.textContent = "Nowy wiersz";
+      }
+
+      if (toolbarGroup && !frameDocument.getElementById("deleteRowFlowBtn")) {
+        const deleteRowButton = frameDocument.createElement("button");
+        deleteRowButton.id = "deleteRowFlowBtn";
+        deleteRowButton.className = addRecordButton ? addRecordButton.className : "btn btn-secondary";
+        deleteRowButton.type = "button";
+        deleteRowButton.textContent = "Usun wiersz";
+        deleteRowButton.addEventListener("click", () => {
+          try {
+            frameWindow.eval(`
+              if (rows.length) {
+                const rowIndexToDelete = typeof activeRowIndex === "number" && activeRowIndex >= 0
+                  ? Math.min(activeRowIndex, rows.length - 1)
+                  : rows.length - 1;
+                rows.splice(rowIndexToDelete, 1);
+                activeRowIndex = Math.max(0, Math.min(rowIndexToDelete, rows.length - 1));
+                populateFilterOptions();
+                renderRows();
+                showMessage(rows.length ? "Usunieto wybrany wiersz." : "Usunieto ostatni wiersz. Lista jest pusta.");
+              } else {
+                showMessage("Brak wierszy do usuniecia.");
+              }
+            `);
+          } catch (error) {
+            setStatus("Nie udalo sie wykonac akcji Usun wiersz w makiecie formularza.");
+          }
+        });
+        toolbarGroup.appendChild(deleteRowButton);
+      }
+
+      if (actionsMenu && !frameDocument.getElementById("clearRowsFlowAction")) {
+        const clearRowsButton = frameDocument.createElement("button");
+        clearRowsButton.id = "clearRowsFlowAction";
+        clearRowsButton.className = "menu-item";
+        clearRowsButton.type = "button";
+        clearRowsButton.textContent = "Wyczysc wiersze zapotrzebowania";
+        clearRowsButton.addEventListener("click", () => {
+          try {
+            frameWindow.eval(`
+              rows.splice(0, rows.length);
+              activeRowIndex = -1;
+              populateFilterOptions();
+              renderRows();
+              showMessage("Wyczyszczono wszystkie wiersze zapotrzebowania.");
+              closeMenus();
+            `);
+          } catch (error) {
+            setStatus("Nie udalo sie wyczyscic wierszy w makiecie formularza.");
+          }
+        });
+        actionsMenu.appendChild(clearRowsButton);
+      }
+
+      if (calculateButton) {
+        calculateButton.dataset.flowHooked = "true";
+      }
+
+      if (modalConfirmButton && !modalConfirmButton.dataset.flowHooked) {
+        modalConfirmButton.dataset.flowHooked = "true";
+        modalConfirmButton.addEventListener("click", () => {
+          try {
+            frameWindow.eval(`
+              if (!rows.length) {
+                rows.splice(0, rows.length, ...cloneRows(initialRows));
+                activeRowIndex = rows.length ? 0 : -1;
+                populateFilterOptions();
+                renderRows();
+                showMessage("Otwarto formularz: Oblicz plan - arkusz zapot. i odtworzono domyslne 3 wiersze.");
+              }
+            `);
+          } catch (error) {
+            setStatus("Nie udalo sie odtworzyc domyslnych wierszy po obliczeniu zapotrzebowania.");
+          }
+        }, true);
+      }
+
+      openPurchaseBtn.hidden = true;
+      setStatus("Akcja Utworz zamowienie zakupu jest podlaczona. Uzyj jej bezposrednio w makiecie formularza.");
+
+      actionButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+
+        const selectedRows = collectSelectedDemandRows(frameWindow);
+        if (!selectedRows || !selectedRows.length) {
+          setStatus("Brak zaznaczonych pozycji do utworzenia zamowienia zakupu.");
+          return;
+        }
+
+        pendingOrders = buildOrdersFromDemandRows(selectedRows);
+        activeOrderIndex = 0;
+        populateOrderSelect();
+        openDialog();
+      }, true);
+    }
+
+    flowFrame.addEventListener("load", () => {
+      if (currentView === "demand") {
+        attachDemandActionHook();
+      }
+
+      if (currentView === "purchase") {
+        injectPurchaseOrderData();
+      }
+    });
+
+    openPurchaseBtn.addEventListener("click", switchToPurchase);
+    backToDemandBtn.addEventListener("click", switchToDemand);
+    dialogOkBtn.addEventListener("click", () => {
+      closeDialog();
+      switchToPurchase();
+    });
+
+    dialogBackdrop.addEventListener("click", (event) => {
+      if (event.target === dialogBackdrop) {
+        closeDialog();
+      }
+    });
+
+    orderSelect.addEventListener("change", () => {
+      activeOrderIndex = Number(orderSelect.value);
+      if (currentView === "purchase") {
+        injectPurchaseOrderData();
+      }
+    });
+  </script>
+</body>
+</html>

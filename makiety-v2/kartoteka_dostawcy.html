@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kartoteka dostawcy - D001209</title>
+  <style>
+    :root {
+      --bg: #f3f2f1;
+      --panel: #ffffff;
+      --panel-muted: #faf9f8;
+      --line: #d2d0ce;
+      --line-soft: #edebe9;
+      --line-strong: #505c6d;
+      --text: #201f1e;
+      --muted: #605e5c;
+      --accent: #0078d4;
+      --accent-strong: #106ebe;
+      --ok: #107c10;
+      --shell: #201f1e;
+      --font: "Segoe UI", "Segoe WP", Segoe, device-segoe, Tahoma, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .top-shell {
+      height: 48px;
+      background: var(--shell);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-size: 14px;
+    }
+
+    .top-shell-title {
+      font-weight: 600;
+    }
+
+    .top-shell-meta {
+      display: flex;
+      gap: 12px;
+      color: #d2d0ce;
+      font-size: 12px;
+    }
+
+    .page {
+      width: min(1680px, calc(100vw - 24px));
+      margin: 8px auto 20px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .doc-title {
+      padding: 8px 12px 0;
+      border-bottom: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .doc-caption {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .doc-number {
+      font-size: clamp(26px, 3.4vw, 38px);
+      line-height: 1.1;
+      font-weight: 300;
+      color: #323130;
+      margin: 0 0 8px;
+    }
+
+    .ribbon-tabs,
+    .action-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .ribbon-tab,
+    .action-link {
+      min-height: 34px;
+      padding: 0 12px;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      font-size: 12px;
+      cursor: pointer;
+      border-right: 1px solid var(--line);
+    }
+
+    .ribbon-tab--active {
+      color: var(--accent-strong);
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .action-row {
+      gap: 6px;
+      padding: 6px 0;
+      border-top: 0;
+    }
+
+    .action-link {
+      min-height: 28px;
+      padding: 0 8px;
+      border-right: 0;
+      color: #3a96a0;
+    }
+
+    .section {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 10px 6px;
+      background: var(--panel-muted);
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .section-more {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .section-body {
+      padding: 12px 10px 14px;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 28px;
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+    }
+
+    .field-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .field-label::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px dotted #d2d0ce;
+      transform: translateY(1px);
+    }
+
+    .field-label.required::before {
+      content: "*";
+      color: #d13438;
+      font-weight: 700;
+      order: 2;
+      margin-left: 2px;
+    }
+
+    .field-input,
+    .field-select,
+    .field-control {
+      min-height: 24px;
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      background: #ffffff;
+      color: #000000;
+      font-size: 12px;
+      padding: 2px 8px;
+    }
+
+    .field-control {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      border-color: var(--line);
+      background: #f3f2f1;
+      color: #0078a3;
+    }
+
+    .field-control--left {
+      justify-content: flex-start;
+      color: var(--text);
+    }
+
+    .field-input:focus,
+    .field-select:focus,
+    .lookup-button:focus {
+      outline: none;
+      border-color: #00b7c3;
+      box-shadow: 0 0 0 1px #00b7c3;
+    }
+
+    .field-with-action {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 26px;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .lookup-button {
+      min-height: 24px;
+      border: 1px solid var(--line-strong);
+      background: #ffffff;
+      cursor: pointer;
+      color: var(--muted);
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      min-height: 24px;
+    }
+
+    .toggle {
+      position: relative;
+      width: 34px;
+      height: 18px;
+      display: inline-block;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: #d2d0ce;
+      border-radius: 999px;
+    }
+
+    .toggle-slider::before {
+      content: "";
+      position: absolute;
+      left: 2px;
+      top: 2px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+    }
+
+    .toggle input:checked + .toggle-slider {
+      background: #8a8886;
+    }
+
+    .toggle input:checked + .toggle-slider::before {
+      transform: translateX(16px);
+    }
+
+    .link-line {
+      color: var(--accent-strong);
+      font-size: 12px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .status-good {
+      color: var(--ok);
+      font-weight: 700;
+    }
+
+    @media (max-width: 1100px) {
+      .section-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .field {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .field-label::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: calc(100vw - 12px);
+        margin: 6px auto 12px;
+      }
+
+      .top-shell {
+        padding: 0 10px;
+      }
+
+      .top-shell-meta {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-shell">
+    <div class="top-shell-title">Dynamics 365 Business Central</div>
+    <div class="top-shell-meta">
+      <span>CORE</span>
+      <span>SANDBOX</span>
+    </div>
+  </div>
+
+  <main class="page">
+    <div class="doc-title">
+      <div class="doc-caption">Kartoteka dostawcy</div>
+      <h1 class="doc-number">D001209</h1>
+
+      <div class="ribbon-tabs">
+        <button class="ribbon-tab ribbon-tab--active" type="button">Strona główna</button>
+        <button class="ribbon-tab" type="button">Żądaj akceptacji</button>
+        <button class="ribbon-tab" type="button">Nowy dokument</button>
+        <button class="ribbon-tab" type="button">Dostawca</button>
+        <button class="ribbon-tab" type="button">Ceny i rabaty</button>
+        <button class="ribbon-tab" type="button">Raport</button>
+        <button class="ribbon-tab" type="button">Akcje</button>
+        <button class="ribbon-tab" type="button">Powiązane</button>
+        <button class="ribbon-tab" type="button">Raporty</button>
+        <button class="ribbon-tab" type="button">Automatyzuj</button>
+        <button class="ribbon-tab" type="button">Mniej opcji</button>
+      </div>
+
+      <div class="action-row">
+        <button class="action-link" type="button">Pobierz dane z serwisów rządowych</button>
+        <button class="action-link" type="button">Kontakt</button>
+        <button class="action-link" type="button">Scalaj z...</button>
+        <button class="action-link" type="button">Zastosuj szablon</button>
+        <button class="action-link" type="button">Wyślij wiadomość e-mail</button>
+        <button class="action-link" type="button">Zapłać dostawcy</button>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Ogólne</span>
+        <span class="section-more">Pokaż więcej</span>
+      </div>
+      <div class="section-body">
+        <div class="section-grid">
+          <div class="field">
+            <span class="field-label">Nr</span>
+            <div class="field-with-action">
+              <input class="field-input" type="text" value="D001209">
+              <button class="lookup-button" type="button">...</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="field-label">Saldo (PLN) jako nabywca</span>
+            <div class="field-control">0,00</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label required">Nazwa</span>
+            <input class="field-input" type="text" value="MARAZZI">
+          </div>
+          <div class="field">
+            <span class="field-label">Saldo należne (PLN)</span>
+            <div class="field-control">0,00</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Zablokowane</span>
+            <select class="field-select">
+              <option selected></option>
+              <option>Wszystko</option>
+              <option>Płatności</option>
+              <option>Dostawy</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="field-label">Liczba dokumentów</span>
+            <div class="field-control">0</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Saldo (PLN)</span>
+            <div class="field-control">0,00</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Przyczyna braku nr KSeF</span>
+            <select class="field-select">
+              <option selected></option>
+              <option>Brak numeru od dostawcy</option>
+              <option>Dokument poza KSeF</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Saldo alokacji (PLN)</span>
+            <div class="field-control">0,00</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Pomiń w analityce JPK KR PD</span>
+            <div class="toggle-row">
+              <label class="toggle" aria-label="Pomiń w analityce JPK KR PD">
+                <input type="checkbox">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Planowanie N24 I</span>
+        <span class="section-more">Pokaż więcej</span>
+      </div>
+      <div class="section-body">
+        <div class="section-grid">
+          <div class="field">
+            <span class="field-label">Aktywny w planowaniu</span>
+            <div class="toggle-row">
+              <label class="toggle" aria-label="Aktywny w planowaniu">
+                <input type="checkbox" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="field">
+            <span class="field-label">Domyślny horyzont prognozy</span>
+            <select class="field-select">
+              <option>1M</option>
+              <option>2M</option>
+              <option selected>3M</option>
+              <option>6M</option>
+              <option>12M</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Maksymalny tonaż ciężarówki</span>
+            <input class="field-input" type="text" value="24 000 kg">
+          </div>
+          <div class="field">
+            <span class="field-label">Maksymalna waga skrzyni</span>
+            <input class="field-input" type="text" value="1 500 kg">
+          </div>
+
+          <div class="field">
+            <span class="field-label">Maksymalna objętość skrzyni</span>
+            <input class="field-input" type="text" value="18,5 m3">
+          </div>
+          <div class="field">
+            <span class="field-label">Typ transportu</span>
+            <select class="field-select">
+              <option selected>Stojaki</option>
+              <option>Skrzynie</option>
+              <option>Mieszany</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Planowanie N24 II</span>
+        <span class="section-more">Pokaż więcej</span>
+      </div>
+      <div class="section-body">
+        <div class="section-grid">
+          <div class="field">
+            <span class="field-label">Aktywny w planowaniu</span>
+            <div class="toggle-row">
+              <label class="toggle" aria-label="Aktywny w planowaniu II">
+                <input type="checkbox" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="field">
+            <span class="field-label">Domyślny horyzont prognozy</span>
+            <select class="field-select">
+              <option>1M</option>
+              <option>2M</option>
+              <option selected>3M</option>
+              <option>6M</option>
+              <option>12M</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Maksymalny tonaż ciężarówki</span>
+            <input class="field-input" type="text" value="24 000 kg">
+          </div>
+          <div class="field">
+            <span class="field-label">Maksymalna waga stojaka</span>
+            <input class="field-input" type="text" value="1 500 kg">
+          </div>
+
+          <div class="field">
+            <span class="field-label">Maksymalna objętość stojaka</span>
+            <input class="field-input" type="text" value="18,5 m3">
+          </div>
+          <div class="field">
+            <span class="field-label">Typ transportu</span>
+            <select class="field-select">
+              <option>Stojaki</option>
+              <option selected>Skrzynie</option>
+              <option>Mieszany</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Adres i kontakt</span>
+        <span class="section-more">Pokaż więcej</span>
+      </div>
+      <div class="section-body">
+        <div class="section-grid">
+          <div class="field">
+            <span class="field-label">Adres</span>
+            <input class="field-input" type="text" value="">
+          </div>
+          <div class="field">
+            <span class="field-label">Nr telefonu komórkowego</span>
+            <input class="field-input" type="text" value="">
+          </div>
+
+          <div class="field">
+            <span class="field-label">Adres 2</span>
+            <input class="field-input" type="text" value="">
+          </div>
+          <div class="field">
+            <span class="field-label">Adres e-mail</span>
+            <input class="field-input" type="text" value="">
+          </div>
+
+          <div class="field">
+            <span class="field-label">Kod kraju/regionu</span>
+            <select class="field-select">
+              <option selected>PL</option>
+              <option>DE</option>
+              <option>CZ</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="field-label">Strona główna</span>
+            <input class="field-input" type="text" value="">
+          </div>
+
+          <div class="field">
+            <span class="field-label">Miasto</span>
+            <div class="field-with-action">
+              <input class="field-input" type="text" value="Warszawa">
+              <button class="lookup-button" type="button">...</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="field-label">Zewn. nr konta</span>
+            <input class="field-input" type="text" value="">
+          </div>
+
+          <div class="field">
+            <span class="field-label">Kod pocztowy</span>
+            <div class="field-with-action">
+              <input class="field-input" type="text" value="00-001">
+              <button class="lookup-button" type="button">...</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="field-label">Kod kontaktu podstawowego</span>
+            <div class="field-with-action">
+              <input class="field-input" type="text" value="">
+              <button class="lookup-button" type="button">...</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="field-label"></span>
+            <div class="link-line">Pokaż na mapie</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Kontakt</span>
+            <div class="field-with-action">
+              <input class="field-input" type="text" value="">
+              <button class="lookup-button" type="button">...</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Nr telefonu</span>
+            <input class="field-input" type="text" value="">
+          </div>
+          <div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Fakturowanie</span>
+        <span class="section-more">Pokaż mniej</span>
+      </div>
+      <div class="section-body">
+        <div class="section-grid">
+          <div class="field">
+            <span class="field-label">Kod kraju nadania NIP</span>
+            <div class="field-with-action">
+              <input class="field-input" type="text" value="">
+              <button class="lookup-button" type="button">...</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="field-label">Ceny z VAT</span>
+            <div class="toggle-row">
+              <label class="toggle" aria-label="Ceny z VAT">
+                <input type="checkbox">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">NIP</span>
+            <div class="field-with-action">
+              <input class="field-input" type="text" value="">
+              <button class="lookup-button" type="button">...</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="field-label">Metoda kalkulacji cen</span>
+            <select class="field-select">
+              <option selected></option>
+              <option>Najniższa cena</option>
+              <option>Najwyższa cena</option>
+              <option>Ostatni koszt</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <span class="field-label">REGON</span>
+            <input class="field-input" type="text" value="">
+          </div>
+          <div class="field">
+            <span class="field-label">Szczegóły księgowania</span>
+            <input class="field-input" type="text" value="">
+          </div>
+
+          <div class="field">
+            <span class="field-label">Nr KRS</span>
+            <input class="field-input" type="text" value="">
+          </div>
+          <div class="field">
+            <span class="field-label">Gł. gosp. grupa księgowa</span>
+            <select class="field-select">
+              <option selected>EXP_IMP</option>
+              <option>KRAJ</option>
+              <option>UE</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Organ rejestracyjny</span>
+            <input class="field-input" type="text" value="">
+          </div>
+          <div class="field">
+            <span class="field-label">Gosp. grupa księgowa VAT</span>
+            <select class="field-select">
+              <option selected>IMP</option>
+              <option>KRAJ</option>
+              <option>UE</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <span class="field-label">GLN</span>
+            <input class="field-input" type="text" value="">
+          </div>
+          <div class="field">
+            <span class="field-label">Grupa księgowa dostawcy</span>
+            <select class="field-select">
+              <option selected>ZAGRANICA</option>
+              <option>KRAJ</option>
+              <option>UE</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Nr odbiorcy płatności</span>
+            <select class="field-select">
+              <option selected></option>
+              <option>D001209</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="field-label">Handel zagraniczny</span>
+            <input class="field-input" type="text" value="">
+          </div>
+
+          <div class="field">
+            <span class="field-label">Kod rabatu faktury</span>
+            <select class="field-select">
+              <option selected>D001209</option>
+              <option>DOMYŚLNY</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="field-label">Kod waluty</span>
+            <select class="field-select">
+              <option selected></option>
+              <option>PLN</option>
+              <option>EUR</option>
+              <option>USD</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

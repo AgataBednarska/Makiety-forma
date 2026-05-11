@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zamowienie zakupu FORMA SYSTEM</title>
+  <style>
+    :root {
+      --bg: #f3f2f1;
+      --panel: #ffffff;
+      --panel-muted: #faf9f8;
+      --line: #d2d0ce;
+      --line-soft: #edebe9;
+      --line-strong: #505c6d;
+      --text: #201f1e;
+      --muted: #605e5c;
+      --accent: #0078d4;
+      --accent-strong: #106ebe;
+      --ok: #107c10;
+      --shell: #201f1e;
+      --font: "Segoe UI", "Segoe WP", Segoe, device-segoe, Tahoma, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .top-shell {
+      height: 48px;
+      background: var(--shell);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-size: 14px;
+    }
+
+    .top-shell-title {
+      font-weight: 600;
+    }
+
+    .top-shell-meta {
+      display: flex;
+      gap: 12px;
+      color: #d2d0ce;
+      font-size: 12px;
+    }
+
+    .page {
+      width: min(1680px, calc(100vw - 24px));
+      margin: 8px auto 20px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .ribbon {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: var(--panel-muted);
+      border-bottom: 1px solid var(--line);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .ribbon-tabs {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .ribbon-tab {
+      min-height: 28px;
+      padding: 0 10px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .ribbon-tab:first-child {
+      padding-left: 0;
+    }
+
+    .ribbon-tab:last-child {
+      border-right: 0;
+    }
+
+    .ribbon-tab--active {
+      font-weight: 700;
+    }
+
+    .ribbon-tab:hover {
+      color: var(--accent-strong);
+    }
+
+    .ribbon-help {
+      border: 0;
+      background: transparent;
+      color: var(--accent-strong);
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .doc-title {
+      padding: 8px 16px 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .doc-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .doc-toolbar-left,
+    .doc-toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-circle,
+    .icon-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: #3a96a0;
+      font-size: 14px;
+      line-height: 1;
+      border-radius: 50%;
+    }
+
+    .icon-ghost {
+      border-radius: 2px;
+      border-color: transparent;
+      width: 24px;
+      height: 24px;
+      color: #49a8b2;
+    }
+
+    .doc-caption {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .doc-kicker {
+      margin: 0 0 6px;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 980px;
+      font-size: clamp(28px, 3.4vw, 34px);
+      line-height: 1.15;
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      color: #323130;
+    }
+
+    .section {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 16px 6px;
+      background: var(--panel-muted);
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .section-more {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .general-card {
+      padding: 12px 16px 14px;
+    }
+
+    .general-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 28px;
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+    }
+
+    .field-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .field-label::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px dotted #d2d0ce;
+      transform: translateY(1px);
+    }
+
+    .field-control,
+    .field-input,
+    .field-select,
+    .line-input {
+      min-height: 24px;
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      background: #ffffff;
+      color: #000000;
+      font: inherit;
+      font-size: 12px;
+      padding: 2px 8px;
+    }
+
+    .field-control {
+      display: flex;
+      align-items: center;
+      border-color: var(--line);
+      background: #f3f2f1;
+      color: var(--text);
+    }
+
+    .field-input:focus,
+    .field-select:focus,
+    .line-input:focus {
+      outline: none;
+      border-color: #00b7c3;
+      box-shadow: 0 0 0 1px #00b7c3;
+    }
+
+    .status-open {
+      color: var(--ok);
+      font-weight: 700;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      min-height: 30px;
+    }
+
+    .toggle {
+      position: relative;
+      width: 34px;
+      height: 18px;
+      display: inline-block;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: #d2d0ce;
+      border-radius: 999px;
+    }
+
+    .toggle-slider::before {
+      content: "";
+      position: absolute;
+      left: 2px;
+      top: 2px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+    }
+
+    .workspace-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 16px 8px;
+      border-bottom: 1px solid var(--line);
+      flex-wrap: wrap;
+      font-size: 12px;
+    }
+
+    .workspace-title {
+      font-weight: 700;
+    }
+
+    .workspace-tab {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      color: var(--text);
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .workspace-tab.is-active {
+      color: var(--accent-strong);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .workspace-link {
+      color: var(--accent-strong);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .workspace-link-muted {
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .subtoolbar {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 8px 16px 9px;
+      border-bottom: 1px solid var(--line);
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: #3a96a0;
+    }
+
+    .subtoolbar[hidden] {
+      display: none;
+    }
+
+    .subtoolbar-link {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      color: #3a96a0;
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .subtoolbar-link:hover,
+    .workspace-link-muted:hover,
+    .workspace-link:hover {
+      text-decoration: underline;
+    }
+
+    .subtoolbar-panel {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      padding: 8px 16px 9px;
+      border-bottom: 1px solid var(--line);
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: #3a96a0;
+    }
+
+    .subtoolbar-panel[hidden] {
+      display: none;
+    }
+
+    .subtoolbar-group {
+      min-width: 170px;
+      display: grid;
+      gap: 6px;
+      align-content: start;
+    }
+
+    .subtoolbar-group-title {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .subtoolbar-action-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(150px, 1fr));
+      gap: 8px 12px;
+    }
+
+    .subtoolbar-link.is-disabled {
+      color: #a19f9d;
+      cursor: default;
+      pointer-events: none;
+      text-decoration: none;
+    }
+
+    .table-shell {
+      border-top: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .table-scroller {
+      overflow-x: scroll;
+      overflow-y: hidden;
+      padding-bottom: 8px;
+      scrollbar-gutter: stable both-edges;
+      scrollbar-width: auto;
+      scrollbar-color: #a19f9d #edebe9;
+    }
+
+    .table-scroller::-webkit-scrollbar {
+      height: 12px;
+    }
+
+    .table-scroller::-webkit-scrollbar-track {
+      background: #edebe9;
+      border-radius: 999px;
+    }
+
+    .table-scroller::-webkit-scrollbar-thumb {
+      background: #a19f9d;
+      border-radius: 999px;
+      border: 2px solid #edebe9;
+    }
+
+    table {
+      width: max-content;
+      min-width: 100%;
+      min-width: 2440px;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background: #f3f2f1;
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line-soft);
+      padding: 7px 6px;
+      text-align: left;
+      font-size: 10px;
+      color: #605e5c;
+      z-index: 2;
+      vertical-align: bottom;
+      font-weight: 400;
+    }
+
+    tbody td {
+      border-bottom: 1px solid var(--line-soft);
+      border-right: 1px solid var(--line-soft);
+      padding: 0;
+      background: #ffffff;
+      font-size: 12px;
+      vertical-align: middle;
+    }
+
+    tbody tr:nth-child(even) td {
+      background: #faf9f8;
+    }
+
+    tbody tr:hover td {
+      background: #f3f8f4;
+    }
+
+    tbody tr.is-active td {
+      background: #e4f0e8;
+    }
+
+    tbody tr.is-active:nth-child(even) td {
+      background: #deede4;
+    }
+
+    tbody tr.is-active .cell-menu {
+      background: #cdeff4;
+    }
+
+    .selection-cell {
+      width: 24px;
+      padding: 0;
+      text-align: center;
+    }
+
+    .arrow-toggle {
+      width: 100%;
+      min-height: 24px;
+      border: 0;
+      background: transparent;
+      color: var(--accent-strong);
+      cursor: pointer;
+      font: inherit;
+      padding: 0;
+    }
+
+    .arrow-toggle:focus {
+      outline: 1px solid #00b7c3;
+      outline-offset: -1px;
+    }
+
+    .col-type {
+      width: 88px;
+    }
+
+    .col-item-no {
+      width: 120px;
+    }
+
+    .col-stock-mark {
+      width: 140px;
+    }
+
+    .col-description {
+      width: 240px;
+    }
+
+    .col-location {
+      width: 120px;
+    }
+
+    .col-bin {
+      width: 120px;
+    }
+
+    .col-transport-type {
+      width: 120px;
+    }
+
+    .col-uom,
+    .col-qty-pcs,
+    .col-qty-m2,
+    .col-weight {
+      width: 110px;
+    }
+
+    .col-unit-cost,
+    .col-line-amount,
+    .col-additional-cost-qty {
+      width: 150px;
+    }
+
+    .col-receive,
+    .col-received,
+    .col-invoice,
+    .col-invoiced,
+    .col-assign,
+    .col-assigned {
+      width: 120px;
+    }
+
+    .cell {
+      min-height: 20px;
+      display: flex;
+      align-items: center;
+      padding: 3px 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cell-marker {
+      justify-content: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .cell-menu {
+      justify-content: center;
+      background: #d7f3f7;
+      color: var(--accent-strong);
+      font-weight: 700;
+    }
+
+    .line-input {
+      min-height: 24px;
+      border-width: 0;
+      background: transparent;
+      padding: 4px 6px;
+    }
+
+    .line-input--compact {
+      text-align: right;
+    }
+
+    .transport-summary {
+      padding: 12px 16px 14px;
+      background: #ffffff;
+    }
+
+    .transport-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px 28px;
+    }
+
+    @media (max-width: 1100px) {
+      .general-grid,
+      .transport-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .field {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .field-label::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: calc(100vw - 12px);
+        margin: 6px auto 12px;
+      }
+
+      .top-shell {
+        padding: 0 10px;
+      }
+
+      .top-shell-meta {
+        display: none;
+      }
+
+      .subtoolbar-action-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-shell">
+    <div class="top-shell-title">Dynamics 365 Business Central</div>
+    <div class="top-shell-meta">
+      <span>FORMA SYSTEM</span>
+      <span>SANDBOX</span>
+    </div>
+  </div>
+
+  <main class="page">
+    <section class="ribbon">
+      <div class="ribbon-tabs">
+        <button class="ribbon-tab ribbon-tab--active" type="button">Strona glowna</button>
+        <button class="ribbon-tab" type="button">Przygotuj</button>
+        <button class="ribbon-tab" type="button">KSeF</button>
+        <button class="ribbon-tab" type="button">Drukuj/Wyslij</button>
+        <button class="ribbon-tab" type="button">Zadaj akceptacji</button>
+        <button class="ribbon-tab" type="button">Zamowienie</button>
+        <button class="ribbon-tab" type="button">Akcje</button>
+        <button class="ribbon-tab" type="button">Powiazane</button>
+        <button class="ribbon-tab" type="button">Automatyzuj</button>
+        <button class="ribbon-tab" type="button">...</button>
+      </div>
+      <button class="ribbon-help" type="button">i</button>
+    </section>
+
+    <div class="doc-title">
+      <div class="doc-toolbar">
+        <div class="doc-toolbar-left">
+          <span class="icon-circle">←</span>
+          <span class="doc-caption">Zamowienie zakupu</span>
+        </div>
+        <div class="doc-toolbar-right">
+          <span class="icon-circle">✎</span>
+          <span class="icon-ghost">⤴</span>
+          <span class="icon-ghost">＋</span>
+          <span class="icon-ghost">🗑</span>
+          <span class="doc-caption">✓ Zapisano</span>
+          <span class="icon-ghost">⤢</span>
+        </div>
+      </div>
+      <p class="doc-kicker">Zamowienie zakupu</p>
+      <h1 id="documentHeading">ZZ/24/000082 · MARAZZI</h1>
+    </div>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Ogolne</span>
+        <span class="section-more">Pokaz wiecej</span>
+      </div>
+      <div class="general-card">
+        <div class="general-grid">
+          <label class="field">
+            <span class="field-label">Nazwa dostawcy</span>
+            <select class="field-select" id="vendorSelect">
+              <option selected>Marazzi</option>
+              <option>Nord Trade</option>
+              <option>Forma Glass</option>
+              <option>Stone Logistics</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field-label">Nr dok. zewn. JPK</span>
+            <input class="field-input" type="text" value="">
+          </label>
+
+          <div class="field">
+            <span class="field-label">Dostawca</span>
+            <div class="field-control" id="vendorName">Marazzi</div>
+          </div>
+          <label class="field">
+            <span class="field-label">Nr dokumentu KSeF</span>
+            <input class="field-input" type="text" value="">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Kontakt</span>
+            <input class="field-input" type="text" value="">
+          </label>
+          <label class="field">
+            <span class="field-label">Nr faktury dostawcy</span>
+            <input class="field-input" type="text" value="">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Data dokumentu</span>
+            <input class="field-input" id="documentDateInput" type="text" value="21.04.2026">
+          </label>
+          <label class="field">
+            <span class="field-label">Nr dostawy wg dostawcy</span>
+            <input class="field-input" type="text" value="">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Data operacji gospodarczej</span>
+            <input class="field-input" id="postingDateInput" type="text" value="21.04.2026">
+          </label>
+          <div class="field">
+            <span class="field-label">Stan</span>
+            <div class="field-control status-open">Otwarte</div>
+          </div>
+
+          <label class="field">
+            <span class="field-label">Data wplywu dokumentu</span>
+            <input class="field-input" id="receiptDateInput" type="text" value="">
+          </label>
+          <div class="field">
+            <span class="field-label">Polaczony z e-dokumentem</span>
+            <div class="toggle-row">
+              <label class="toggle" aria-label="Polaczony z e-dokumentem">
+                <input type="checkbox">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <label class="field">
+            <span class="field-label">Przyczyna braku nr KSeF</span>
+            <select class="field-select">
+              <option selected></option>
+              <option>Brak numeru od dostawcy</option>
+              <option>Dokument poza KSeF</option>
+            </select>
+          </label>
+          <div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="workspace-toolbar">
+        <span class="workspace-title">Wiersze</span>
+        <button class="workspace-tab" type="button" data-workspace-tab="zarzadzaj">Zarzadzaj</button>
+        <button class="workspace-tab" type="button" data-workspace-tab="wiersz">Wiersz</button>
+        <button class="workspace-tab" type="button" data-workspace-tab="funkcje">Funkcje</button>
+        <button class="workspace-tab" type="button" data-workspace-tab="zamowienie">Zamowienie</button>
+      </div>
+      <div class="subtoolbar" id="rowsPanel">
+        <button class="subtoolbar-link" type="button">Nowy wiersz</button>
+        <button class="subtoolbar-link" type="button">Usun wiersz</button>
+        <button class="subtoolbar-link" type="button">Wybierz zapasy...</button>
+      </div>
+      <div class="subtoolbar-panel" id="lineActionsPanel" hidden>
+        <div class="subtoolbar-group">
+          <div class="subtoolbar-action-grid">
+            <button class="subtoolbar-link" type="button">Dostepnosc zapasu wg</button>
+            <button class="subtoolbar-link" id="trackingLinesInnerBtn" type="button">Wiersze sledzenia zapasu</button>
+            <button class="subtoolbar-link" type="button">Zapisy rezerwacji</button>
+            <button class="subtoolbar-link" type="button">Wymiary</button>
+          </div>
+          <div class="subtoolbar-group-title">Wiersz</div>
+        </div>
+        <div class="subtoolbar-group">
+          <div class="subtoolbar-action-grid">
+            <button class="subtoolbar-link" type="button">Atrybuty VAT</button>
+            <button class="subtoolbar-link is-disabled" type="button">Przypisanie kosztu dodatk.</button>
+            <button class="subtoolbar-link" type="button">Komentarze</button>
+            <button class="subtoolbar-link" type="button">Sledzenie wiersza dokumentu</button>
+          </div>
+          <div class="subtoolbar-group-title">Informacje dodatkowe</div>
+        </div>
+        <div class="subtoolbar-group">
+          <div class="subtoolbar-action-grid">
+            <button class="subtoolbar-link is-disabled" type="button">Harmonogram rozliczen miedzyokresowych</button>
+            <button class="subtoolbar-link" type="button">Zmien kwoty alokacji na kontach</button>
+            <button class="subtoolbar-link" type="button">Generuj wiersze z wiersza konta alokacji</button>
+            <button class="subtoolbar-link" type="button">Zalaczniki</button>
+          </div>
+          <div class="subtoolbar-group-title">Akcje powiazane</div>
+        </div>
+      </div>
+      <div class="table-shell">
+        <div class="table-scroller" id="lineScroller" tabindex="0" aria-label="Tabela wierszy zamowienia zakupu">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 24px;"></th>
+                <th style="width: 24px;"></th>
+                <th class="col-type">Typ</th>
+                <th class="col-item-no">Nr</th>
+                <th class="col-stock-mark">Nr ozn. zap.</th>
+                <th class="col-description">Opis</th>
+                <th class="col-location">Kod lokalizacji</th>
+                <th class="col-bin">Kod pojemnika</th>
+                <th class="col-transport-type">Typ transportu</th>
+                <th class="col-uom">Kod jednostki miary</th>
+                <th class="col-unit-cost">Bezpośr. koszt jedn. bez VAT</th>
+                <th class="col-line-amount">Kwota wiersza bez VAT</th>
+                <th class="col-receive">Ilosc do przyjecia</th>
+                <th class="col-received">Ilosc przyjeta</th>
+                <th class="col-invoice">Ilosc do fakturowania</th>
+                <th class="col-invoiced">Ilosc zafakturowana</th>
+                <th class="col-assign">Ilosc do przypisania</th>
+                <th class="col-additional-cost-qty">Ilosc wg koszt dodatkowego do realizacji</th>
+                <th class="col-assigned">Przypisana ilosc</th>
+                <th class="col-qty-pcs">Ilosc szt.</th>
+                <th class="col-qty-m2">Ilosc m²</th>
+                <th class="col-weight">Waga</th>
+              </tr>
+            </thead>
+            <tbody id="lineBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Podsumowanie transportu skrzynie</span>
+        <span class="section-more">Pokaz wiecej</span>
+      </div>
+      <div class="transport-summary">
+        <div class="transport-grid">
+          <div class="field">
+            <span class="field-label">Suma wag wszystkich pozycji</span>
+            <div class="field-control" id="crateTotalWeightValue">0 kg</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Maksymalny tonaz</span>
+            <div class="field-control" id="crateMaxTonnageValue">0 kg</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Procent wykorzystania transportu</span>
+            <div class="field-control" id="crateTransportUsageValue">0,0%</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Suma wykorzystania stojaka</span>
+            <div class="field-control" id="crateRackUsageValue">0,00 m2</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Procent wykorzystania stojaka</span>
+            <div class="field-control" id="crateRackUsagePercentValue">0,0%</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Typ transportu</span>
+            <div class="field-control">Skrzynie</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Podsumowanie transportu stojaki</span>
+        <span class="section-more">Pokaz wiecej</span>
+      </div>
+      <div class="transport-summary">
+        <div class="transport-grid">
+          <div class="field">
+            <span class="field-label">Suma wag wszystkich pozycji</span>
+            <div class="field-control" id="rackTotalWeightValue">0 kg</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Maksymalny tonaz</span>
+            <div class="field-control" id="rackMaxTonnageValue">0 kg</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Procent wykorzystania transportu</span>
+            <div class="field-control" id="rackTransportUsageValue">0,0%</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Suma wykorzystania stojaka</span>
+            <div class="field-control" id="rackOnlyUsageValue">0,00 m2</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Procent wykorzystania stojaka</span>
+            <div class="field-control" id="rackOnlyUsagePercentValue">0,0%</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Typ transportu</span>
+            <div class="field-control">Stojaki</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const transportCaps = {
+      skrzynie: {
+        maxTonnageKg: 24000,
+        rackCapacitySquareMeters: 120
+      },
+      stojaki: {
+        maxTonnageKg: 24000,
+        rackCapacitySquareMeters: 140
+      }
+    };
+
+    const lineData = [
+      {
+        itemNo: "P-001209",
+        stockMark: "MC8S-12MM",
+        description: "Golden White satin 12mm (MC8S)",
+        locationCode: "DEMO",
+        binCode: "1_PRZ",
+        quantity: "20,00",
+        reservedQuantity: "8,00",
+        unitOfMeasureCode: "m²",
+        directUnitCostNet: "22,78",
+        lineAmountNet: "455,60",
+        quantityToReceive: "20,00",
+        quantityReceived: "0,00",
+        quantityToInvoice: "20,00",
+        quantityInvoiced: "0,00",
+        quantityToAssign: "20,00",
+        additionalCostToHandleQuantity: "0,00",
+        assignedQuantity: "0,00",
+        orderQtyPieces: "20",
+        orderQtySquareMeters: "96,00",
+        weight: "1 240 kg",
+        transportType: "skrzynie"
+      },
+      {
+        itemNo: "P-001209",
+        stockMark: "MC8S-12MM",
+        description: "Golden White satin 12mm (MC8S)",
+        locationCode: "DEMO",
+        binCode: "1_PRZ",
+        quantity: "4,00",
+        reservedQuantity: "1,00",
+        unitOfMeasureCode: "m²",
+        directUnitCostNet: "65,00",
+        lineAmountNet: "260,00",
+        quantityToReceive: "4,00",
+        quantityReceived: "0,00",
+        quantityToInvoice: "4,00",
+        quantityInvoiced: "0,00",
+        quantityToAssign: "4,00",
+        additionalCostToHandleQuantity: "0,00",
+        assignedQuantity: "0,00",
+        orderQtyPieces: "4",
+        orderQtySquareMeters: "20,00",
+        weight: "260 kg",
+        transportType: "stojaki"
+      }
+    ];
+
+    const vendorSelect = document.getElementById("vendorSelect");
+    const vendorName = document.getElementById("vendorName");
+    const documentDateInput = document.getElementById("documentDateInput");
+    const postingDateInput = document.getElementById("postingDateInput");
+    const receiptDateInput = document.getElementById("receiptDateInput");
+    const workspaceTabs = [...document.querySelectorAll("[data-workspace-tab]")];
+    const rowsPanel = document.getElementById("rowsPanel");
+    const lineActionsPanel = document.getElementById("lineActionsPanel");
+    const trackingLinesInnerBtn = document.getElementById("trackingLinesInnerBtn");
+    const lineBody = document.getElementById("lineBody");
+    const lineScroller = document.getElementById("lineScroller");
+    const documentHeading = document.getElementById("documentHeading");
+    const crateTotalWeightValue = document.getElementById("crateTotalWeightValue");
+    const crateMaxTonnageValue = document.getElementById("crateMaxTonnageValue");
+    const crateTransportUsageValue = document.getElementById("crateTransportUsageValue");
+    const crateRackUsageValue = document.getElementById("crateRackUsageValue");
+    const crateRackUsagePercentValue = document.getElementById("crateRackUsagePercentValue");
+    const rackTotalWeightValue = document.getElementById("rackTotalWeightValue");
+    const rackMaxTonnageValue = document.getElementById("rackMaxTonnageValue");
+    const rackTransportUsageValue = document.getElementById("rackTransportUsageValue");
+    const rackOnlyUsageValue = document.getElementById("rackOnlyUsageValue");
+    const rackOnlyUsagePercentValue = document.getElementById("rackOnlyUsagePercentValue");
+    let activeRowIndex = 0;
+
+    function syncVendorLabels() {
+      const vendorValue = vendorSelect.value;
+      vendorName.textContent = vendorValue;
+      documentHeading.textContent = "ZZ/24/000082 · " + vendorValue.toUpperCase();
+    }
+
+    function syncDateFieldsFromDocument() {
+      const documentDate = documentDateInput.value;
+      postingDateInput.value = documentDate;
+      receiptDateInput.value = documentDate;
+    }
+
+    function setWorkspaceTab(activeTab) {
+      workspaceTabs.forEach((tabButton) => {
+        tabButton.classList.toggle("is-active", tabButton.dataset.workspaceTab === activeTab);
+      });
+
+      rowsPanel.hidden = activeTab !== "wiersze";
+      lineActionsPanel.hidden = activeTab !== "wiersz";
+    }
+
+    function parseLocalizedNumber(value) {
+      const normalized = String(value).replace(/\s+/g, "").replace(",", ".");
+      const parsed = Number(normalized);
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+
+    function parseWeightKg(value) {
+      return parseLocalizedNumber(String(value).replace(/kg/gi, ""));
+    }
+
+    function formatLocalizedNumber(value, fractionDigits) {
+      return value.toLocaleString("pl-PL", {
+        minimumFractionDigits: fractionDigits,
+        maximumFractionDigits: fractionDigits
+      });
+    }
+
+    function createCell(className, text) {
+      const div = document.createElement("div");
+      div.className = className;
+      div.textContent = text;
+      return div;
+    }
+
+    function createQuantityInput(value, index, fieldName) {
+      const input = document.createElement("input");
+      input.className = "line-input line-input--compact";
+      input.type = "text";
+      input.value = value;
+      input.dataset.index = String(index);
+      input.dataset.field = fieldName;
+      input.addEventListener("input", handleQuantityChange);
+      return input;
+    }
+
+    function appendCell(tr, node, className) {
+      const td = document.createElement("td");
+      if (className) {
+        td.className = className;
+      }
+      td.appendChild(node);
+      tr.appendChild(td);
+    }
+
+    function updateActiveRowState(shouldScroll) {
+      const rowElements = lineBody.querySelectorAll("tr");
+
+      rowElements.forEach((rowElement) => {
+        const rowIndex = Number(rowElement.dataset.index);
+        const isActive = rowIndex === activeRowIndex;
+        rowElement.classList.toggle("is-active", isActive);
+        rowElement.tabIndex = isActive ? 0 : -1;
+        rowElement.setAttribute("aria-selected", String(isActive));
+
+        const toggleButton = rowElement.querySelector(".arrow-toggle");
+        if (toggleButton) {
+          toggleButton.dataset.active = String(isActive);
+          toggleButton.textContent = isActive ? "➜" : "→";
+        }
+
+        if (isActive && shouldScroll) {
+          rowElement.scrollIntoView({ block: "nearest", inline: "nearest" });
+        }
+      });
+    }
+
+    function setActiveRow(index, shouldScroll) {
+      activeRowIndex = Math.max(0, Math.min(index, lineData.length - 1));
+      updateActiveRowState(shouldScroll);
+    }
+
+    function renderLines() {
+      lineBody.innerHTML = "";
+
+      lineData.forEach((line, index) => {
+        const tr = document.createElement("tr");
+        tr.dataset.index = String(index);
+        tr.addEventListener("click", (event) => {
+          if (event.target.closest("button, input, select")) {
+            return;
+          }
+
+          setActiveRow(index, false);
+        });
+        tr.addEventListener("focusin", () => {
+          activeRowIndex = index;
+          updateActiveRowState(false);
+        });
+
+        const selectionButton = document.createElement("button");
+        selectionButton.className = "arrow-toggle";
+        selectionButton.type = "button";
+        selectionButton.dataset.index = String(index);
+        selectionButton.addEventListener("click", () => {
+          setActiveRow(index, false);
+        });
+
+        appendCell(tr, selectionButton, "selection-cell");
+        appendCell(tr, createCell("cell cell-menu", index === 0 ? "⋮" : ""));
+        appendCell(tr, createCell("cell", "Zapas"), "col-type");
+        appendCell(tr, createCell("cell", line.itemNo), "col-item-no");
+        appendCell(tr, createCell("cell", line.stockMark), "col-stock-mark");
+        appendCell(tr, createCell("cell", line.description), "col-description");
+        appendCell(tr, createCell("cell", line.locationCode), "col-location");
+        appendCell(tr, createCell("cell", line.binCode), "col-bin");
+        appendCell(tr, createCell("cell", line.transportType), "col-transport-type");
+        appendCell(tr, createQuantityInput(line.unitOfMeasureCode, index, "unitOfMeasureCode"), "col-uom");
+        appendCell(tr, createQuantityInput(line.directUnitCostNet, index, "directUnitCostNet"), "col-unit-cost");
+        appendCell(tr, createQuantityInput(line.lineAmountNet, index, "lineAmountNet"), "col-line-amount");
+        appendCell(tr, createQuantityInput(line.quantityToReceive, index, "quantityToReceive"), "col-receive");
+        appendCell(tr, createQuantityInput(line.quantityReceived, index, "quantityReceived"), "col-received");
+        appendCell(tr, createQuantityInput(line.quantityToInvoice, index, "quantityToInvoice"), "col-invoice");
+        appendCell(tr, createQuantityInput(line.quantityInvoiced, index, "quantityInvoiced"), "col-invoiced");
+        appendCell(tr, createQuantityInput(line.quantityToAssign, index, "quantityToAssign"), "col-assign");
+        appendCell(tr, createQuantityInput(line.additionalCostToHandleQuantity, index, "additionalCostToHandleQuantity"), "col-additional-cost-qty");
+        appendCell(tr, createQuantityInput(line.assignedQuantity, index, "assignedQuantity"), "col-assigned");
+        appendCell(tr, createQuantityInput(line.orderQtyPieces, index, "orderQtyPieces"), "col-qty-pcs");
+        appendCell(tr, createQuantityInput(line.orderQtySquareMeters, index, "orderQtySquareMeters"), "col-qty-m2");
+        appendCell(tr, createQuantityInput(line.weight, index, "weight"), "col-weight");
+
+        lineBody.appendChild(tr);
+      });
+
+      updateActiveRowState(false);
+      syncSummary();
+    }
+
+    function handleQuantityChange(event) {
+      const index = Number(event.target.dataset.index);
+      const fieldName = event.target.dataset.field;
+      lineData[index][fieldName] = event.target.value;
+      syncSummary();
+    }
+
+    function updateTransportSummary(transportType, controls) {
+      const matchingLines = lineData.filter((line) => (line.transportType || "stojaki") === transportType);
+      const caps = transportCaps[transportType];
+      const totalWeightKg = matchingLines.reduce((sum, line) => sum + parseWeightKg(line.weight), 0);
+      const totalRackUsageSquareMeters = matchingLines.reduce((sum, line) => sum + parseLocalizedNumber(line.orderQtySquareMeters), 0);
+      const transportUsagePercent = caps.maxTonnageKg === 0 ? 0 : (totalWeightKg / caps.maxTonnageKg) * 100;
+      const rackUsagePercent = caps.rackCapacitySquareMeters === 0 ? 0 : (totalRackUsageSquareMeters / caps.rackCapacitySquareMeters) * 100;
+
+      controls.totalWeight.textContent = formatLocalizedNumber(totalWeightKg, 0) + " kg";
+      controls.maxTonnage.textContent = formatLocalizedNumber(caps.maxTonnageKg, 0) + " kg";
+      controls.transportUsage.textContent = formatLocalizedNumber(transportUsagePercent, 1) + "%";
+      controls.rackUsage.textContent = formatLocalizedNumber(totalRackUsageSquareMeters, 2) + " m2";
+      controls.rackUsagePercent.textContent = formatLocalizedNumber(rackUsagePercent, 1) + "%";
+    }
+
+    function syncSummary() {
+      updateTransportSummary("skrzynie", {
+        totalWeight: crateTotalWeightValue,
+        maxTonnage: crateMaxTonnageValue,
+        transportUsage: crateTransportUsageValue,
+        rackUsage: crateRackUsageValue,
+        rackUsagePercent: crateRackUsagePercentValue
+      });
+
+      updateTransportSummary("stojaki", {
+        totalWeight: rackTotalWeightValue,
+        maxTonnage: rackMaxTonnageValue,
+        transportUsage: rackTransportUsageValue,
+        rackUsage: rackOnlyUsageValue,
+        rackUsagePercent: rackOnlyUsagePercentValue
+      });
+    }
+
+    vendorSelect.addEventListener("change", syncVendorLabels);
+    documentDateInput.addEventListener("input", syncDateFieldsFromDocument);
+    documentDateInput.addEventListener("change", syncDateFieldsFromDocument);
+    workspaceTabs.forEach((tabButton) => {
+      tabButton.addEventListener("click", () => {
+        setWorkspaceTab(tabButton.dataset.workspaceTab);
+      });
+    });
+    trackingLinesInnerBtn.addEventListener("click", () => {
+      window.location.href = "./wiersz_sledzenia_zapasu.html?widok=pelny";
+    });
+    lineScroller.addEventListener("keydown", (event) => {
+      if (event.target.closest("input, select, textarea") && event.target !== lineScroller) {
+        return;
+      }
+
+      if (event.key !== "ArrowDown" && event.key !== "ArrowUp") {
+        return;
+      }
+
+      const nextIndex = event.key === "ArrowDown" ? activeRowIndex + 1 : activeRowIndex - 1;
+      setActiveRow(nextIndex, true);
+      event.preventDefault();
+    });
+
+    renderLines();
+    setWorkspaceTab("wiersze");
+    syncVendorLabels();
+    syncDateFieldsFromDocument();
+  </script>
+</body>
+</html>

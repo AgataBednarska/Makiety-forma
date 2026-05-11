@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zamowienie sprzedazy FORMA SYSTEM</title>
+  <style>
+    :root {
+      --bg: #f3f2f1;
+      --panel: #ffffff;
+      --panel-muted: #faf9f8;
+      --line: #d2d0ce;
+      --line-soft: #edebe9;
+      --line-strong: #505c6d;
+      --text: #201f1e;
+      --muted: #605e5c;
+      --accent: #0078d4;
+      --accent-strong: #106ebe;
+      --ok: #107c10;
+      --shell: #201f1e;
+      --font: "Segoe UI", "Segoe WP", Segoe, device-segoe, Tahoma, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .top-shell {
+      height: 48px;
+      background: var(--shell);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-size: 14px;
+    }
+
+    .top-shell-title {
+      font-weight: 600;
+    }
+
+    .top-shell-meta {
+      display: flex;
+      gap: 12px;
+      color: #d2d0ce;
+      font-size: 12px;
+    }
+
+    .page {
+      width: min(1680px, calc(100vw - 24px));
+      margin: 8px auto 20px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .ribbon {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: var(--panel-muted);
+      border-bottom: 1px solid var(--line);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .ribbon-tabs {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .ribbon-tab {
+      min-height: 28px;
+      padding: 0 10px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .ribbon-tab:first-child {
+      padding-left: 0;
+    }
+
+    .ribbon-tab:last-child {
+      border-right: 0;
+    }
+
+    .ribbon-tab--active {
+      font-weight: 700;
+    }
+
+    .ribbon-tab:hover,
+    .ribbon-help:hover {
+      color: var(--accent-strong);
+    }
+
+    .ribbon-help {
+      border: 0;
+      background: transparent;
+      color: var(--accent-strong);
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .doc-title {
+      padding: 8px 16px 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .doc-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .doc-toolbar-left,
+    .doc-toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .icon-circle,
+    .icon-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: #3a96a0;
+      font-size: 14px;
+      line-height: 1;
+      border-radius: 50%;
+    }
+
+    .icon-ghost {
+      border-radius: 2px;
+      border-color: transparent;
+      width: 24px;
+      height: 24px;
+      color: #49a8b2;
+    }
+
+    .doc-caption {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .doc-kicker {
+      margin: 0 0 6px;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 1120px;
+      font-size: clamp(28px, 3.4vw, 34px);
+      line-height: 1.15;
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      color: #323130;
+    }
+
+    .section {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 16px 6px;
+      background: var(--panel-muted);
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .section-more {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .general-card,
+    .summary-card,
+    .logistics-card {
+      padding: 12px 16px 14px;
+    }
+
+    .general-grid,
+    .summary-grid,
+    .logistics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 28px;
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: 184px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+    }
+
+    .field-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .field-label::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px dotted #d2d0ce;
+      transform: translateY(1px);
+    }
+
+    .field-control,
+    .field-input,
+    .field-select,
+    .line-input {
+      min-height: 24px;
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      background: #ffffff;
+      color: #000000;
+      font: inherit;
+      font-size: 12px;
+      padding: 2px 8px;
+    }
+
+    .field-control {
+      display: flex;
+      align-items: center;
+      border-color: var(--line);
+      background: #f3f2f1;
+      color: var(--text);
+    }
+
+    .field-input:focus,
+    .field-select:focus,
+    .line-input:focus {
+      outline: none;
+      border-color: #00b7c3;
+      box-shadow: 0 0 0 1px #00b7c3;
+    }
+
+    .status-open {
+      color: var(--ok);
+      font-weight: 700;
+    }
+
+    .workspace-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 16px 8px;
+      border-bottom: 1px solid var(--line);
+      flex-wrap: wrap;
+      font-size: 12px;
+    }
+
+    .workspace-title {
+      font-weight: 700;
+    }
+
+    .workspace-tab {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      color: var(--text);
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .workspace-tab.is-active {
+      color: var(--accent-strong);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .subtoolbar,
+    .subtoolbar-panel {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      padding: 8px 16px 9px;
+      border-bottom: 1px solid var(--line);
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: #3a96a0;
+    }
+
+    .subtoolbar[hidden],
+    .subtoolbar-panel[hidden] {
+      display: none;
+    }
+
+    .subtoolbar-group {
+      min-width: 190px;
+      display: grid;
+      gap: 6px;
+      align-content: start;
+    }
+
+    .subtoolbar-group-title {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .subtoolbar-action-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(150px, 1fr));
+      gap: 8px 12px;
+    }
+
+    .subtoolbar-link {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      color: #3a96a0;
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .subtoolbar-link:hover {
+      text-decoration: underline;
+    }
+
+    .subtoolbar-link.is-disabled {
+      color: #a19f9d;
+      cursor: default;
+      pointer-events: none;
+      text-decoration: none;
+    }
+
+    .table-shell {
+      border-top: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .table-scroller {
+      overflow-x: scroll;
+      overflow-y: hidden;
+      padding-bottom: 8px;
+      scrollbar-gutter: stable both-edges;
+      scrollbar-width: auto;
+      scrollbar-color: #a19f9d #edebe9;
+    }
+
+    .table-scroller::-webkit-scrollbar {
+      height: 12px;
+    }
+
+    .table-scroller::-webkit-scrollbar-track {
+      background: #edebe9;
+      border-radius: 999px;
+    }
+
+    .table-scroller::-webkit-scrollbar-thumb {
+      background: #a19f9d;
+      border-radius: 999px;
+      border: 2px solid #edebe9;
+    }
+
+    table {
+      width: max-content;
+      min-width: 100%;
+      min-width: 2060px;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background: #f3f2f1;
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line-soft);
+      padding: 7px 6px;
+      text-align: left;
+      font-size: 10px;
+      color: #605e5c;
+      z-index: 2;
+      vertical-align: bottom;
+      font-weight: 400;
+    }
+
+    tbody td {
+      border-bottom: 1px solid var(--line-soft);
+      border-right: 1px solid var(--line-soft);
+      padding: 0;
+      background: #ffffff;
+      font-size: 12px;
+      vertical-align: middle;
+    }
+
+    tbody tr:nth-child(even) td {
+      background: #faf9f8;
+    }
+
+    tbody tr:hover td {
+      background: #f3f8f4;
+    }
+
+    tbody tr.is-active td {
+      background: #e4f0e8;
+    }
+
+    tbody tr.is-active:nth-child(even) td {
+      background: #deede4;
+    }
+
+    tbody tr.is-active .cell-menu {
+      background: #cdeff4;
+    }
+
+    tbody tr.is-child-row td {
+      background: #f7fbfd;
+    }
+
+    tbody tr.is-child-row:nth-child(even) td {
+      background: #f1f7fa;
+    }
+
+    tbody tr.is-child-row:hover td {
+      background: #edf6fa;
+    }
+
+    .selection-cell {
+      width: 24px;
+      padding: 0;
+      text-align: center;
+    }
+
+    .arrow-toggle {
+      width: 100%;
+      min-height: 24px;
+      border: 0;
+      background: transparent;
+      color: var(--accent-strong);
+      cursor: pointer;
+      font: inherit;
+      padding: 0;
+    }
+
+    .arrow-toggle:focus {
+      outline: 1px solid #00b7c3;
+      outline-offset: -1px;
+    }
+
+    .col-type { width: 88px; }
+    .col-item-no { width: 120px; }
+    .col-stock-mark { width: 120px; }
+    .col-description { width: 260px; }
+    .col-location { width: 120px; }
+    .col-uom,
+    .col-qty,
+    .col-discount,
+    .col-ship,
+    .col-shipped,
+    .col-invoice,
+    .col-invoiced,
+    .col-route,
+    .col-qty-pcs,
+    .col-qty-m2,
+    .col-weight { width: 110px; }
+    .col-unit-price,
+    .col-line-amount,
+    .col-date { width: 150px; }
+
+    .cell {
+      min-height: 20px;
+      display: flex;
+      align-items: center;
+      padding: 3px 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cell-marker {
+      justify-content: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .cell-menu {
+      justify-content: center;
+      background: #d7f3f7;
+      color: var(--accent-strong);
+      font-weight: 700;
+    }
+
+    .cell-child-type {
+      color: #3a96a0;
+      font-weight: 700;
+    }
+
+    .line-input {
+      min-height: 24px;
+      border-width: 0;
+      background: transparent;
+      padding: 4px 6px;
+    }
+
+    .line-input--compact {
+      text-align: right;
+    }
+
+    .summary-card {
+      background: #ffffff;
+    }
+
+    .summary-highlight {
+      color: var(--accent-strong);
+      font-weight: 700;
+    }
+
+    @media (max-width: 1180px) {
+      .general-grid,
+      .summary-grid,
+      .logistics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        background: #ffffff;
+      }
+
+      .page {
+        width: 100%;
+        margin: 0;
+        border: 0;
+      }
+
+      .top-shell,
+      .doc-toolbar,
+      .workspace-toolbar,
+      .subtoolbar,
+      .subtoolbar-panel {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .field {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .field-label::after {
+        display: none;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-shell">
+    <div class="top-shell-title">Dynamics 365 Business Central</div>
+    <div class="top-shell-meta">
+      <span>CORE</span>
+      <span>Rekrutacja A.B.</span>
+      <span>Sprzedaz</span>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="ribbon">
+      <div class="ribbon-tabs">
+        <button class="ribbon-tab ribbon-tab--active" type="button">Narzedzia glowne</button>
+        <button class="ribbon-tab" type="button">Akcje</button>
+        <button class="ribbon-tab" type="button">Wysylka</button>
+        <button class="ribbon-tab" type="button">Faktura</button>
+        <button class="ribbon-tab" type="button">Zamowienie</button>
+        <button class="ribbon-tab" type="button">Powiazane</button>
+        <button class="ribbon-tab" type="button">...</button>
+      </div>
+      <button class="ribbon-help" type="button">i</button>
+    </section>
+
+    <div class="doc-title">
+      <div class="doc-toolbar">
+        <div class="doc-toolbar-left">
+          <span class="icon-circle">←</span>
+          <span class="doc-caption">Zamowienie sprzedazy</span>
+        </div>
+        <div class="doc-toolbar-right">
+          <span class="icon-circle">✎</span>
+          <span class="icon-ghost">⤴</span>
+          <span class="icon-ghost">＋</span>
+          <span class="icon-ghost">🗑</span>
+          <span class="doc-caption">✓ Zapisano</span>
+          <span class="icon-ghost">⤢</span>
+        </div>
+      </div>
+      <p class="doc-kicker">Zamowienie sprzedazy</p>
+      <h1 id="documentHeading">ZS/24/00070 · AUCHAN POLSKA SPOLKA Z OGRANICZONA ODPOWIEDZIALNOSCIA (CORE)</h1>
+    </div>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Ogolne</span>
+        <span class="section-more">Pokaz wiecej</span>
+      </div>
+      <div class="general-card">
+        <div class="general-grid">
+          <label class="field">
+            <span class="field-label">Nazwa klienta</span>
+            <select class="field-select" id="customerSelect">
+              <option selected>AUCHAN POLSKA SPOLKA Z OGRANICZONA ODPOWIEDZIALNOSCIA (CORE)</option>
+              <option>Leroy Merlin Polska</option>
+              <option>OBI Centrala Systemowa</option>
+              <option>Castorama Polska</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field-label">Zewnetrzny nr dokumentu</span>
+            <input class="field-input" type="text" value="AUC/05/2026/1187">
+          </label>
+
+          <div class="field">
+            <span class="field-label">Klient</span>
+            <div class="field-control" id="customerName">AUCHAN POLSKA SPOLKA Z OGRANICZONA ODPOWIEDZIALNOSCIA (CORE)</div>
+          </div>
+          <label class="field">
+            <span class="field-label">Nr referencyjny klienta</span>
+            <input class="field-input" type="text" value="PO-845991">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Kontakt</span>
+            <input class="field-input" type="text" value="Dzial zamowien centralnych">
+          </label>
+          <label class="field">
+            <span class="field-label">Kod sprzedawcy</span>
+            <input class="field-input" type="text" value="ABED">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Data dokumentu</span>
+            <input class="field-input" type="text" value="05.05.2026">
+          </label>
+          <label class="field">
+            <span class="field-label">Data ksiegowania</span>
+            <input class="field-input" type="text" value="05.05.2026">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Data zamowienia</span>
+            <input class="field-input" type="text" value="05.05.2026">
+          </label>
+          <label class="field">
+            <span class="field-label">Termin dostawy</span>
+            <input class="field-input" type="text" value="12.05.2026">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Kod waluty</span>
+            <input class="field-input" type="text" value="PLN">
+          </label>
+          <label class="field">
+            <span class="field-label">Kod kampanii</span>
+            <input class="field-input" type="text" value="SIEC-HIPER-2026">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Warunki platnosci</span>
+            <input class="field-input" type="text" value="30 DNI">
+          </label>
+          <div class="field">
+            <span class="field-label">Stan</span>
+            <div class="field-control status-open">Otwarte</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Fakturowanie i wysylka</span>
+        <span class="section-more">Pokaz wiecej</span>
+      </div>
+      <div class="logistics-card">
+        <div class="logistics-grid">
+          <label class="field">
+            <span class="field-label">Odbiorca faktury</span>
+            <input class="field-input" type="text" value="AUCHAN POLSKA SP. Z O.O.">
+          </label>
+          <label class="field">
+            <span class="field-label">Adres dostawy</span>
+            <input class="field-input" type="text" value="Centrum Dystrybucyjne Mszczonow, ul. Logistyczna 4">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Metoda platnosci</span>
+            <input class="field-input" type="text" value="Przelew">
+          </label>
+          <label class="field">
+            <span class="field-label">Kod wysylki</span>
+            <input class="field-input" type="text" value="TRANSPORT WLASNY">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Termin platnosci</span>
+            <input class="field-input" type="text" value="04.06.2026">
+          </label>
+          <label class="field">
+            <span class="field-label">Kod lokalizacji</span>
+            <input class="field-input" type="text" value="DEMO">
+          </label>
+
+          <label class="field">
+            <span class="field-label">NIP</span>
+            <input class="field-input" type="text" value="5260309174">
+          </label>
+          <label class="field">
+            <span class="field-label">Trasa dostawy</span>
+            <input class="field-input" type="text" value="AUC-MAZ-01">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Miasto dostawy</span>
+            <input class="field-input" type="text" value="Mszczonow">
+          </label>
+          <label class="field">
+            <span class="field-label">Priorytet dostawy</span>
+            <input class="field-input" type="text" value="Wysoki">
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="workspace-toolbar">
+        <span class="workspace-title">Wiersze</span>
+        <button class="workspace-tab" type="button" data-workspace-tab="zarzadzaj">Zarzadzaj</button>
+        <button class="workspace-tab" type="button" data-workspace-tab="wiersz">Wiersz</button>
+        <button class="workspace-tab" type="button" data-workspace-tab="funkcje">Funkcje</button>
+        <button class="workspace-tab" type="button" data-workspace-tab="zamowienie">Zamowienie</button>
+      </div>
+      <div class="subtoolbar" id="rowsPanel">
+        <button class="subtoolbar-link" type="button">Nowy wiersz</button>
+        <button class="subtoolbar-link" type="button">Usun wiersz</button>
+        <button class="subtoolbar-link" type="button">Kopiuj z dokumentu</button>
+        <button class="subtoolbar-link" type="button">Sprawdz dostepnosc</button>
+      </div>
+      <div class="subtoolbar-panel" id="lineActionsPanel" hidden>
+        <div class="subtoolbar-group">
+          <div class="subtoolbar-action-grid">
+            <button class="subtoolbar-link" type="button">Dostepnosc zapasu wg</button>
+            <button class="subtoolbar-link" id="trackingLinesBtn" type="button">Wiersze sledzenia zapasu</button>
+            <button class="subtoolbar-link" type="button">Ceny sprzedazy</button>
+            <button class="subtoolbar-link" type="button">Rabaty wiersza</button>
+          </div>
+          <div class="subtoolbar-group-title">Wiersz</div>
+        </div>
+        <div class="subtoolbar-group">
+          <div class="subtoolbar-action-grid">
+            <button class="subtoolbar-link" type="button">Rezerwacja</button>
+            <button class="subtoolbar-link" type="button">Wymiary</button>
+            <button class="subtoolbar-link" type="button">Komentarze</button>
+            <button class="subtoolbar-link" type="button">Zalaczniki</button>
+          </div>
+          <div class="subtoolbar-group-title">Informacje dodatkowe</div>
+        </div>
+        <div class="subtoolbar-group">
+          <div class="subtoolbar-action-grid">
+            <button class="subtoolbar-link" type="button">Zamien na fakture</button>
+            <button class="subtoolbar-link" type="button">Utworz wysylke</button>
+            <button class="subtoolbar-link is-disabled" type="button">Anuluj wysylke</button>
+            <button class="subtoolbar-link" type="button">Szczegoly realizacji</button>
+          </div>
+          <div class="subtoolbar-group-title">Akcje powiazane</div>
+        </div>
+      </div>
+      <div class="table-shell">
+        <div class="table-scroller" id="lineScroller" tabindex="0" aria-label="Tabela wierszy zamowienia sprzedazy">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 24px;"></th>
+                <th style="width: 24px;"></th>
+                <th class="col-type">Typ</th>
+                <th class="col-item-no">Nr</th>
+                <th class="col-stock-mark">Nr ozn. zap.</th>
+                <th class="col-description">Opis</th>
+                <th class="col-location">Kod lokalizacji</th>
+                <th class="col-uom">Kod jednostki miary</th>
+                <th class="col-qty">Ilosc</th>
+                <th class="col-unit-price">Cena sprzedazy jedn. bez VAT</th>
+                <th class="col-discount">Rabat %</th>
+                <th class="col-line-amount">Kwota wiersza bez VAT</th>
+                <th class="col-ship">Ilosc do wysylki</th>
+                <th class="col-shipped">Ilosc wyslana</th>
+                <th class="col-invoice">Ilosc do fakturowania</th>
+                <th class="col-invoiced">Ilosc zafakturowana</th>
+                <th class="col-date">Data dostawy</th>
+                <th class="col-route">Trasa</th>
+                <th class="col-qty-pcs">Ilosc szt.</th>
+                <th class="col-qty-m2">Ilosc m²</th>
+                <th class="col-weight">Waga</th>
+              </tr>
+            </thead>
+            <tbody id="lineBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Podsumowanie dokumentu</span>
+        <span class="section-more">Pokaz wiecej</span>
+      </div>
+      <div class="summary-card">
+        <div class="summary-grid">
+          <div class="field">
+            <span class="field-label">Suma netto</span>
+            <div class="field-control summary-highlight" id="netTotalValue">0,00</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Suma ilosci do wysylki</span>
+            <div class="field-control" id="shipTotalValue">0,00</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Szacowany VAT 23%</span>
+            <div class="field-control" id="vatTotalValue">0,00</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Suma ilosci do fakturowania</span>
+            <div class="field-control" id="invoiceTotalValue">0,00</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Suma brutto</span>
+            <div class="field-control summary-highlight" id="grossTotalValue">0,00</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Suma ilosci szt.</span>
+            <div class="field-control" id="piecesTotalValue">0</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Suma wagi</span>
+            <div class="field-control" id="weightTotalValue">0 kg</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Suma ilosci m²</span>
+            <div class="field-control" id="squareMetersTotalValue">0,00</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const customerSelect = document.querySelector("#customerSelect");
+    const customerName = document.querySelector("#customerName");
+    const documentHeading = document.querySelector("#documentHeading");
+    const workspaceTabs = [...document.querySelectorAll("[data-workspace-tab]")];
+    const rowsPanel = document.querySelector("#rowsPanel");
+    const lineActionsPanel = document.querySelector("#lineActionsPanel");
+    const lineBody = document.querySelector("#lineBody");
+    const trackingLinesBtn = document.querySelector("#trackingLinesBtn");
+
+    const netTotalValue = document.querySelector("#netTotalValue");
+    const vatTotalValue = document.querySelector("#vatTotalValue");
+    const grossTotalValue = document.querySelector("#grossTotalValue");
+    const shipTotalValue = document.querySelector("#shipTotalValue");
+    const invoiceTotalValue = document.querySelector("#invoiceTotalValue");
+    const piecesTotalValue = document.querySelector("#piecesTotalValue");
+    const squareMetersTotalValue = document.querySelector("#squareMetersTotalValue");
+    const weightTotalValue = document.querySelector("#weightTotalValue");
+
+    let activeRowIndex = 0;
+    const expandedRows = new Set();
+
+    const lineData = [
+      {
+        type: "Towar",
+        itemNo: "P-001209",
+        stockMark: "MC8S-12MM",
+        description: "Golden White satin 12mm (MC8S)",
+        locationCode: "DEMO",
+        unitOfMeasureCode: "m²",
+        quantity: "96,00",
+        unitPriceNet: "69,90",
+        lineDiscountPct: "3,00",
+        lineAmountNet: "6509,09",
+        quantityToShip: "96,00",
+        quantityShipped: "0,00",
+        quantityToInvoice: "96,00",
+        quantityInvoiced: "0,00",
+        deliveryDate: "12.05.2026",
+        routeCode: "AUC-MAZ-01",
+        orderQtyPieces: "20",
+        orderQtySquareMeters: "96,00",
+        weightKg: "1240"
+      },
+      {
+        type: "Towar",
+        itemNo: "P-001324",
+        stockMark: "CA6M-6MM",
+        description: "Concrete Ash matt 6mm (CA6M)",
+        locationCode: "DEMO",
+        unitOfMeasureCode: "m²",
+        quantity: "64,00",
+        unitPriceNet: "58,50",
+        lineDiscountPct: "2,50",
+        lineAmountNet: "3650,40",
+        quantityToShip: "64,00",
+        quantityShipped: "0,00",
+        quantityToInvoice: "64,00",
+        quantityInvoiced: "0,00",
+        deliveryDate: "12.05.2026",
+        routeCode: "AUC-MAZ-01",
+        orderQtyPieces: "16",
+        orderQtySquareMeters: "64,00",
+        weightKg: "780"
+      },
+      {
+        type: "Towar",
+        itemNo: "P-001611",
+        stockMark: "SNW8-8MM",
+        description: "Snow White polished 8mm (SNW8)",
+        locationCode: "DEMO",
+        unitOfMeasureCode: "m²",
+        quantity: "42,00",
+        unitPriceNet: "74,20",
+        lineDiscountPct: "0,00",
+        lineAmountNet: "3116,40",
+        quantityToShip: "42,00",
+        quantityShipped: "0,00",
+        quantityToInvoice: "42,00",
+        quantityInvoiced: "0,00",
+        deliveryDate: "13.05.2026",
+        routeCode: "AUC-MAZ-02",
+        orderQtyPieces: "10",
+        orderQtySquareMeters: "42,00",
+        weightKg: "530"
+      }
+    ];
+
+    function parseLocalizedNumber(value) {
+      return Number(String(value).replace(/\s/g, "").replace(",", ".")) || 0;
+    }
+
+    function formatLocalizedNumber(value, digits = 2) {
+      return value.toLocaleString("pl-PL", {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits
+      });
+    }
+
+    function formatInteger(value) {
+      return Math.round(value).toLocaleString("pl-PL");
+    }
+
+    function formatCurrency(value) {
+      return formatLocalizedNumber(value, 2);
+    }
+
+    function formatWeight(value) {
+      return `${formatInteger(value)} kg`;
+    }
+
+    function recalculateLine(line) {
+      const quantity = parseLocalizedNumber(line.quantity);
+      const price = parseLocalizedNumber(line.unitPriceNet);
+      const discount = parseLocalizedNumber(line.lineDiscountPct);
+      const amount = quantity * price * (1 - discount / 100);
+      line.lineAmountNet = formatLocalizedNumber(amount, 2);
+    }
+
+    function updateDocumentHeading() {
+      const customer = customerSelect.value;
+      customerName.textContent = customer;
+      documentHeading.textContent = `ZS/24/00070 · ${customer}`;
+    }
+
+    function setWorkspaceTab(activeTab) {
+      workspaceTabs.forEach((tab) => {
+        tab.classList.toggle("is-active", tab.dataset.workspaceTab === activeTab);
+      });
+
+      const showLineActions = activeTab === "wiersz";
+      rowsPanel.hidden = showLineActions;
+      lineActionsPanel.hidden = !showLineActions;
+    }
+
+    function setActiveRow(index) {
+      activeRowIndex = Math.max(0, Math.min(index, lineData.length - 1));
+      renderLines();
+    }
+
+    function toggleExpandedRow(index) {
+      if (expandedRows.has(index)) {
+        expandedRows.delete(index);
+      } else {
+        expandedRows.add(index);
+      }
+
+      activeRowIndex = Math.max(0, Math.min(index, lineData.length - 1));
+      renderLines();
+    }
+
+    function createJamboRow(line, index) {
+      const childRow = document.createElement("tr");
+      childRow.classList.add("is-child-row");
+
+      childRow.innerHTML = `
+        <td class="selection-cell"></td>
+        <td><div class="cell cell-menu">·</div></td>
+        <td><div class="cell cell-child-type">JAMBO</div></td>
+        <td><div class="cell">${line.itemNo}</div></td>
+        <td><div class="cell">${line.stockMark}</div></td>
+        <td><div class="cell">JAMBO · ${line.description}</div></td>
+        <td><div class="cell">${line.locationCode}</div></td>
+        <td><div class="cell">${line.unitOfMeasureCode}</div></td>
+        <td><div class="cell">${line.quantity}</div></td>
+        <td><div class="cell">${line.unitPriceNet}</div></td>
+        <td><div class="cell">${line.lineDiscountPct}</div></td>
+        <td><div class="cell">${line.lineAmountNet}</div></td>
+        <td><div class="cell">${line.quantityToShip}</div></td>
+        <td><div class="cell">${line.quantityShipped}</div></td>
+        <td><div class="cell">${line.quantityToInvoice}</div></td>
+        <td><div class="cell">${line.quantityInvoiced}</div></td>
+        <td><div class="cell">${line.deliveryDate}</div></td>
+        <td><div class="cell">${line.routeCode}</div></td>
+        <td><div class="cell">${line.orderQtyPieces}</div></td>
+        <td><div class="cell">${line.orderQtySquareMeters}</div></td>
+        <td><div class="cell">${line.weightKg}</div></td>
+      `;
+
+      childRow.dataset.parentIndex = String(index);
+      return childRow;
+    }
+
+    function renderLines() {
+      lineBody.innerHTML = "";
+
+      lineData.forEach((line, index) => {
+        const row = document.createElement("tr");
+        row.classList.toggle("is-active", index === activeRowIndex);
+        const isExpanded = expandedRows.has(index);
+
+        row.innerHTML = `
+          <td class="selection-cell"><button class="arrow-toggle" type="button" data-row-index="${index}" aria-expanded="${isExpanded}">${isExpanded ? "▾" : "▸"}</button></td>
+          <td><div class="cell cell-menu">⋮</div></td>
+          <td><div class="cell">${line.type}</div></td>
+          <td><input class="line-input" data-index="${index}" data-field="itemNo" value="${line.itemNo}"></td>
+          <td><input class="line-input" data-index="${index}" data-field="stockMark" value="${line.stockMark}"></td>
+          <td><input class="line-input" data-index="${index}" data-field="description" value="${line.description}"></td>
+          <td><input class="line-input" data-index="${index}" data-field="locationCode" value="${line.locationCode}"></td>
+          <td><input class="line-input" data-index="${index}" data-field="unitOfMeasureCode" value="${line.unitOfMeasureCode}"></td>
+          <td><input class="line-input line-input--compact" data-index="${index}" data-field="quantity" value="${line.quantity}"></td>
+          <td><input class="line-input line-input--compact" data-index="${index}" data-field="unitPriceNet" value="${line.unitPriceNet}"></td>
+          <td><input class="line-input line-input--compact" data-index="${index}" data-field="lineDiscountPct" value="${line.lineDiscountPct}"></td>
+          <td><div class="cell">${line.lineAmountNet}</div></td>
+          <td><input class="line-input line-input--compact" data-index="${index}" data-field="quantityToShip" value="${line.quantityToShip}"></td>
+          <td><input class="line-input line-input--compact" data-index="${index}" data-field="quantityShipped" value="${line.quantityShipped}"></td>
+          <td><input class="line-input line-input--compact" data-index="${index}" data-field="quantityToInvoice" value="${line.quantityToInvoice}"></td>
+          <td><input class="line-input line-input--compact" data-index="${index}" data-field="quantityInvoiced" value="${line.quantityInvoiced}"></td>
+          <td><input class="line-input" data-index="${index}" data-field="deliveryDate" value="${line.deliveryDate}"></td>
+          <td><input class="line-input" data-index="${index}" data-field="routeCode" value="${line.routeCode}"></td>
+          <td><input class="line-input line-input--compact" data-index="${index}" data-field="orderQtyPieces" value="${line.orderQtyPieces}"></td>
+          <td><input class="line-input line-input--compact" data-index="${index}" data-field="orderQtySquareMeters" value="${line.orderQtySquareMeters}"></td>
+          <td><input class="line-input line-input--compact" data-index="${index}" data-field="weightKg" value="${line.weightKg}"></td>
+        `;
+
+        lineBody.append(row);
+
+        if (isExpanded) {
+          lineBody.append(createJamboRow(line, index));
+        }
+      });
+
+      updateSummaries();
+    }
+
+    function updateSummaries() {
+      const totals = lineData.reduce((accumulator, line) => {
+        accumulator.net += parseLocalizedNumber(line.lineAmountNet);
+        accumulator.toShip += parseLocalizedNumber(line.quantityToShip);
+        accumulator.toInvoice += parseLocalizedNumber(line.quantityToInvoice);
+        accumulator.pieces += parseLocalizedNumber(line.orderQtyPieces);
+        accumulator.squareMeters += parseLocalizedNumber(line.orderQtySquareMeters);
+        accumulator.weight += parseLocalizedNumber(line.weightKg);
+        return accumulator;
+      }, {
+        net: 0,
+        toShip: 0,
+        toInvoice: 0,
+        pieces: 0,
+        squareMeters: 0,
+        weight: 0
+      });
+
+      const vat = totals.net * 0.23;
+      const gross = totals.net + vat;
+
+      netTotalValue.textContent = formatCurrency(totals.net);
+      vatTotalValue.textContent = formatCurrency(vat);
+      grossTotalValue.textContent = formatCurrency(gross);
+      shipTotalValue.textContent = formatLocalizedNumber(totals.toShip, 2);
+      invoiceTotalValue.textContent = formatLocalizedNumber(totals.toInvoice, 2);
+      piecesTotalValue.textContent = formatInteger(totals.pieces);
+      squareMetersTotalValue.textContent = formatLocalizedNumber(totals.squareMeters, 2);
+      weightTotalValue.textContent = formatWeight(totals.weight);
+    }
+
+    customerSelect.addEventListener("change", updateDocumentHeading);
+
+    workspaceTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        setWorkspaceTab(tab.dataset.workspaceTab);
+      });
+    });
+
+    lineBody.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-row-index]");
+      if (!button) {
+        return;
+      }
+
+      toggleExpandedRow(Number(button.dataset.rowIndex));
+    });
+
+    lineBody.addEventListener("change", (event) => {
+      const input = event.target.closest("[data-index][data-field]");
+      if (!input) {
+        return;
+      }
+
+      const index = Number(input.dataset.index);
+      const fieldName = input.dataset.field;
+      lineData[index][fieldName] = input.value;
+
+      if (["quantity", "unitPriceNet", "lineDiscountPct"].includes(fieldName)) {
+        recalculateLine(lineData[index]);
+      }
+
+      renderLines();
+      setActiveRow(index);
+    });
+
+    trackingLinesBtn.addEventListener("click", () => {
+      window.location.href = "./wiersz_sledzenia_zapasu.html?widok=pelny";
+    });
+
+    lineData.forEach(recalculateLine);
+    updateDocumentHeading();
+    setWorkspaceTab("zarzadzaj");
+    renderLines();
+  </script>
+</body>
+</html>

@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wiersz śledzenia zapasu - P-001209</title>
+  <style>
+    :root {
+      --bg: #f3f2f1;
+      --panel: #ffffff;
+      --panel-muted: #faf9f8;
+      --line: #d2d0ce;
+      --line-soft: #edebe9;
+      --line-strong: #8a8886;
+      --text: #201f1e;
+      --muted: #605e5c;
+      --accent: #0078d4;
+      --accent-soft: #0f6cbd;
+      --shell: #201f1e;
+      --success: #107c10;
+      --warning: #8a6d1f;
+      --font: "Segoe UI", "Segoe WP", Segoe, device-segoe, Tahoma, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .top-shell {
+      height: 48px;
+      background: var(--shell);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-size: 14px;
+    }
+
+    .top-shell-title {
+      font-weight: 600;
+    }
+
+    .top-shell-meta {
+      display: flex;
+      gap: 12px;
+      color: #d2d0ce;
+      font-size: 12px;
+    }
+
+    .page {
+      width: min(1720px, calc(100vw - 24px));
+      margin: 8px auto 20px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .doc-title {
+      padding: 10px 12px 0;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .doc-caption {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .doc-number {
+      font-size: clamp(24px, 3.1vw, 38px);
+      line-height: 1.1;
+      font-weight: 300;
+      color: #323130;
+      margin: 0 0 8px;
+    }
+
+    .ribbon-tabs,
+    .action-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .ribbon-tab,
+    .action-link {
+      min-height: 34px;
+      padding: 0 12px;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      font-size: 12px;
+      cursor: pointer;
+      border-right: 1px solid var(--line);
+    }
+
+    .ribbon-tab--active {
+      color: var(--accent);
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .action-row {
+      gap: 8px;
+      padding: 6px 0;
+      border-top: 0;
+    }
+
+    .action-link {
+      min-height: 28px;
+      padding: 0 8px;
+      border-right: 0;
+      color: var(--accent-soft);
+    }
+
+    .section {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 10px 6px;
+      background: var(--panel-muted);
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .section-more {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .section-body {
+      padding: 12px 10px 14px;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 28px;
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+    }
+
+    .field-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      min-width: 0;
+    }
+
+    .field-label::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px dotted #d2d0ce;
+      transform: translateY(1px);
+    }
+
+    .field-input,
+    .field-select,
+    .field-control {
+      min-height: 24px;
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      background: #fff;
+      color: #000;
+      font-size: 12px;
+      padding: 2px 8px;
+    }
+
+    .field-input[readonly] {
+      background: #f3f2f1;
+      border-color: var(--line-soft);
+      color: #323130;
+    }
+
+    .field-control {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      border-color: var(--line-soft);
+      background: #f3f2f1;
+      color: #323130;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      background: #eef6fc;
+      color: var(--accent-soft);
+    }
+
+    .badge--success {
+      background: #edf6ed;
+      color: var(--success);
+    }
+
+    .badge--warning {
+      background: #fff4ce;
+      color: var(--warning);
+    }
+
+    .summary-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      padding: 0 10px 12px;
+    }
+
+    .summary-card {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 10px 12px;
+    }
+
+    .summary-label {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .summary-value {
+      margin-top: 6px;
+      font-size: 22px;
+      font-weight: 600;
+      color: #323130;
+    }
+
+    .summary-note {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .grid-shell {
+      border: 1px solid var(--line);
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .grid-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 10px;
+      background: var(--panel-muted);
+      border-bottom: 1px solid var(--line);
+      font-size: 12px;
+    }
+
+    .grid-note {
+      color: var(--muted);
+    }
+
+    .tracking-view-note {
+      margin-top: 8px;
+      padding: 6px 10px;
+      border: 1px solid #b7d7f0;
+      background: #eef6fc;
+      color: #0f548c;
+      font-size: 12px;
+    }
+
+    .grid-scroll {
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1220px;
+      table-layout: fixed;
+    }
+
+    th,
+    td {
+      border-right: 1px solid var(--line-soft);
+      border-bottom: 1px solid var(--line-soft);
+      padding: 6px 8px;
+      font-size: 12px;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #f8f8f8;
+      font-weight: 600;
+      color: #323130;
+      white-space: nowrap;
+    }
+
+    tr.is-active {
+      background: #f3f9fd;
+    }
+
+    tr:hover {
+      background: #faf9f8;
+    }
+
+    .cell-input {
+      width: 100%;
+      min-height: 24px;
+      border: 1px solid transparent;
+      background: transparent;
+      padding: 2px 4px;
+      font-size: 12px;
+    }
+
+    .cell-input:focus {
+      outline: none;
+      border-color: #00b7c3;
+      background: #fff;
+    }
+
+    .cell-select {
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .cell-output {
+      display: block;
+      width: 100%;
+      min-height: 24px;
+      padding: 3px 4px;
+      color: #323130;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cell-center {
+      text-align: center;
+    }
+
+    .footer-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1100px) {
+      .section-grid,
+      .summary-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .field {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .field-label::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: calc(100vw - 12px);
+        margin: 6px auto 12px;
+      }
+
+      .top-shell {
+        padding: 0 10px;
+      }
+
+      .top-shell-meta {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-shell">
+    <div class="top-shell-title">Dynamics 365 Business Central</div>
+    <div class="top-shell-meta">
+      <span>CORE</span>
+      <span>SANDBOX</span>
+    </div>
+  </div>
+
+  <main class="page">
+    <div class="doc-title">
+      <div class="doc-caption">Wiersze śledzenia zapasu</div>
+      <h1 class="doc-number">P-001209 · Golden White satin 12mm (MC8S)</h1>
+
+      <div class="ribbon-tabs">
+        <button class="ribbon-tab ribbon-tab--active" type="button">Strona główna</button>
+        <button class="ribbon-tab" type="button">Wiersz</button>
+        <button class="ribbon-tab" type="button">Powiązane</button>
+        <button class="ribbon-tab" type="button">Akcje</button>
+        <button class="ribbon-tab" type="button">Raporty</button>
+        <button class="ribbon-tab" type="button">Mniej opcji</button>
+      </div>
+
+      <div class="action-row">
+        <button class="action-link" type="button">Pobierz numer partii</button>
+        <button class="action-link" type="button">Automatycznie przypisz</button>
+        <button class="action-link" type="button">Rozdziel ilość</button>
+        <button class="action-link" type="button">Odśwież dostępność</button>
+      </div>
+      <div class="tracking-view-note">Widok pelny sledzenia zapasu: zawiera kolumny Kierunkowosc, Odcien, Kolor i pozostale pola szczegolowe.</div>
+    </div>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Kontekst dokumentu</span>
+        <span class="section-more">Pozycja z zamówienia zakupu</span>
+      </div>
+      <div class="section-body">
+        <div class="section-grid">
+          <div class="field">
+            <span class="field-label">Typ dokumentu</span>
+            <div class="field-control">Zamówienie zakupu</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Nr dokumentu</span>
+            <div class="field-control">ZZ/24/000082</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Nr pozycji</span>
+            <div class="field-control">10000</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Dostawca</span>
+            <div class="field-control">Marazzi</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Nr zapasu</span>
+            <div class="field-control">P-001209</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Nazwa zapasu</span>
+            <div class="field-control">Golden White satin 12mm (MC8S)</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Kod towaru</span>
+            <div class="field-control">MC8S-12MM</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Magazyn / Kosz</span>
+            <div class="field-control">DEMO / 1_PRZ</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Ilość do przypisania</span>
+            <div class="field-control">20,00 m²</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Typ śledzenia</span>
+            <div class="field-control">Nr partii obowiązkowy</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Podsumowanie</span>
+        <span class="section-more">Bieżący stan przypisania</span>
+      </div>
+      <div class="section-body">
+        <div class="summary-strip">
+          <article class="summary-card">
+            <div class="summary-label">Ilość w wierszu</div>
+            <div class="summary-value">20,00 m²</div>
+            <div class="summary-note">Wartość z aktywnego wiersza zakupu.</div>
+          </article>
+          <article class="summary-card">
+            <div class="summary-label">Już przypisano</div>
+            <div class="summary-value">20,00 m²</div>
+            <div class="summary-note">Suma wszystkich wierszy śledzenia poniżej.</div>
+          </article>
+          <article class="summary-card">
+            <div class="summary-label">Pozostało</div>
+            <div class="summary-value">0,00 m²</div>
+            <div class="summary-note">Brak różnicy do uzupełnienia.</div>
+          </article>
+          <article class="summary-card">
+            <div class="summary-label">Status</div>
+            <div class="summary-value"><span class="badge badge--success">W pełni przypisane</span></div>
+            <div class="summary-note">Zgodne z ilością do przyjęcia.</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Wiersze śledzenia</span>
+        <span class="section-more">Widok roboczy dla partii i ilości</span>
+      </div>
+      <div class="section-body">
+        <div class="grid-shell">
+          <div class="grid-toolbar">
+            <div>Nr zapasu: <strong>P-001209</strong> · Golden White satin 12mm (MC8S)</div>
+            <div class="grid-note">Jednostka miary: m² · długość i szerokość w mm</div>
+          </div>
+          <div class="grid-scroll">
+            <table aria-label="Wiersze śledzenia zapasu">
+              <thead>
+                <tr>
+                  <th style="width: 80px;">Lp.</th>
+                  <th style="width: 170px;">Nr partii</th>
+                  <th style="width: 130px;">Jakość</th>
+                  <th style="width: 150px;">Typ płyty</th>
+                  <th style="width: 140px;">Kierunkowość</th>
+                  <th style="width: 130px;">Odcień</th>
+                  <th style="width: 130px;">Kolor</th>
+                  <th style="width: 110px;">Długość</th>
+                  <th style="width: 110px;">Szerokość</th>
+                  <th style="width: 130px;">Powierzchnia m²</th>
+                  <th style="width: 150px;">Dostawca</th>
+                  <th style="width: 160px;">Data dostawy</th>
+                  <th style="width: 180px;">Powiązanie</th>
+                  <th style="width: 220px;">Uwagi</th>
+                  <th style="width: 120px;">Ilość</th>
+                  <th style="width: 120px;">Ilość bazowa</th>
+                  <th style="width: 130px;">Data przyjęcia</th>
+                  <th style="width: 150px;">Data ważności</th>
+                  <th style="width: 140px;">Magazyn</th>
+                  <th style="width: 140px;">Kosz</th>
+                  <th style="width: 160px;">Rezerwacja</th>
+                  <th style="width: 220px;">Opis</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="is-active">
+                  <td>1</td>
+                  <td><input class="cell-input" type="text" value="GW-12-202604-01"></td>
+                  <td>
+                    <select class="cell-input cell-select">
+                      <option selected>Dobra</option>
+                      <option>Zła</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select class="cell-input cell-select">
+                      <option selected>Pełna płyta</option>
+                      <option>Połówka</option>
+                      <option>Docinka</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select class="cell-input cell-select">
+                      <option selected>Poziome</option>
+                      <option>Pionowe</option>
+                    </select>
+                  </td>
+                  <td><input class="cell-input" type="text" value="A"></td>
+                  <td><input class="cell-input" type="text" value="Golden White"></td>
+                  <td><input class="cell-input js-length" type="text" value="3200"></td>
+                  <td><input class="cell-input js-width" type="text" value="1600"></td>
+                  <td><span class="cell-output js-area">5,12</span></td>
+                  <td><input class="cell-input" type="text" value="Marazzi"></td>
+                  <td><input class="cell-input" type="text" value="23.04.2026"></td>
+                  <td><input class="cell-input" type="text" value="ZZ/24/000082/10000"></td>
+                  <td><input class="cell-input" type="text" value="Płyta pełnowymiarowa do pierwszego przypisania"></td>
+                  <td><input class="cell-input" type="text" value="12,00"></td>
+                  <td><input class="cell-input" type="text" value="12,00"></td>
+                  <td><input class="cell-input" type="text" value="23.04.2026"></td>
+                  <td><input class="cell-input" type="text" value=""></td>
+                  <td><input class="cell-input" type="text" value="DEMO"></td>
+                  <td><input class="cell-input" type="text" value="1_PRZ"></td>
+                  <td><span class="badge badge--success">Przypisano</span></td>
+                  <td><input class="cell-input" type="text" value="Golden White satin 12mm (MC8S)"></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td><input class="cell-input" type="text" value="GW-12-202604-02"></td>
+                  <td>
+                    <select class="cell-input cell-select">
+                      <option selected>Dobra</option>
+                      <option>Zła</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select class="cell-input cell-select">
+                      <option>Pełna płyta</option>
+                      <option selected>Połówka</option>
+                      <option>Docinka</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select class="cell-input cell-select">
+                      <option>Poziome</option>
+                      <option selected>Pionowe</option>
+                    </select>
+                  </td>
+                  <td><input class="cell-input" type="text" value="A"></td>
+                  <td><input class="cell-input" type="text" value="Golden White"></td>
+                  <td><input class="cell-input js-length" type="text" value="2500"></td>
+                  <td><input class="cell-input js-width" type="text" value="1600"></td>
+                  <td><span class="cell-output js-area">4,00</span></td>
+                  <td><input class="cell-input" type="text" value="Marazzi"></td>
+                  <td><input class="cell-input" type="text" value="23.04.2026"></td>
+                  <td><input class="cell-input" type="text" value="ZZ/24/000082/10000"></td>
+                  <td><input class="cell-input" type="text" value="Płyta obracana zgodnie z układem użylenia"></td>
+                  <td><input class="cell-input" type="text" value="8,00"></td>
+                  <td><input class="cell-input" type="text" value="8,00"></td>
+                  <td><input class="cell-input" type="text" value="23.04.2026"></td>
+                  <td><input class="cell-input" type="text" value=""></td>
+                  <td><input class="cell-input" type="text" value="DEMO"></td>
+                  <td><input class="cell-input" type="text" value="1_PRZ"></td>
+                  <td><span class="badge badge--success">Przypisano</span></td>
+                  <td><input class="cell-input" type="text" value="Golden White satin 12mm (MC8S)"></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td><input class="cell-input" type="text" value=""></td>
+                  <td>
+                    <select class="cell-input cell-select">
+                      <option selected>Dobra</option>
+                      <option>Zła</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select class="cell-input cell-select">
+                      <option>Pełna płyta</option>
+                      <option>Połówka</option>
+                      <option selected>Docinka</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select class="cell-input cell-select">
+                      <option selected>Poziome</option>
+                      <option>Pionowe</option>
+                    </select>
+                  </td>
+                  <td><input class="cell-input" type="text" value=""></td>
+                  <td><input class="cell-input" type="text" value=""></td>
+                  <td><input class="cell-input js-length" type="text" value="0"></td>
+                  <td><input class="cell-input js-width" type="text" value="0"></td>
+                  <td><span class="cell-output js-area">0,00</span></td>
+                  <td><input class="cell-input" type="text" value="Marazzi"></td>
+                  <td><input class="cell-input" type="text" value=""></td>
+                  <td><input class="cell-input" type="text" value=""></td>
+                  <td><input class="cell-input" type="text" value="Nowy wiersz do uzupełnienia"></td>
+                  <td><input class="cell-input" type="text" value="0,00"></td>
+                  <td><input class="cell-input" type="text" value="0,00"></td>
+                  <td><input class="cell-input" type="text" value=""></td>
+                  <td><input class="cell-input" type="text" value=""></td>
+                  <td><input class="cell-input" type="text" value="DEMO"></td>
+                  <td><input class="cell-input" type="text" value="1_PRZ"></td>
+                  <td><span class="badge badge--warning">Puste</span></td>
+                  <td><input class="cell-input" type="text" value="Nowy wiersz do podziału ilości"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-bar">
+      <span>Makieta referencyjna dla śledzenia zapasu z zamówienia zakupu.</span>
+      <span>Źródłowy zapas: P-001209 · Golden White satin 12mm (MC8S)</span>
+    </div>
+  </main>
+
+  <script>
+    function parseLocalizedNumber(value) {
+      const normalizedValue = String(value || "")
+        .replace(/\s+/g, "")
+        .replace(",", ".");
+      const parsedValue = Number.parseFloat(normalizedValue);
+      return Number.isFinite(parsedValue) ? parsedValue : 0;
+    }
+
+    function formatLocalizedNumber(value, fractionDigits) {
+      return new Intl.NumberFormat("pl-PL", {
+        minimumFractionDigits: fractionDigits,
+        maximumFractionDigits: fractionDigits
+      }).format(value);
+    }
+
+    function updateRowArea(row) {
+      const lengthInput = row.querySelector(".js-length");
+      const widthInput = row.querySelector(".js-width");
+      const areaOutput = row.querySelector(".js-area");
+
+      if (!lengthInput || !widthInput || !areaOutput) {
+        return;
+      }
+
+      const lengthMm = parseLocalizedNumber(lengthInput.value);
+      const widthMm = parseLocalizedNumber(widthInput.value);
+      const areaSquareMeters = (lengthMm * widthMm) / 1000000;
+      areaOutput.textContent = formatLocalizedNumber(areaSquareMeters, 2);
+    }
+
+    document.querySelectorAll("tbody tr").forEach((row) => {
+      updateRowArea(row);
+
+      row.querySelectorAll(".js-length, .js-width").forEach((input) => {
+        input.addEventListener("input", () => updateRowArea(row));
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Przeplyw zapotrzebowanie i zamowienie zakupu</title>
+  <style>
+    :root {
+      --bg: #f3f2f1;
+      --panel: #ffffff;
+      --panel-muted: #faf9f8;
+      --line: #d2d0ce;
+      --line-soft: #edebe9;
+      --line-strong: #8a8886;
+      --text: #201f1e;
+      --muted: #605e5c;
+      --accent: #0078d4;
+      --accent-strong: #106ebe;
+      --accent-soft: #d7f3f7;
+      --ok: #107c10;
+      --shell: #201f1e;
+      --overlay: rgba(32, 31, 30, 0.38);
+      --font: "Segoe UI", "Segoe WP", Segoe, device-segoe, Tahoma, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .top-shell {
+      height: 48px;
+      background: var(--shell);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-size: 14px;
+    }
+
+    .top-shell-title {
+      font-weight: 600;
+    }
+
+    .top-shell-meta {
+      display: flex;
+      gap: 12px;
+      color: #d2d0ce;
+      font-size: 12px;
+    }
+
+    .page {
+      width: min(1720px, calc(100vw - 24px));
+      margin: 8px auto 20px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .ribbon {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: var(--panel-muted);
+      border-bottom: 1px solid var(--line);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .ribbon-tabs {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .ribbon-tab {
+      min-height: 28px;
+      padding: 0 10px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      background: transparent;
+      color: var(--text);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .ribbon-tab--active {
+      font-weight: 700;
+    }
+
+    .ribbon-help {
+      border: 0;
+      background: transparent;
+      color: var(--accent-strong);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .doc-title {
+      padding: 8px 16px 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .doc-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .doc-toolbar-left,
+    .doc-toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-circle,
+    .icon-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: #3a96a0;
+      font-size: 14px;
+      line-height: 1;
+      border-radius: 50%;
+    }
+
+    .icon-ghost {
+      border-radius: 2px;
+      border-color: transparent;
+      width: 24px;
+      height: 24px;
+      color: #49a8b2;
+    }
+
+    .doc-caption {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .doc-kicker {
+      margin: 0 0 6px;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 3.4vw, 34px);
+      line-height: 1.15;
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      color: #323130;
+    }
+
+    .section {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 16px 6px;
+      background: var(--panel-muted);
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .section-more {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .workspace-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 16px 8px;
+      border-bottom: 1px solid var(--line);
+      flex-wrap: wrap;
+      font-size: 12px;
+    }
+
+    .workspace-title {
+      font-weight: 700;
+    }
+
+    .workspace-link,
+    .workspace-link-muted {
+      color: var(--accent-strong);
+      text-decoration: underline;
+      cursor: pointer;
+      border: 0;
+      background: transparent;
+      padding: 0;
+    }
+
+    .workspace-link-muted {
+      color: var(--text);
+    }
+
+    .subtoolbar {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 8px 16px 9px;
+      border-bottom: 1px solid var(--line);
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: #3a96a0;
+    }
+
+    .subtoolbar-link,
+    .subtoolbar-button,
+    .tab-button {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      color: #3a96a0;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .subtoolbar-button {
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--text);
+    }
+
+    .subtoolbar-button--primary {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .filter-field,
+    .field {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+    }
+
+    .filter-field {
+      min-width: 320px;
+    }
+
+    .field-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .field-label::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px dotted #d2d0ce;
+      transform: translateY(1px);
+    }
+
+    .field-control,
+    .field-input,
+    .field-select,
+    .line-input,
+    .filter-select {
+      min-height: 24px;
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      background: #ffffff;
+      color: #000000;
+      font-size: 12px;
+      padding: 2px 8px;
+    }
+
+    .field-control {
+      display: flex;
+      align-items: center;
+      border-color: var(--line);
+      background: #f3f2f1;
+      color: var(--text);
+    }
+
+    .field-input:focus,
+    .field-select:focus,
+    .line-input:focus,
+    .filter-select:focus,
+    .selection-toggle:focus,
+    .arrow-toggle:focus,
+    .subtoolbar-button:focus,
+    .tab-button:focus {
+      outline: none;
+      border-color: #00b7c3;
+      box-shadow: 0 0 0 1px #00b7c3;
+    }
+
+    .message-bar {
+      min-height: 28px;
+      padding: 8px 16px 6px;
+      font-size: 12px;
+      color: var(--accent-strong);
+      font-weight: 600;
+      background: #ffffff;
+    }
+
+    .tab-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel-muted);
+    }
+
+    .tab-button {
+      padding: 6px 10px;
+      border: 1px solid transparent;
+      color: var(--text);
+    }
+
+    .tab-button.is-active {
+      background: #ffffff;
+      border-color: var(--line);
+      font-weight: 700;
+    }
+
+    .table-shell {
+      border-top: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .table-scroller {
+      overflow-x: scroll;
+      overflow-y: hidden;
+      padding-bottom: 8px;
+      scrollbar-gutter: stable both-edges;
+      scrollbar-width: auto;
+      scrollbar-color: #a19f9d #edebe9;
+    }
+
+    .table-scroller::-webkit-scrollbar {
+      height: 12px;
+    }
+
+    .table-scroller::-webkit-scrollbar-track {
+      background: #edebe9;
+      border-radius: 999px;
+    }
+
+    .table-scroller::-webkit-scrollbar-thumb {
+      background: #a19f9d;
+      border-radius: 999px;
+      border: 2px solid #edebe9;
+    }
+
+    table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    .demand-table {
+      min-width: 1520px;
+    }
+
+    .purchase-table {
+      min-width: 2320px;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background: #f3f2f1;
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line-soft);
+      padding: 7px 6px;
+      text-align: left;
+      font-size: 10px;
+      color: #605e5c;
+      z-index: 2;
+      vertical-align: bottom;
+      font-weight: 400;
+    }
+
+    tbody td {
+      border-bottom: 1px solid var(--line-soft);
+      border-right: 1px solid var(--line-soft);
+      padding: 0;
+      background: #ffffff;
+      font-size: 12px;
+      vertical-align: middle;
+    }
+
+    tbody tr:nth-child(even) td {
+      background: #faf9f8;
+    }
+
+    tbody tr:hover td {
+      background: #f3f8f4;
+    }
+
+    tbody tr.is-active td {
+      background: #e4f0e8;
+    }
+
+    tbody tr.is-active:nth-child(even) td {
+      background: #deede4;
+    }
+
+    tbody tr.is-active .cell-menu {
+      background: #cdeff4;
+    }
+
+    .selection-cell {
+      width: 32px;
+      padding: 0;
+      text-align: center;
+    }
+
+    .selection-toggle,
+    .arrow-toggle {
+      width: 100%;
+      min-height: 28px;
+      border: 0;
+      background: transparent;
+      color: var(--accent-strong);
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .selection-toggle {
+      font-size: 13px;
+    }
+
+    .selection-toggle[data-selected="true"] {
+      color: var(--ok);
+      font-weight: 700;
+    }
+
+    .cell {
+      min-height: 28px;
+      display: flex;
+      align-items: center;
+      padding: 3px 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cell-menu {
+      justify-content: center;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      font-weight: 700;
+    }
+
+    .line-input {
+      min-height: 28px;
+      border-width: 0;
+      background: transparent;
+      padding: 4px 6px;
+    }
+
+    .line-input--compact {
+      text-align: right;
+    }
+
+    .general-card,
+    .transport-summary {
+      padding: 12px 16px 14px;
+      background: #ffffff;
+    }
+
+    .general-grid,
+    .transport-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 28px;
+    }
+
+    .transport-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .status-open {
+      color: var(--ok);
+      font-weight: 700;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.is-active {
+      display: block;
+    }
+
+    .dialog-backdrop {
+      position: fixed;
+      inset: 0;
+      background: var(--overlay);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 50;
+    }
+
+    .dialog-backdrop.is-visible {
+      display: flex;
+    }
+
+    .dialog {
+      width: min(460px, 100%);
+      border: 1px solid var(--line);
+      background: #ffffff;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    .dialog-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      font-weight: 700;
+      background: var(--panel-muted);
+    }
+
+    .dialog-body {
+      padding: 18px 16px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 0 16px 16px;
+    }
+
+    .dialog-button {
+      min-width: 88px;
+      min-height: 32px;
+      border: 1px solid var(--line-strong);
+      background: #ffffff;
+      cursor: pointer;
+    }
+
+    .dialog-button--primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+    }
+
+    .col-type { width: 90px; }
+    .col-item-no { width: 140px; }
+    .col-stock-mark { width: 140px; }
+    .col-description { width: 260px; }
+    .col-supplier { width: 170px; }
+    .col-transport { width: 130px; }
+    .col-location,
+    .col-bin,
+    .col-qty,
+    .col-reserved,
+    .col-uom,
+    .col-qty-pcs,
+    .col-qty-m2,
+    .col-weight,
+    .col-receive,
+    .col-received,
+    .col-invoice,
+    .col-invoiced,
+    .col-assign,
+    .col-assigned { width: 120px; }
+    .col-unit-cost,
+    .col-line-amount,
+    .col-additional-cost { width: 150px; }
+
+    @media (max-width: 1100px) {
+      .general-grid,
+      .transport-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .field,
+      .filter-field {
+        grid-template-columns: 1fr;
+        gap: 4px;
+        min-width: 0;
+      }
+
+      .field-label::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: calc(100vw - 12px);
+        margin: 6px auto 12px;
+      }
+
+      .top-shell {
+        padding: 0 10px;
+      }
+
+      .top-shell-meta {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-shell">
+    <div class="top-shell-title">Dynamics 365 Business Central</div>
+    <div class="top-shell-meta">
+      <span>FORMA SYSTEM</span>
+      <span>SANDBOX</span>
+    </div>
+  </div>
+
+  <main class="page">
+    <section class="ribbon">
+      <div class="ribbon-tabs">
+        <button class="ribbon-tab ribbon-tab--active" type="button">Strona glowna</button>
+        <button class="ribbon-tab" type="button">Przygotuj</button>
+        <button class="ribbon-tab" type="button">Zamowienie</button>
+        <button class="ribbon-tab" type="button">Akcje</button>
+        <button class="ribbon-tab" type="button">Powiazane</button>
+        <button class="ribbon-tab" type="button">Automatyzuj</button>
+      </div>
+      <button class="ribbon-help" type="button">i</button>
+    </section>
+
+    <div class="doc-title">
+      <div class="doc-toolbar">
+        <div class="doc-toolbar-left">
+          <span class="icon-circle">←</span>
+          <span class="doc-caption" id="flowCaption">Zapotrzebowanie</span>
+        </div>
+        <div class="doc-toolbar-right">
+          <span class="icon-circle">✎</span>
+          <span class="icon-ghost">⤴</span>
+          <span class="icon-ghost">＋</span>
+          <span class="icon-ghost">🗑</span>
+          <span class="doc-caption">✓ Zapisano</span>
+        </div>
+      </div>
+      <p class="doc-kicker" id="flowKicker">Przeplyw procesowy</p>
+      <h1 id="mainHeading">Zapotrzebowanie z filtrowaniem i tworzeniem zamowienia</h1>
+    </div>
+
+    <section class="view is-active" id="demandView">
+      <div class="workspace-toolbar">
+        <span class="workspace-title">Zapotrzebowanie</span>
+        <button class="workspace-link" type="button">Zarzadzaj</button>
+        <button class="workspace-link-muted" type="button">Wiersz</button>
+        <button class="workspace-link-muted" type="button">Funkcje</button>
+        <button class="workspace-link-muted" type="button">Zamowienie</button>
+      </div>
+      <div class="filter-bar">
+        <label class="filter-field">
+          <span class="field-label">Dostawca</span>
+          <select class="filter-select" id="supplierFilter"></select>
+        </label>
+        <label class="filter-field">
+          <span class="field-label">Typ transportu</span>
+          <select class="filter-select" id="transportFilter"></select>
+        </label>
+        <button class="subtoolbar-button" type="button" id="resetFiltersBtn">Reset filtrów</button>
+        <button class="subtoolbar-button subtoolbar-button--primary" type="button" id="createOrderBtn">Utworz zamowienie zakupu</button>
+      </div>
+      <div class="message-bar" id="demandMessage"></div>
+      <div class="table-shell">
+        <div class="table-scroller" id="demandScroller" tabindex="0" aria-label="Tabela zapotrzebowania">
+          <table class="demand-table">
+            <thead>
+              <tr>
+                <th style="width: 32px;"></th>
+                <th style="width: 32px;"></th>
+                <th class="col-type">Typ</th>
+                <th class="col-item-no">Nr</th>
+                <th class="col-stock-mark">Nr ozn. zap.</th>
+                <th class="col-description">Opis</th>
+                <th class="col-supplier">Dostawca</th>
+                <th class="col-location">Kod lokalizacji</th>
+                <th class="col-bin">Kod pojemnika</th>
+                <th class="col-qty-m2">Ilosc do zamowienia m²</th>
+                <th class="col-qty-pcs">Ilosc szt.</th>
+                <th class="col-weight">Waga</th>
+                <th class="col-transport">Typ transportu</th>
+              </tr>
+            </thead>
+            <tbody id="demandBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="purchaseView">
+      <div class="workspace-toolbar">
+        <span class="workspace-title">Zamowienie zakupu</span>
+        <button class="workspace-link" type="button" id="backToDemandBtn">Powrot do zapotrzebowania</button>
+        <button class="workspace-link-muted" type="button">Wiersz</button>
+        <button class="workspace-link-muted" type="button">Funkcje</button>
+        <button class="workspace-link-muted" type="button">Zamowienie</button>
+      </div>
+      <div class="tab-strip" id="orderTabs"></div>
+      <section class="section">
+        <div class="section-header">
+          <span>Ogolne</span>
+          <span class="section-more">Pokaz wiecej</span>
+        </div>
+        <div class="general-card">
+          <div class="general-grid">
+            <div class="field">
+              <span class="field-label">Nazwa dostawcy</span>
+              <div class="field-control" id="purchaseVendorName"></div>
+            </div>
+            <div class="field">
+              <span class="field-label">Nr dok. zewn. JPK</span>
+              <div class="field-control"></div>
+            </div>
+
+            <div class="field">
+              <span class="field-label">Dostawca</span>
+              <div class="field-control" id="purchaseVendorNo"></div>
+            </div>
+            <div class="field">
+              <span class="field-label">Nr dokumentu KSeF</span>
+              <div class="field-control"></div>
+            </div>
+
+            <label class="field">
+              <span class="field-label">Data dokumentu</span>
+              <input class="field-input" id="purchaseDocumentDate" type="text" value="22.04.2026">
+            </label>
+            <div class="field">
+              <span class="field-label">Typ transportu</span>
+              <div class="field-control" id="purchaseTransportType"></div>
+            </div>
+
+            <label class="field">
+              <span class="field-label">Data operacji gospodarczej</span>
+              <input class="field-input" id="purchasePostingDate" type="text" value="22.04.2026">
+            </label>
+            <div class="field">
+              <span class="field-label">Stan</span>
+              <div class="field-control status-open">Otwarte</div>
+            </div>
+
+            <label class="field">
+              <span class="field-label">Data wplywu dokumentu</span>
+              <input class="field-input" id="purchaseReceiptDate" type="text" value="22.04.2026">
+            </label>
+            <div class="field">
+              <span class="field-label">Nr dokumentu</span>
+              <div class="field-control" id="purchaseOrderNo"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="workspace-toolbar">
+          <span class="workspace-title">Wiersze</span>
+          <button class="workspace-link" type="button">Zarzadzaj</button>
+          <button class="workspace-link-muted" type="button">Wiersz</button>
+          <button class="workspace-link-muted" type="button">Funkcje</button>
+          <button class="workspace-link-muted" type="button">Zamowienie</button>
+        </div>
+        <div class="message-bar" id="purchaseMessage"></div>
+        <div class="table-shell">
+          <div class="table-scroller" id="purchaseScroller" tabindex="0" aria-label="Tabela wierszy zamowienia zakupu">
+            <table class="purchase-table">
+              <thead>
+                <tr>
+                  <th style="width: 24px;"></th>
+                  <th style="width: 24px;"></th>
+                  <th class="col-type">Typ</th>
+                  <th class="col-item-no">Nr</th>
+                  <th class="col-stock-mark">Nr ozn. zap.</th>
+                  <th class="col-description">Opis</th>
+                  <th class="col-location">Kod lokalizacji</th>
+                  <th class="col-bin">Kod pojemnika</th>
+                  <th class="col-qty">Ilosc</th>
+                  <th class="col-reserved">Ilosc zarezerwowana</th>
+                  <th class="col-uom">Kod jednostki miary</th>
+                  <th class="col-unit-cost">Bezpośr. koszt jedn. bez VAT</th>
+                  <th class="col-line-amount">Kwota wiersza bez VAT</th>
+                  <th class="col-receive">Ilosc do przyjecia</th>
+                  <th class="col-received">Ilosc przyjeta</th>
+                  <th class="col-invoice">Ilosc do fakturowania</th>
+                  <th class="col-invoiced">Ilosc zafakturowana</th>
+                  <th class="col-assign">Ilosc do przypisania</th>
+                  <th class="col-additional-cost">Ilosc wg koszt dodatkowego do realizacji</th>
+                  <th class="col-assigned">Przypisana ilosc</th>
+                  <th class="col-qty-pcs">Ilosc szt.</th>
+                  <th class="col-qty-m2">Ilosc m²</th>
+                  <th class="col-weight">Waga</th>
+                  <th class="col-transport">Typ transportu</th>
+                </tr>
+              </thead>
+              <tbody id="purchaseBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <span>Podsumowanie transportu</span>
+          <span class="section-more">Pokaz wiecej</span>
+        </div>
+        <div class="transport-summary">
+          <div class="transport-grid">
+            <div class="field">
+              <span class="field-label">Suma wag wszystkich pozycji</span>
+              <div class="field-control" id="summaryTotalWeight"></div>
+            </div>
+            <div class="field">
+              <span class="field-label">Maksymalny tonaz</span>
+              <div class="field-control" id="summaryMaxTonnage"></div>
+            </div>
+            <div class="field">
+              <span class="field-label">Procent wykorzystania transportu</span>
+              <div class="field-control" id="summaryTransportUsage"></div>
+            </div>
+            <div class="field">
+              <span class="field-label">Suma wykorzystania stojaka</span>
+              <div class="field-control" id="summaryRackUsage"></div>
+            </div>
+            <div class="field">
+              <span class="field-label">Procent wykorzystania stojaka</span>
+              <div class="field-control" id="summaryRackUsagePercent"></div>
+            </div>
+            <div class="field">
+              <span class="field-label">Pozycje przeniesione</span>
+              <div class="field-control" id="summaryLineCount"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div class="dialog-backdrop" id="infoDialogBackdrop" aria-hidden="true">
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="infoDialogTitle">
+      <div class="dialog-header" id="infoDialogTitle">Informacja</div>
+      <div class="dialog-body" id="infoDialogBody"></div>
+      <div class="dialog-actions">
+        <button class="dialog-button dialog-button--primary" type="button" id="confirmDialogBtn">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const baseDocumentDate = "22.04.2026";
+    const demandRows = [
+      {
+        selected: true,
+        type: "Zapas",
+        itemNo: "FS-100245",
+        stockMark: "OZ-12060-GR",
+        description: "Plyta elewacyjna grafit 120x60",
+        supplier: "Nord Trade",
+        vendorNo: "NT-10000",
+        locationCode: "DEMO",
+        binCode: "1_PRZ",
+        orderQtySquareMeters: "96,00",
+        orderQtyPieces: "20",
+        weight: "1 240 kg",
+        transportType: "Stojaki",
+        reservedQuantity: "8,00",
+        directUnitCostNet: "22,78",
+        maxTonnageKg: 24000,
+        rackCapacitySquareMeters: 140
+      },
+      {
+        selected: true,
+        type: "Zapas",
+        itemNo: "FS-100245-A",
+        stockMark: "OZ-12060-GR-UZ",
+        description: "Plyta elewacyjna grafit 120x60 - dostawa uzupelniajaca",
+        supplier: "Nord Trade",
+        vendorNo: "NT-10000",
+        locationCode: "DEMO",
+        binCode: "1_PRZ",
+        orderQtySquareMeters: "20,00",
+        orderQtyPieces: "4",
+        weight: "260 kg",
+        transportType: "Stojaki",
+        reservedQuantity: "1,00",
+        directUnitCostNet: "65,00",
+        maxTonnageKg: 24000,
+        rackCapacitySquareMeters: 140
+      },
+      {
+        selected: true,
+        type: "Zapas",
+        itemNo: "FS-220510",
+        stockMark: "SZ-80X120-BR",
+        description: "Formatka szkla bezpiecznego 80x120",
+        supplier: "Forma Glass",
+        vendorNo: "FG-20010",
+        locationCode: "GLASS",
+        binCode: "2_A1",
+        orderQtySquareMeters: "78,00",
+        orderQtyPieces: "14",
+        weight: "960 kg",
+        transportType: "Skrzynie",
+        reservedQuantity: "3,00",
+        directUnitCostNet: "31,50",
+        maxTonnageKg: 18000,
+        rackCapacitySquareMeters: 120
+      },
+      {
+        selected: false,
+        type: "Zapas",
+        itemNo: "FS-310510",
+        stockMark: "SP-320160-MAT",
+        description: "Spiek kwarcowy matowy 320x160",
+        supplier: "Stone Logistics",
+        vendorNo: "SL-30030",
+        locationCode: "HIGH",
+        binCode: "ST-03",
+        orderQtySquareMeters: "88,00",
+        orderQtyPieces: "11",
+        weight: "1 480 kg",
+        transportType: "Stojaki",
+        reservedQuantity: "4,00",
+        directUnitCostNet: "86,40",
+        maxTonnageKg: 24000,
+        rackCapacitySquareMeters: 150
+      },
+      {
+        selected: false,
+        type: "Koszt dodatkowy (zapas)",
+        itemNo: "KD-00045",
+        stockMark: "SERV-TRANSPORT",
+        description: "Koszt dodatkowy transportu stojakowego",
+        supplier: "Stone Logistics",
+        vendorNo: "SL-30030",
+        locationCode: "SERV",
+        binCode: "-",
+        orderQtySquareMeters: "10,00",
+        orderQtyPieces: "1",
+        weight: "40 kg",
+        transportType: "Stojaki",
+        reservedQuantity: "0,00",
+        directUnitCostNet: "12,00",
+        maxTonnageKg: 24000,
+        rackCapacitySquareMeters: 150
+      }
+    ];
+
+    const filters = {
+      supplier: "",
+      transportType: ""
+    };
+
+    const generatedOrders = [];
+    let pendingOrders = [];
+    let activeDemandRowIndex = 0;
+    let activeOrderIndex = 0;
+    let activePurchaseRowIndex = 0;
+
+    const demandView = document.getElementById("demandView");
+    const purchaseView = document.getElementById("purchaseView");
+    const demandBody = document.getElementById("demandBody");
+    const purchaseBody = document.getElementById("purchaseBody");
+    const demandScroller = document.getElementById("demandScroller");
+    const purchaseScroller = document.getElementById("purchaseScroller");
+    const supplierFilter = document.getElementById("supplierFilter");
+    const transportFilter = document.getElementById("transportFilter");
+    const demandMessage = document.getElementById("demandMessage");
+    const purchaseMessage = document.getElementById("purchaseMessage");
+    const flowCaption = document.getElementById("flowCaption");
+    const flowKicker = document.getElementById("flowKicker");
+    const mainHeading = document.getElementById("mainHeading");
+    const infoDialogBackdrop = document.getElementById("infoDialogBackdrop");
+    const infoDialogBody = document.getElementById("infoDialogBody");
+    const confirmDialogBtn = document.getElementById("confirmDialogBtn");
+    const orderTabs = document.getElementById("orderTabs");
+    const purchaseVendorName = document.getElementById("purchaseVendorName");
+    const purchaseVendorNo = document.getElementById("purchaseVendorNo");
+    const purchaseDocumentDate = document.getElementById("purchaseDocumentDate");
+    const purchasePostingDate = document.getElementById("purchasePostingDate");
+    const purchaseReceiptDate = document.getElementById("purchaseReceiptDate");
+    const purchaseTransportType = document.getElementById("purchaseTransportType");
+    const purchaseOrderNo = document.getElementById("purchaseOrderNo");
+    const summaryTotalWeight = document.getElementById("summaryTotalWeight");
+    const summaryMaxTonnage = document.getElementById("summaryMaxTonnage");
+    const summaryTransportUsage = document.getElementById("summaryTransportUsage");
+    const summaryRackUsage = document.getElementById("summaryRackUsage");
+    const summaryRackUsagePercent = document.getElementById("summaryRackUsagePercent");
+    const summaryLineCount = document.getElementById("summaryLineCount");
+
+    function parseLocalizedNumber(value) {
+      const normalized = String(value || "").replace(/\s+/g, "").replace(",", ".");
+      const parsed = Number(normalized);
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+
+    function parseWeightKg(value) {
+      return parseLocalizedNumber(String(value || "").replace(/kg/gi, ""));
+    }
+
+    function formatLocalizedNumber(value, fractionDigits) {
+      return value.toLocaleString("pl-PL", {
+        minimumFractionDigits: fractionDigits,
+        maximumFractionDigits: fractionDigits
+      });
+    }
+
+    function showDemandMessage(text) {
+      demandMessage.textContent = text;
+    }
+
+    function showPurchaseMessage(text) {
+      purchaseMessage.textContent = text;
+    }
+
+    function getFilteredDemandIndexes() {
+      return demandRows.reduce((indexes, row, index) => {
+        const supplierMatch = !filters.supplier || row.supplier === filters.supplier;
+        const transportMatch = !filters.transportType || row.transportType === filters.transportType;
+        if (supplierMatch && transportMatch) {
+          indexes.push(index);
+        }
+        return indexes;
+      }, []);
+    }
+
+    function createCell(className, text) {
+      const div = document.createElement("div");
+      div.className = className;
+      div.textContent = text;
+      return div;
+    }
+
+    function createLineInput(value, changeHandler, metadata) {
+      const input = document.createElement("input");
+      input.className = "line-input line-input--compact";
+      input.type = "text";
+      input.value = value;
+      Object.entries(metadata).forEach(([key, val]) => {
+        input.dataset[key] = String(val);
+      });
+      input.addEventListener("input", changeHandler);
+      input.addEventListener("focus", metadata.focusHandler);
+      return input;
+    }
+
+    function appendCell(tr, node, className) {
+      const td = document.createElement("td");
+      if (className) {
+        td.className = className;
+      }
+      td.appendChild(node);
+      tr.appendChild(td);
+    }
+
+    function populateDemandFilters() {
+      const supplierValues = [...new Set(demandRows.map((row) => row.supplier))].sort((left, right) => left.localeCompare(right, "pl"));
+      const transportValues = [...new Set(demandRows.map((row) => row.transportType))].sort((left, right) => left.localeCompare(right, "pl"));
+
+      const setOptions = (select, values, activeValue) => {
+        select.innerHTML = "";
+        const allOption = document.createElement("option");
+        allOption.value = "";
+        allOption.textContent = "Wszystkie";
+        select.appendChild(allOption);
+
+        values.forEach((value) => {
+          const option = document.createElement("option");
+          option.value = value;
+          option.textContent = value;
+          select.appendChild(option);
+        });
+
+        select.value = activeValue;
+      };
+
+      setOptions(supplierFilter, supplierValues, filters.supplier);
+      setOptions(transportFilter, transportValues, filters.transportType);
+    }
+
+    function updateActiveDemandRowState(shouldScroll) {
+      const visibleIndexes = getFilteredDemandIndexes();
+      if (!visibleIndexes.length) {
+        activeDemandRowIndex = -1;
+      } else if (!visibleIndexes.includes(activeDemandRowIndex)) {
+        activeDemandRowIndex = visibleIndexes[0];
+      }
+
+      demandBody.querySelectorAll("tr").forEach((rowElement) => {
+        const rowIndex = Number(rowElement.dataset.index);
+        const isActive = rowIndex === activeDemandRowIndex && !rowElement.hidden;
+        rowElement.classList.toggle("is-active", isActive);
+        rowElement.tabIndex = isActive ? 0 : -1;
+        rowElement.setAttribute("aria-selected", String(isActive));
+
+        const arrow = rowElement.querySelector(".arrow-toggle");
+        if (arrow) {
+          arrow.textContent = isActive ? "➜" : "→";
+        }
+
+        if (isActive && shouldScroll) {
+          rowElement.scrollIntoView({ block: "nearest", inline: "nearest" });
+        }
+      });
+    }
+
+    function setActiveDemandRow(index, shouldScroll) {
+      activeDemandRowIndex = index;
+      updateActiveDemandRowState(shouldScroll);
+    }
+
+    function renderDemandRows() {
+      demandBody.innerHTML = "";
+
+      demandRows.forEach((row, index) => {
+        const isVisible = getFilteredDemandIndexes().includes(index);
+        const tr = document.createElement("tr");
+        tr.dataset.index = String(index);
+        tr.hidden = !isVisible;
+        tr.addEventListener("click", (event) => {
+          if (event.target.closest("button, input, select")) {
+            return;
+          }
+          setActiveDemandRow(index, false);
+        });
+
+        const checkbox = document.createElement("button");
+        checkbox.className = "selection-toggle";
+        checkbox.type = "button";
+        checkbox.dataset.index = String(index);
+        checkbox.dataset.selected = String(row.selected);
+        checkbox.textContent = row.selected ? "✓" : "○";
+        checkbox.addEventListener("click", () => {
+          row.selected = !row.selected;
+          renderDemandRows();
+          showDemandMessage("Zmieniono zaznaczenie pozycji dla: " + row.itemNo + ".");
+        });
+
+        const arrow = document.createElement("button");
+        arrow.className = "arrow-toggle";
+        arrow.type = "button";
+        arrow.addEventListener("click", () => {
+          setActiveDemandRow(index, false);
+        });
+
+        appendCell(tr, checkbox, "selection-cell");
+        appendCell(tr, arrow, "selection-cell");
+        appendCell(tr, createCell("cell", row.type), "col-type");
+        appendCell(tr, createCell("cell", row.itemNo), "col-item-no");
+        appendCell(tr, createCell("cell", row.stockMark), "col-stock-mark");
+        appendCell(tr, createCell("cell", row.description), "col-description");
+        appendCell(tr, createCell("cell", row.supplier), "col-supplier");
+        appendCell(tr, createCell("cell", row.locationCode), "col-location");
+        appendCell(tr, createCell("cell", row.binCode), "col-bin");
+        appendCell(tr, createCell("cell", row.orderQtySquareMeters), "col-qty-m2");
+        appendCell(tr, createCell("cell", row.orderQtyPieces), "col-qty-pcs");
+        appendCell(tr, createCell("cell", row.weight), "col-weight");
+        appendCell(tr, createCell("cell", row.transportType), "col-transport");
+
+        demandBody.appendChild(tr);
+      });
+
+      updateActiveDemandRowState(false);
+    }
+
+    function buildPurchaseOrders(selectedRows) {
+      const groups = new Map();
+
+      selectedRows.forEach((row) => {
+        if (!groups.has(row.supplier)) {
+          groups.set(row.supplier, []);
+        }
+        groups.get(row.supplier).push(row);
+      });
+
+      return [...groups.entries()].map(([supplier, rows], orderIndex) => ({
+        orderNo: "ZZ/24/" + String(83 + orderIndex).padStart(6, "0"),
+        supplier,
+        vendorNo: rows[0].vendorNo,
+        documentDate: baseDocumentDate,
+        postingDate: baseDocumentDate,
+        receiptDate: baseDocumentDate,
+        transportType: [...new Set(rows.map((row) => row.transportType))].join(", "),
+        maxTonnageKg: Math.max(...rows.map((row) => row.maxTonnageKg)),
+        rackCapacitySquareMeters: Math.max(...rows.map((row) => row.rackCapacitySquareMeters)),
+        lines: rows.map((row) => {
+          const quantity = row.orderQtySquareMeters;
+          const quantityValue = parseLocalizedNumber(quantity);
+          const unitCostValue = parseLocalizedNumber(row.directUnitCostNet);
+          return {
+            type: row.type,
+            itemNo: row.itemNo,
+            stockMark: row.stockMark,
+            description: row.description,
+            locationCode: row.locationCode,
+            binCode: row.binCode,
+            quantity,
+            reservedQuantity: row.reservedQuantity,
+            unitOfMeasureCode: "m²",
+            directUnitCostNet: row.directUnitCostNet,
+            lineAmountNet: formatLocalizedNumber(quantityValue * unitCostValue, 2),
+            quantityToReceive: quantity,
+            quantityReceived: "0,00",
+            quantityToInvoice: quantity,
+            quantityInvoiced: "0,00",
+            quantityToAssign: quantity,
+            additionalCostToHandleQuantity: row.type === "Koszt dodatkowy (zapas)" ? quantity : "0,00",
+            assignedQuantity: "0,00",
+            orderQtyPieces: row.orderQtyPieces,
+            orderQtySquareMeters: row.orderQtySquareMeters,
+            weight: row.weight,
+            transportType: row.transportType
+          };
+        })
+      }));
+    }
+
+    function openInfoDialog(text) {
+      infoDialogBody.textContent = text;
+      infoDialogBackdrop.classList.add("is-visible");
+      infoDialogBackdrop.setAttribute("aria-hidden", "false");
+      confirmDialogBtn.focus();
+    }
+
+    function closeInfoDialog() {
+      infoDialogBackdrop.classList.remove("is-visible");
+      infoDialogBackdrop.setAttribute("aria-hidden", "true");
+    }
+
+    function switchToPurchaseView() {
+      generatedOrders.splice(0, generatedOrders.length, ...pendingOrders);
+      pendingOrders = [];
+      activeOrderIndex = 0;
+      activePurchaseRowIndex = 0;
+
+      demandView.classList.remove("is-active");
+      purchaseView.classList.add("is-active");
+      flowCaption.textContent = "Zamowienie zakupu";
+      flowKicker.textContent = "Przeplyw procesowy";
+      mainHeading.textContent = "Zamowienie zakupu utworzone z zapotrzebowania";
+
+      renderOrderTabs();
+      renderPurchaseOrder();
+      showPurchaseMessage("Pozycje zostaly przeniesione z zapotrzebowania do zamowienia zakupu.");
+    }
+
+    function switchToDemandView() {
+      purchaseView.classList.remove("is-active");
+      demandView.classList.add("is-active");
+      flowCaption.textContent = "Zapotrzebowanie";
+      flowKicker.textContent = "Przeplyw procesowy";
+      mainHeading.textContent = "Zapotrzebowanie z filtrowaniem i tworzeniem zamowienia";
+      showDemandMessage("Wrocila makieta zapotrzebowania.");
+    }
+
+    function renderOrderTabs() {
+      orderTabs.innerHTML = "";
+      generatedOrders.forEach((order, index) => {
+        const button = document.createElement("button");
+        button.className = "tab-button" + (index === activeOrderIndex ? " is-active" : "");
+        button.type = "button";
+        button.textContent = order.orderNo + " · " + order.supplier;
+        button.addEventListener("click", () => {
+          activeOrderIndex = index;
+          activePurchaseRowIndex = 0;
+          renderOrderTabs();
+          renderPurchaseOrder();
+        });
+        orderTabs.appendChild(button);
+      });
+    }
+
+    function updateActivePurchaseRowState(shouldScroll) {
+      const activeOrder = generatedOrders[activeOrderIndex];
+      if (!activeOrder || !activeOrder.lines.length) {
+        activePurchaseRowIndex = -1;
+      } else {
+        activePurchaseRowIndex = Math.max(0, Math.min(activePurchaseRowIndex, activeOrder.lines.length - 1));
+      }
+
+      purchaseBody.querySelectorAll("tr").forEach((rowElement) => {
+        const rowIndex = Number(rowElement.dataset.index);
+        const isActive = rowIndex === activePurchaseRowIndex;
+        rowElement.classList.toggle("is-active", isActive);
+        rowElement.tabIndex = isActive ? 0 : -1;
+        rowElement.setAttribute("aria-selected", String(isActive));
+
+        const arrow = rowElement.querySelector(".arrow-toggle");
+        if (arrow) {
+          arrow.textContent = isActive ? "➜" : "→";
+        }
+
+        if (isActive && shouldScroll) {
+          rowElement.scrollIntoView({ block: "nearest", inline: "nearest" });
+        }
+      });
+    }
+
+    function setActivePurchaseRow(index, shouldScroll) {
+      activePurchaseRowIndex = index;
+      updateActivePurchaseRowState(shouldScroll);
+    }
+
+    function handlePurchaseLineFocus(event) {
+      activePurchaseRowIndex = Number(event.target.dataset.index);
+      updateActivePurchaseRowState(false);
+    }
+
+    function handlePurchaseLineChange(event) {
+      const order = generatedOrders[activeOrderIndex];
+      if (!order) {
+        return;
+      }
+
+      const lineIndex = Number(event.target.dataset.index);
+      const field = event.target.dataset.field;
+      order.lines[lineIndex][field] = event.target.value;
+
+      if (field === "quantity" || field === "directUnitCostNet") {
+        const line = order.lines[lineIndex];
+        const quantityValue = parseLocalizedNumber(line.quantity);
+        const unitCostValue = parseLocalizedNumber(line.directUnitCostNet);
+        line.lineAmountNet = formatLocalizedNumber(quantityValue * unitCostValue, 2);
+      }
+
+      renderPurchaseOrder();
+    }
+
+    function syncPurchaseDatesFromDocument() {
+      const activeOrder = generatedOrders[activeOrderIndex];
+      if (!activeOrder) {
+        return;
+      }
+
+      const documentDate = purchaseDocumentDate.value;
+      activeOrder.documentDate = documentDate;
+      activeOrder.postingDate = documentDate;
+      activeOrder.receiptDate = documentDate;
+      purchasePostingDate.value = documentDate;
+      purchaseReceiptDate.value = documentDate;
+    }
+
+    function renderPurchaseOrder() {
+      const order = generatedOrders[activeOrderIndex];
+      if (!order) {
+        return;
+      }
+
+      purchaseVendorName.textContent = order.supplier;
+      purchaseVendorNo.textContent = order.vendorNo;
+      purchaseDocumentDate.value = order.documentDate;
+      purchasePostingDate.value = order.postingDate;
+      purchaseReceiptDate.value = order.receiptDate;
+      purchaseTransportType.textContent = order.transportType;
+      purchaseOrderNo.textContent = order.orderNo;
+
+      purchaseBody.innerHTML = "";
+
+      order.lines.forEach((line, index) => {
+        const tr = document.createElement("tr");
+        tr.dataset.index = String(index);
+        tr.addEventListener("click", (event) => {
+          if (event.target.closest("button, input, select")) {
+            return;
+          }
+          setActivePurchaseRow(index, false);
+        });
+
+        const arrow = document.createElement("button");
+        arrow.className = "arrow-toggle";
+        arrow.type = "button";
+        arrow.addEventListener("click", () => {
+          setActivePurchaseRow(index, false);
+        });
+
+        appendCell(tr, arrow, "selection-cell");
+        appendCell(tr, createCell("cell cell-menu", index === 0 ? "⋮" : ""));
+        appendCell(tr, createCell("cell", line.type), "col-type");
+        appendCell(tr, createCell("cell", line.itemNo), "col-item-no");
+        appendCell(tr, createCell("cell", line.stockMark), "col-stock-mark");
+        appendCell(tr, createCell("cell", line.description), "col-description");
+        appendCell(tr, createCell("cell", line.locationCode), "col-location");
+        appendCell(tr, createCell("cell", line.binCode), "col-bin");
+        appendCell(tr, createLineInput(line.quantity, handlePurchaseLineChange, { index, field: "quantity", focusHandler: handlePurchaseLineFocus }), "col-qty");
+        appendCell(tr, createLineInput(line.reservedQuantity, handlePurchaseLineChange, { index, field: "reservedQuantity", focusHandler: handlePurchaseLineFocus }), "col-reserved");
+        appendCell(tr, createLineInput(line.unitOfMeasureCode, handlePurchaseLineChange, { index, field: "unitOfMeasureCode", focusHandler: handlePurchaseLineFocus }), "col-uom");
+        appendCell(tr, createLineInput(line.directUnitCostNet, handlePurchaseLineChange, { index, field: "directUnitCostNet", focusHandler: handlePurchaseLineFocus }), "col-unit-cost");
+        appendCell(tr, createLineInput(line.lineAmountNet, handlePurchaseLineChange, { index, field: "lineAmountNet", focusHandler: handlePurchaseLineFocus }), "col-line-amount");
+        appendCell(tr, createLineInput(line.quantityToReceive, handlePurchaseLineChange, { index, field: "quantityToReceive", focusHandler: handlePurchaseLineFocus }), "col-receive");
+        appendCell(tr, createLineInput(line.quantityReceived, handlePurchaseLineChange, { index, field: "quantityReceived", focusHandler: handlePurchaseLineFocus }), "col-received");
+        appendCell(tr, createLineInput(line.quantityToInvoice, handlePurchaseLineChange, { index, field: "quantityToInvoice", focusHandler: handlePurchaseLineFocus }), "col-invoice");
+        appendCell(tr, createLineInput(line.quantityInvoiced, handlePurchaseLineChange, { index, field: "quantityInvoiced", focusHandler: handlePurchaseLineFocus }), "col-invoiced");
+        appendCell(tr, createLineInput(line.quantityToAssign, handlePurchaseLineChange, { index, field: "quantityToAssign", focusHandler: handlePurchaseLineFocus }), "col-assign");
+        appendCell(tr, createLineInput(line.additionalCostToHandleQuantity, handlePurchaseLineChange, { index, field: "additionalCostToHandleQuantity", focusHandler: handlePurchaseLineFocus }), "col-additional-cost");
+        appendCell(tr, createLineInput(line.assignedQuantity, handlePurchaseLineChange, { index, field: "assignedQuantity", focusHandler: handlePurchaseLineFocus }), "col-assigned");
+        appendCell(tr, createLineInput(line.orderQtyPieces, handlePurchaseLineChange, { index, field: "orderQtyPieces", focusHandler: handlePurchaseLineFocus }), "col-qty-pcs");
+        appendCell(tr, createLineInput(line.orderQtySquareMeters, handlePurchaseLineChange, { index, field: "orderQtySquareMeters", focusHandler: handlePurchaseLineFocus }), "col-qty-m2");
+        appendCell(tr, createLineInput(line.weight, handlePurchaseLineChange, { index, field: "weight", focusHandler: handlePurchaseLineFocus }), "col-weight");
+        appendCell(tr, createCell("cell", line.transportType), "col-transport");
+
+        purchaseBody.appendChild(tr);
+      });
+
+      updateActivePurchaseRowState(false);
+      syncPurchaseSummary(order);
+    }
+
+    function syncPurchaseSummary(order) {
+      const totalWeightKg = order.lines.reduce((sum, line) => sum + parseWeightKg(line.weight), 0);
+      const totalSquareMeters = order.lines.reduce((sum, line) => sum + parseLocalizedNumber(line.orderQtySquareMeters), 0);
+      const transportUsagePercent = order.maxTonnageKg === 0 ? 0 : (totalWeightKg / order.maxTonnageKg) * 100;
+      const rackUsagePercent = order.rackCapacitySquareMeters === 0 ? 0 : (totalSquareMeters / order.rackCapacitySquareMeters) * 100;
+
+      summaryTotalWeight.textContent = formatLocalizedNumber(totalWeightKg, 0) + " kg";
+      summaryMaxTonnage.textContent = formatLocalizedNumber(order.maxTonnageKg, 0) + " kg";
+      summaryTransportUsage.textContent = formatLocalizedNumber(transportUsagePercent, 1) + "%";
+      summaryRackUsage.textContent = formatLocalizedNumber(totalSquareMeters, 2) + " m2";
+      summaryRackUsagePercent.textContent = formatLocalizedNumber(rackUsagePercent, 1) + "%";
+      summaryLineCount.textContent = String(order.lines.length);
+    }
+
+    function createPurchaseOrderFlow() {
+      const selectedRows = demandRows.filter((row) => row.selected);
+      if (!selectedRows.length) {
+        showDemandMessage("Zaznacz przynajmniej jedna pozycje, aby utworzyc zamowienie zakupu.");
+        return;
+      }
+
+      pendingOrders = buildPurchaseOrders(selectedRows);
+
+      const orderLabel = pendingOrders.length === 1 ? "zamowienie zakupu" : "zamowienia zakupu";
+      openInfoDialog("Utworzono " + pendingOrders.length + " " + orderLabel + " dla " + selectedRows.length + " pozycji. Kliknij OK, aby przejsc do nowej makiety zamowienia zakupu.");
+    }
+
+    function resetDemandFilters() {
+      filters.supplier = "";
+      filters.transportType = "";
+      populateDemandFilters();
+      renderDemandRows();
+      showDemandMessage("Wyczyszczono filtry zapotrzebowania.");
+    }
+
+    document.getElementById("createOrderBtn").addEventListener("click", createPurchaseOrderFlow);
+    document.getElementById("resetFiltersBtn").addEventListener("click", resetDemandFilters);
+    document.getElementById("backToDemandBtn").addEventListener("click", switchToDemandView);
+
+    supplierFilter.addEventListener("change", () => {
+      filters.supplier = supplierFilter.value;
+      renderDemandRows();
+      showDemandMessage(filters.supplier ? "Filtr dostawcy aktywny: " + filters.supplier + "." : "Pokazano wszystkich dostawcow.");
+    });
+
+    transportFilter.addEventListener("change", () => {
+      filters.transportType = transportFilter.value;
+      renderDemandRows();
+      showDemandMessage(filters.transportType ? "Filtr typu transportu aktywny: " + filters.transportType + "." : "Pokazano wszystkie typy transportu.");
+    });
+
+    confirmDialogBtn.addEventListener("click", () => {
+      closeInfoDialog();
+      switchToPurchaseView();
+    });
+
+    purchaseDocumentDate.addEventListener("input", syncPurchaseDatesFromDocument);
+    purchaseDocumentDate.addEventListener("change", syncPurchaseDatesFromDocument);
+
+    demandScroller.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowDown" && event.key !== "ArrowUp") {
+        return;
+      }
+
+      const visibleIndexes = getFilteredDemandIndexes();
+      if (!visibleIndexes.length) {
+        return;
+      }
+
+      const currentPosition = Math.max(0, visibleIndexes.indexOf(activeDemandRowIndex));
+      const nextPosition = event.key === "ArrowDown"
+        ? Math.min(visibleIndexes.length - 1, currentPosition + 1)
+        : Math.max(0, currentPosition - 1);
+
+      setActiveDemandRow(visibleIndexes[nextPosition], true);
+      event.preventDefault();
+    });
+
+    purchaseScroller.addEventListener("keydown", (event) => {
+      if (event.target.closest("input, select, textarea") && event.target !== purchaseScroller) {
+        return;
+      }
+
+      if (event.key !== "ArrowDown" && event.key !== "ArrowUp") {
+        return;
+      }
+
+      const activeOrder = generatedOrders[activeOrderIndex];
+      if (!activeOrder || !activeOrder.lines.length) {
+        return;
+      }
+
+      const nextIndex = event.key === "ArrowDown" ? activePurchaseRowIndex + 1 : activePurchaseRowIndex - 1;
+      setActivePurchaseRow(Math.max(0, Math.min(nextIndex, activeOrder.lines.length - 1)), true);
+      event.preventDefault();
+    });
+
+    populateDemandFilters();
+    renderDemandRows();
+    showDemandMessage("Zaznacz pozycje i uzyj akcji Utworz zamowienie zakupu.");
+  </script>
+</body>
+</html>

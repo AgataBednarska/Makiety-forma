@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kartoteka zapasu - P-001209</title>
+  <style>
+    :root {
+      --bg: #f3f2f1;
+      --panel: #ffffff;
+      --panel-muted: #faf9f8;
+      --line: #d2d0ce;
+      --line-soft: #edebe9;
+      --line-strong: #8a8886;
+      --text: #201f1e;
+      --muted: #605e5c;
+      --accent: #0078d4;
+      --accent-soft: #3a96a0;
+      --shell: #201f1e;
+      --font: "Segoe UI", "Segoe WP", Segoe, device-segoe, Tahoma, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .top-shell {
+      height: 48px;
+      background: var(--shell);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-size: 14px;
+    }
+
+    .top-shell-title {
+      font-weight: 600;
+    }
+
+    .top-shell-meta {
+      display: flex;
+      gap: 12px;
+      color: #d2d0ce;
+      font-size: 12px;
+    }
+
+    .page {
+      width: min(1680px, calc(100vw - 24px));
+      margin: 8px auto 20px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .doc-title {
+      padding: 10px 12px 0;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .doc-caption {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .doc-number {
+      font-size: clamp(26px, 3.4vw, 40px);
+      line-height: 1.1;
+      font-weight: 300;
+      color: #323130;
+      margin: 0 0 8px;
+    }
+
+    .ribbon-tabs,
+    .action-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .ribbon-tab,
+    .action-link {
+      min-height: 34px;
+      padding: 0 12px;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      font-size: 12px;
+      cursor: pointer;
+      border-right: 1px solid var(--line);
+    }
+
+    .ribbon-tab--active {
+      color: var(--accent);
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .action-row {
+      gap: 8px;
+      padding: 6px 0;
+      border-top: 0;
+    }
+
+    .action-link {
+      min-height: 28px;
+      padding: 0 8px;
+      border-right: 0;
+      color: var(--accent-soft);
+    }
+
+    .section {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 10px 6px;
+      background: var(--panel-muted);
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .section-more {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .section-body {
+      padding: 12px 10px 14px;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 28px;
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+    }
+
+    .field-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      min-width: 0;
+    }
+
+    .field-label::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px dotted #d2d0ce;
+      transform: translateY(1px);
+    }
+
+    .field-input,
+    .field-select,
+    .field-control {
+      min-height: 24px;
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      background: #fff;
+      color: #000;
+      font-size: 12px;
+      padding: 2px 8px;
+    }
+
+    .field-input[readonly] {
+      background: #f3f2f1;
+      border-color: var(--line-soft);
+      color: #323130;
+    }
+
+    .field-control {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      border-color: var(--line-soft);
+      background: #f3f2f1;
+      color: #0078a3;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .field-control--left {
+      justify-content: flex-start;
+      color: var(--text);
+    }
+
+    .field-input:focus,
+    .field-select:focus,
+    .lookup-button:focus {
+      outline: none;
+      border-color: #00b7c3;
+      box-shadow: 0 0 0 1px #00b7c3;
+    }
+
+    .field-with-action {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 26px;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .lookup-button {
+      min-height: 24px;
+      border: 1px solid var(--line-strong);
+      background: #fff;
+      cursor: pointer;
+      color: var(--muted);
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      min-height: 24px;
+    }
+
+    .toggle {
+      position: relative;
+      width: 34px;
+      height: 18px;
+      display: inline-block;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: #d2d0ce;
+      border-radius: 999px;
+    }
+
+    .toggle-slider::before {
+      content: "";
+      position: absolute;
+      left: 2px;
+      top: 2px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+    }
+
+    .toggle input:checked + .toggle-slider {
+      background: #8a8886;
+    }
+
+    .toggle input:checked + .toggle-slider::before {
+      transform: translateX(16px);
+    }
+
+    .section-grid--planning .field {
+      grid-template-columns: 220px minmax(0, 1fr);
+    }
+
+    .muted-note {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 1100px) {
+      .section-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .field,
+      .section-grid--planning .field {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .field-label::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: calc(100vw - 12px);
+        margin: 6px auto 12px;
+      }
+
+      .top-shell {
+        padding: 0 10px;
+      }
+
+      .top-shell-meta {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-shell">
+    <div class="top-shell-title">Dynamics 365 Business Central</div>
+    <div class="top-shell-meta">
+      <span>CORE</span>
+      <span>SANDBOX</span>
+    </div>
+  </div>
+
+  <main class="page">
+    <div class="doc-title">
+      <div class="doc-caption">Kartoteka zapasu</div>
+      <h1 class="doc-number">P-001209 · Golden White satin 12mm (MC8S)</h1>
+
+      <div class="ribbon-tabs">
+        <button class="ribbon-tab ribbon-tab--active" type="button">Strona główna</button>
+        <button class="ribbon-tab" type="button">Żądaj akceptacji</button>
+        <button class="ribbon-tab" type="button">Zapas</button>
+        <button class="ribbon-tab" type="button">Ceny i rabaty</button>
+        <button class="ribbon-tab" type="button">Akcje</button>
+        <button class="ribbon-tab" type="button">Powiązane</button>
+        <button class="ribbon-tab" type="button">Raporty</button>
+        <button class="ribbon-tab" type="button">Automatyzuj</button>
+        <button class="ribbon-tab" type="button">Mniej opcji</button>
+      </div>
+
+      <div class="action-row">
+        <button class="action-link" type="button">Kopiuj zapas</button>
+        <button class="action-link" type="button">Koryguj zapasy</button>
+        <button class="action-link" type="button">Utwórz jedn. skład. zapasu</button>
+        <button class="action-link" type="button">Zastosuj szablon</button>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Zapas</span>
+        <span class="section-more">Pokaż mniej</span>
+      </div>
+      <div class="section-body">
+        <div class="section-grid">
+          <div class="field">
+            <span class="field-label">Nr</span>
+            <div class="field-with-action">
+              <input class="field-input" type="text" value="P-001209">
+              <button class="lookup-button" type="button">...</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="field-label">Grupa przedmiotów serwisu</span>
+            <select class="field-select">
+              <option selected></option>
+              <option>Narzędzia</option>
+              <option>Akcesoria</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Opis</span>
+            <input class="field-input" type="text" value="Golden White satin 12mm (MC8S)">
+          </div>
+          <div class="field">
+            <span class="field-label">Automat. teksty dodatkowe</span>
+            <div class="toggle-row">
+              <label class="toggle" aria-label="Automat teksty dodatkowe">
+                <input type="checkbox">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Zablokowane</span>
+            <div class="toggle-row">
+              <label class="toggle" aria-label="Zablokowane">
+                <input type="checkbox">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="field">
+            <span class="field-label">Wspólny numer zapasu</span>
+            <input class="field-input" type="text" value="">
+          </div>
+
+          <div class="field">
+            <span class="field-label">Typ</span>
+            <select class="field-select">
+              <option selected>Zapasy</option>
+              <option>Usługa</option>
+              <option>Nieskładowany</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="field-label">Kod zakupu</span>
+            <select class="field-select">
+              <option selected></option>
+              <option>KRAJ</option>
+              <option>IMPORT</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Podst. jednostka miary</span>
+            <select class="field-select">
+              <option selected>SZT</option>
+              <option>M2</option>
+              <option>KG</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="field-label">Wariant obowiązkowy, jeśli...</span>
+            <select class="field-select">
+              <option selected>Domyślnie (Nie)</option>
+              <option>Tak</option>
+              <option>Nie</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Show in IVS</span>
+            <div class="toggle-row">
+              <label class="toggle" aria-label="Show in IVS">
+                <input type="checkbox">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="field">
+            <span class="field-label">Kolor (VAPS)</span>
+            <div class="field-with-action">
+              <input class="field-input" type="text" value="">
+              <button class="lookup-button" type="button">...</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Data ostatniej modyfikacji</span>
+            <input class="field-input" type="text" value="10.03.2026" readonly>
+          </div>
+          <div class="field">
+            <span class="field-label">Procent tolerancji EMAD</span>
+            <div class="field-control">0,00</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">GTIN</span>
+            <input class="field-input" type="text" value="">
+          </div>
+          <div class="field">
+            <span class="field-label">Wykluczenie z eMAD (VAPS)</span>
+            <div class="toggle-row">
+              <label class="toggle" aria-label="Wykluczenie z eMAD">
+                <input type="checkbox">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Kod kategorii zapasu</span>
+            <select class="field-select">
+              <option selected></option>
+              <option>Narzędzia</option>
+              <option>Części</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="field-label">Kod towaru</span>
+            <input class="field-input" type="text" value="MC8S-12MM">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Zapasy</span>
+        <span class="section-more">Pokaż mniej</span>
+      </div>
+      <div class="section-body">
+        <div class="section-grid">
+          <div class="field">
+            <span class="field-label">Nr półki</span>
+            <input class="field-input" type="text" value="A-01-03">
+          </div>
+          <div class="field">
+            <span class="field-label">Ilość w zamówieniu projek...</span>
+            <div class="field-control">0</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Utworzono z zapasu katalo...</span>
+            <div class="toggle-row">
+              <label class="toggle" aria-label="Utworzono z zapasu katalogowego">
+                <input type="checkbox">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="field">
+            <span class="field-label">Ilość w zleceniu kompl.</span>
+            <div class="field-control">0</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Opis szukany</span>
+            <input class="field-input" type="text" value="GOLDEN WHITE SATIN 12MM">
+          </div>
+          <div class="field">
+            <span class="field-label">Il. dla komponentu kompl.</span>
+            <div class="field-control">0</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Zapasy</span>
+            <div class="field-with-action">
+              <div class="field-control">212</div>
+              <button class="lookup-button" type="button">...</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="field-label">Ostrzeżenie o stanach zap...</span>
+            <select class="field-select">
+              <option selected>Domyślnie (Tak)</option>
+              <option>Tak</option>
+              <option>Nie</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Ilość na zamówieniu zakupu</span>
+            <div class="field-control">0</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Zapobieganie ujemnym st...</span>
+            <select class="field-select">
+              <option selected>Domyślnie (Tak)</option>
+              <option>Tak</option>
+              <option>Nie</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Ilość na zleceniu prod.</span>
+            <div class="field-control">9</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Waga netto</span>
+            <div class="field-control field-control--left">0</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Ilość w wierszach kompon...</span>
+            <div class="field-control">21</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Waga brutto</span>
+            <div class="field-control field-control--left">0</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Ilość na zamówieniu sprze...</span>
+            <div class="field-control">3</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Objętość jednostkowa</span>
+            <div class="field-control field-control--left">0</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Ilość na zleceniu serwisow...</span>
+            <div class="field-control">0</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Kod nadmiarowego przyję...</span>
+            <select class="field-select">
+              <option selected></option>
+              <option>NAD-01</option>
+              <option>NAD-02</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Dane planistyczne</span>
+        <span class="section-more">Pokaż więcej</span>
+      </div>
+      <div class="section-body">
+        <div class="section-grid section-grid--planning">
+          <div class="field">
+            <span class="field-label">Waga na m² (w standardzie)</span>
+            <input class="field-input" type="text" value="18,50 kg">
+          </div>
+          <div class="field">
+            <span class="field-label">Typ</span>
+            <select class="field-select">
+              <option selected>Zużycie</option>
+              <option>Zakup</option>
+              <option>Produkcja</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Przelicznik m² → sztuki (opcjonalnie)</span>
+            <input class="field-input" type="text" value="0,83">
+          </div>
+          <div class="field">
+            <span class="field-label">Zużycie 3M</span>
+            <input class="field-input" type="text" value="124,00">
+          </div>
+        </div>
+        <div class="muted-note">Sekcja dodatkowa N24 do parametrów planistycznych i przeliczeń dla zapasu.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Księgowanie kosztów</span>
+        <span class="section-more">Pokaż więcej</span>
+      </div>
+      <div class="section-body">
+        <div class="section-grid">
+          <div class="field">
+            <span class="field-label">Metoda wyceny</span>
+            <select class="field-select">
+              <option selected>FIFO</option>
+              <option>Average</option>
+              <option>Specific</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="field-label">Szczegóły księgowania</span>
+            <select class="field-select">
+              <option selected>WYROBY</option>
+              <option>TOWARY</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Cena ewidencyjna</span>
+            <div class="field-control">420,00</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Gr. tow. grupa księgowa</span>
+            <select class="field-select">
+              <option selected>WYROBY</option>
+              <option>NARZEDZIA</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
