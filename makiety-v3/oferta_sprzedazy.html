@@ -492,6 +492,7 @@
     .col-description { width: 330px; }
     .col-location { width: 92px; }
     .col-qty { width: 92px; }
+    .col-qty-pcs { width: 96px; }
     .col-assemble { width: 112px; }
     .col-uom { width: 92px; }
     .col-unit-price { width: 98px; }
@@ -1076,6 +1077,7 @@
       <div class="subtoolbar-panel" id="linePanel" hidden>
         <button class="subtoolbar-link" type="button">Zwolnij</button>
         <button class="subtoolbar-link" type="button">Komentarze wiersza</button>
+        <button class="subtoolbar-link" type="button">Wiersze sledzenia zapasu</button>
         <button class="subtoolbar-link" type="button">Arkusz pozycji</button>
         <button class="subtoolbar-link" type="button">Dostepnosc</button>
         <button class="subtoolbar-link" type="button">Szczegoly ceny</button>
@@ -1099,6 +1101,7 @@
                 <th class="col-description">Opis</th>
                 <th class="col-location">Kod lokalizacji</th>
                 <th class="col-qty">Ilosc</th>
+                <th class="col-qty-pcs">Ilosc w szt</th>
                 <th class="col-assemble">Ilosc do kompletacji na zamowienie</th>
                 <th class="col-uom">Kod jednostki miary</th>
                 <th class="col-unit-price">Cena jednostkowa bez VAT</th>
@@ -1433,6 +1436,7 @@
           `<td>${descriptionCell}</td>`,
           `<td><div class="cell">${line.locationCode}</div></td>`,
           `<td>${quantityCell}</td>`,
+          `<td><div class="cell cell-right">${line.quantity}</div></td>`,
           `<td><div class="cell cell-right ${parseLocaleNumber(line.assembleQty) === 0 ? "qty-alert" : ""}">${line.assembleQty}</div></td>`,
           `<td><div class="cell">${line.unitOfMeasureCode}</div></td>`,
           `<td>${priceCell}</td>`,
@@ -2323,6 +2327,7 @@
             `<td>${descriptionCell}</td>`,
             `<td><div class="cell">${line.locationCode}</div></td>`,
             `<td>${line.billable ? `<input class="line-input line-input--compact" data-field="quantity" data-row-index="${index}" value="${line.quantity}">` : `<div class="cell cell-right">${line.quantity}</div>`}</td>`,
+            `<td><div class="cell cell-right">${line.quantity}</div></td>`,
             `<td><div class="cell cell-right ${parseNumber(line.assembleQty) === 0 ? "qty-alert" : ""}">${line.assembleQty}</div></td>`,
             `<td><div class="cell">${line.unitOfMeasureCode}</div></td>`,
             `<td>${line.billable ? `<input class="line-input line-input--compact" data-field="unitPriceNet" data-row-index="${index}" value="${line.unitPriceNet}">` : `<div class="cell cell-right">${line.unitPriceNet}</div>`}</td>`,
