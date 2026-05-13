@@ -1057,6 +1057,7 @@
         <button class="subtoolbar-link" type="button">Wstaw teksty dodatk.</button>
         <button class="subtoolbar-link" type="button">Wymiary</button>
         <button class="subtoolbar-link" type="button">Atrybuty VAT</button>
+        <button class="subtoolbar-link" type="button">Wiersze sledzenia zapasu</button>
         <button class="subtoolbar-link" type="button" id="showOfferRowsButton">Wiersze oferty</button>
         <button class="subtoolbar-link" type="button" id="openTemplatePanelButton">Zastosuj szablon</button>
       </div>
@@ -1097,7 +1098,7 @@
                 <th style="width: 26px;"></th>
                 <th class="col-type">Typ</th>
                 <th class="col-item-no">Nr</th>
-                <th class="col-jumbo">JUMBO</th>
+                <th class="col-jumbo">Oferta</th>
                 <th class="col-description">Opis</th>
                 <th class="col-location">Kod lokalizacji</th>
                 <th class="col-qty">Ilosc</th>
@@ -2419,8 +2420,11 @@
       });
 
       showRowsBtn.addEventListener("click", () => {
-        stateShowAll = true;
-        renderRows();
+        const target = "formularz_wiersze_oferty.html";
+        const opened = window.open(target, "_blank", "noopener");
+        if (!opened) {
+          window.location.href = target;
+        }
       });
 
       openTemplateBtn.addEventListener("click", openTemplatePanel);

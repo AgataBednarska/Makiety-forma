@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formularz wiersza oferty</title>
+  <style>
+    :root {
+      --bg: #f3f2f1;
+      --surface: #ffffff;
+      --line: #d2d0ce;
+      --line-strong: #505c6d;
+      --text: #201f1e;
+      --muted: #605e5c;
+      --accent: #0078d4;
+      --accent-soft: #edf4fb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", "Segoe WP", Segoe, device-segoe, Tahoma, Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .topbar {
+      height: 48px;
+      background: #232629;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+
+    .page {
+      width: min(1680px, calc(100vw - 24px));
+      margin: 8px auto 20px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .card {
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header {
+      padding: 10px 16px 12px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .title {
+      margin: 0;
+      max-width: 1180px;
+      font-size: clamp(28px, 3.2vw, 34px);
+      line-height: 1.15;
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      color: #323130;
+    }
+
+    .subtitle {
+      margin: 6px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .workspace-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .workspace-title {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .workspace-tabs {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+    }
+
+    .workspace-tab {
+      min-height: 28px;
+      padding: 0 10px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .workspace-tab:first-child {
+      padding-left: 0;
+    }
+
+    .workspace-tab:last-child {
+      border-right: 0;
+    }
+
+    .workspace-tab.is-active {
+      font-weight: 700;
+    }
+
+    .subtoolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .subtoolbar-link {
+      border: 0;
+      background: transparent;
+      color: var(--accent);
+      padding: 0;
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .section {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-title {
+      margin: 0;
+      padding: 8px 16px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: #faf9f8;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .section-more {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .section-body {
+      padding: 12px 16px 14px;
+    }
+
+    .workspace-note {
+      padding: 8px 16px 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .section:not(.section--lines) {
+      padding: 0;
+    }
+
+    .section--lines .section-body {
+      padding-top: 10px;
+    }
+
+    .offer-actions-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px 16px;
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .control,
+    .input,
+    .select,
+    .textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      min-height: 30px;
+      padding: 5px 8px;
+      font-size: 12px;
+      border-radius: 4px;
+    }
+
+    .control {
+      display: flex;
+      align-items: center;
+      background: #f9fbfd;
+    }
+
+    .textarea {
+      min-height: 84px;
+      resize: vertical;
+      line-height: 1.35;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+      align-items: start;
+    }
+
+    .full .label {
+      padding-top: 8px;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 14px 16px;
+      background: #fff;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      padding: 7px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: default;
+    }
+
+    .btn.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .offer-list {
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .offer-list-header,
+    .offer-row {
+      display: grid;
+      grid-template-columns: 44px 72px 130px minmax(0, 1fr) 160px 84px 108px 40px;
+      gap: 8px;
+      align-items: center;
+      padding: 8px 10px;
+    }
+
+    .offer-list-header {
+      background: #faf9f8;
+      color: var(--muted);
+      font-size: 12px;
+      border-bottom: 1px solid var(--line);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .offer-row {
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .offer-row:last-child {
+      border-bottom: none;
+    }
+
+    .offer-index {
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .offer-check {
+      display: flex;
+      justify-content: center;
+    }
+
+    .offer-check input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .offer-value {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      min-height: 30px;
+      padding: 5px 8px;
+      font-size: 12px;
+      border-radius: 4px;
+    }
+
+    .offer-remove {
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .offer-actions {
+      display: flex;
+      justify-content: flex-start;
+      padding-top: 10px;
+    }
+
+    .btn.add {
+      color: var(--accent);
+      border-color: transparent;
+      background: transparent;
+      padding-left: 0;
+      font-weight: 600;
+    }
+
+    @media (max-width: 1100px) {
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+      .offer-list-header,
+      .offer-row {
+        grid-template-columns: 36px 64px 110px minmax(0, 1fr) 140px 72px 96px 36px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page { width: calc(100vw - 12px); margin: 6px auto 12px; }
+      .grid { grid-template-columns: 1fr; }
+      .field { grid-template-columns: 1fr; gap: 6px; }
+      .full .label { padding-top: 0; }
+
+      .offer-list-header {
+        display: none;
+      }
+
+      .offer-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        padding: 10px;
+      }
+
+      .offer-index {
+        text-align: left;
+      }
+
+      .offer-remove {
+        justify-self: start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">Dynamics 365 Business Central</div>
+
+  <main class="page">
+    <div class="header">
+      <h1 class="title">Formularz wiersza oferty</h1>
+      <p class="subtitle">Widok dopasowany do akcji w makiecie oferty sprzedaży przy przycisku Wiersze oferty.</p>
+    </div>
+
+    <div class="workspace-toolbar">
+      <span class="workspace-title">Wiersze oferty</span>
+      <div class="workspace-tabs">
+        <button class="workspace-tab" type="button">Zarzadzaj</button>
+        <button class="workspace-tab is-active" type="button">Wiersz</button>
+        <button class="workspace-tab" type="button">Funkcje</button>
+      </div>
+    </div>
+
+    <div class="subtoolbar">
+      <button class="subtoolbar-link" type="button">Nowy wiersz</button>
+      <button class="subtoolbar-link" type="button">Usun wiersz</button>
+      <button class="subtoolbar-link" type="button">Wybierz zapasy...</button>
+      <button class="subtoolbar-link" type="button">Wstaw teksty dodatk.</button>
+      <button class="subtoolbar-link" type="button">Wymiary</button>
+      <button class="subtoolbar-link" type="button">Atrybuty VAT</button>
+      <button class="subtoolbar-link" type="button">Wiersze sledzenia zapasu</button>
+    </div>
+
+    <section class="section section--lines">
+      <h2 class="section-title">Elementy oferty sprzedazy <span class="section-more">akcje wiersza</span></h2>
+      <div class="section-body">
+        <div class="offer-list">
+          <div class="offer-list-header">
+            <div>Lp.</div>
+            <div>Aktyw.</div>
+            <div>Typ</div>
+            <div>Wartosc</div>
+            <div>Nr</div>
+            <div>Ilosc</div>
+            <div>Cena</div>
+            <div></div>
+          </div>
+          <div id="offerRows"></div>
+        </div>
+        <div class="offer-actions">
+          <button id="addOfferRow" class="btn add" type="button">+ Dodaj</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <button class="btn">Anuluj</button>
+      <button class="btn primary">Zapisz</button>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      var valueOptions = {
+        zapas: ["Blat granitowy 2 cm", "Plyta spiek kwarcowy 12 mm", "Zlew podwieszany", "Bateria stojaca"],
+        usluga: ["Montaz", "Transport", "Obrobka"],
+        koszt: ["401-01 Materialy podstawowe", "402-10 Uslugi obce - montaz", "402-20 Uslugi obce - transport", "409-00 Pozostale koszty operacyjne"]
+      };
+
+      var wojewodztwa = [
+        "Dolnoslaskie", "Kujawsko-Pomorskie", "Lubelskie", "Lubuskie", "Lodzkie", "Malopolskie", "Mazowieckie", "Opolskie",
+        "Podkarpackie", "Podlaskie", "Pomorskie", "Slaskie", "Swietokrzyskie", "Warminsko-Mazurskie", "Wielkopolskie", "Zachodniopomorskie"
+      ];
+
+      var obrobkaOpcje = ["Szlif", "Wyciecie pod zlew", "Zaokraglenia"];
+
+      var montazOpcje = ["Wybierz...", "Ekipa montazowa 1", "Ekipa montazowa 2", "Ekipa montazowa 3"];
+
+      var rows = [
+        { active: true, type: "zapas", value: "Blat granitowy 2 cm", nr: "B-000001", qty: "1", price: "275,00" },
+        { active: true, type: "usluga", value: "Montaz", nr: "", qty: "1", price: "120,00" },
+        { active: true, type: "koszt", value: "401-01 Materialy podstawowe", nr: "K/G-401", qty: "1", price: "35,00" },
+        { active: false, type: "komentarz", value: "Uwagi do pozycji oferty...", nr: "", qty: "", price: "" }
+      ];
+
+      var rowsContainer = document.getElementById("offerRows");
+      var addButton = document.getElementById("addOfferRow");
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function getValueInput(row, index) {
+        if (row.type === "komentarz") {
+          return '<input class="offer-value" type="text" data-field="value" data-index="' + index + '" value="' + escapeHtml(row.value) + '" placeholder="Wpisz komentarz">';
+        }
+
+        var options = valueOptions[row.type] || [];
+        var optionsHtml = options.map(function (option) {
+          var selected = option === row.value ? " selected" : "";
+          return '<option' + selected + '>' + escapeHtml(option) + '</option>';
+        }).join("");
+        return '<select class="offer-value" data-field="value" data-index="' + index + '">' + optionsHtml + '</select>';
+      }
+
+      function getQtyInput(row, index) {
+        if (row.type === "komentarz") {
+          return '<input class="offer-value" type="text" value="-" disabled>';
+        }
+
+        return '<input class="offer-value" type="text" data-field="qty" data-index="' + index + '" value="' + escapeHtml(row.qty) + '">';
+      }
+
+      function normalizeName(value) {
+        return String(value || "")
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .trim()
+          .toLowerCase();
+      }
+
+      function isTransportService(row) {
+        return row.type === "usluga" && normalizeName(row.value) === "transport";
+      }
+
+      function isObrobkaService(row) {
+        var normalized = normalizeName(row.value);
+        return row.type === "usluga" && (normalized === "obrobka" || normalized === "obrubka");
+      }
+
+      function isAnyService(row) {
+        return row.type === "usluga";
+      }
+
+      function buildSelect(options, selectedValue, fieldName, index) {
+        var optionsHtml = options.map(function (item) {
+          var selected = item === selectedValue ? " selected" : "";
+          return '<option' + selected + '>' + escapeHtml(item) + '</option>';
+        }).join("");
+
+        return '<select class="offer-value" data-field="' + fieldName + '" data-index="' + index + '">' + optionsHtml + '</select>';
+      }
+
+      function getNrInput(row, index) {
+        if (row.type === "komentarz") {
+          return '<input class="offer-value" type="text" value="-" disabled>';
+        }
+
+        if (isTransportService(row)) {
+          return buildSelect(wojewodztwa, row.nr, "nr", index);
+        }
+
+        if (isObrobkaService(row)) {
+          return buildSelect(obrobkaOpcje, row.nr, "nr", index);
+        }
+
+        if (isAnyService(row)) {
+          if (!row.nr) {
+            row.nr = montazOpcje[0];
+          }
+          return buildSelect(montazOpcje, row.nr, "nr", index);
+        }
+
+        return '<input class="offer-value" type="text" data-field="nr" data-index="' + index + '" value="' + escapeHtml(row.nr || "") + '">';
+      }
+
+      function getPriceInput(row, index) {
+        if (row.type === "komentarz") {
+          return '<input class="offer-value" type="text" value="-" disabled>';
+        }
+
+        return '<input class="offer-value" type="text" data-field="price" data-index="' + index + '" value="' + escapeHtml(row.price) + '">';
+      }
+
+      function renderRows() {
+        rowsContainer.innerHTML = rows.map(function (row, index) {
+          return '' +
+            '<div class="offer-row">' +
+              '<div class="offer-index">' + (index + 1) + '</div>' +
+              '<label class="offer-check"><input type="checkbox" data-field="active" data-index="' + index + '"' + (row.active ? ' checked' : '') + '></label>' +
+              '<select class="offer-value" data-field="type" data-index="' + index + '">' +
+                '<option value="zapas"' + (row.type === "zapas" ? " selected" : "") + '>Zapas</option>' +
+                '<option value="usluga"' + (row.type === "usluga" ? " selected" : "") + '>Usluga</option>' +
+                '<option value="koszt"' + (row.type === "koszt" ? " selected" : "") + '>Element kosztowy</option>' +
+                '<option value="komentarz"' + (row.type === "komentarz" ? " selected" : "") + '>Komentarz</option>' +
+              '</select>' +
+              getValueInput(row, index) +
+              getNrInput(row, index) +
+              getQtyInput(row, index) +
+              getPriceInput(row, index) +
+              '<button class="offer-remove" type="button" data-remove="' + index + '">x</button>' +
+            '</div>';
+        }).join("");
+      }
+
+      function normalizeRowByType(row) {
+        if (typeof row.active !== "boolean") {
+          row.active = true;
+        }
+
+        if (row.type === "komentarz") {
+          row.value = row.value || "";
+          row.nr = "";
+          row.qty = "";
+          row.price = "";
+          return;
+        }
+
+        var options = valueOptions[row.type] || [];
+        if (!options.includes(row.value)) {
+          row.value = options[0] || "";
+        }
+
+        if (isTransportService(row)) {
+          if (!wojewodztwa.includes(row.nr)) {
+            row.nr = wojewodztwa[0];
+          }
+        } else if (isObrobkaService(row)) {
+          if (!obrobkaOpcje.includes(row.nr)) {
+            row.nr = obrobkaOpcje[0];
+          }
+        } else if (isAnyService(row)) {
+          if (!montazOpcje.includes(row.nr)) {
+            row.nr = montazOpcje[0];
+          }
+        } else {
+          row.nr = row.nr || "";
+        }
+
+        row.qty = row.qty || "1";
+        row.price = row.price || "0,00";
+      }
+
+      addButton.addEventListener("click", function () {
+        rows.push({ active: true, type: "zapas", value: valueOptions.zapas[0], nr: "", qty: "1", price: "0,00" });
+        renderRows();
+      });
+
+      rowsContainer.addEventListener("click", function (event) {
+        var removeIndex = event.target.getAttribute("data-remove");
+        if (removeIndex === null) {
+          return;
+        }
+
+        rows.splice(Number(removeIndex), 1);
+        renderRows();
+      });
+
+      rowsContainer.addEventListener("change", function (event) {
+        var field = event.target.getAttribute("data-field");
+        var indexAttr = event.target.getAttribute("data-index");
+        if (!field || indexAttr === null) {
+          return;
+        }
+
+        var index = Number(indexAttr);
+        if (!rows[index]) {
+          return;
+        }
+
+        if (field === "active") {
+          rows[index].active = event.target.checked;
+          return;
+        }
+
+        rows[index][field] = event.target.value;
+        if (field === "type" || field === "value") {
+          normalizeRowByType(rows[index]);
+          renderRows();
+        }
+      });
+
+      rowsContainer.addEventListener("input", function (event) {
+        var field = event.target.getAttribute("data-field");
+        var indexAttr = event.target.getAttribute("data-index");
+        if (!field || indexAttr === null || field === "type") {
+          return;
+        }
+
+        var index = Number(indexAttr);
+        if (!rows[index]) {
+          return;
+        }
+
+        rows[index][field] = event.target.value;
+        if (field === "value") {
+          normalizeRowByType(rows[index]);
+          renderRows();
+        }
+      });
+
+      rows.forEach(normalizeRowByType);
+      renderRows();
+    }());
+  </script>
+</body>
+</html>
