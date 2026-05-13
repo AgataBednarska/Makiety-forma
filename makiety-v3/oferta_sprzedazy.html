@@ -1187,7 +1187,7 @@
     const weightTotalValue = document.querySelector("#weightTotalValue");
 
     let activeRowIndex = 0;
-    let showAllOfferRows = false;
+    let showAllOfferRows = true;
 
     const lineData = [
       {
@@ -2178,7 +2178,7 @@
 
       let stateLines = baseLines.map((line) => ({ ...line }));
       let stateActiveRow = 1;
-      let stateShowAll = false;
+      let stateShowAll = true;
       let selectedTemplateId = null;
 
       const normalizeLine = (line) => {
