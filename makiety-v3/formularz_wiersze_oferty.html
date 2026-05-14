@@ -283,7 +283,7 @@
     .offer-list-header,
     .offer-row {
       display: grid;
-      grid-template-columns: 44px 72px 130px minmax(0, 1fr) 160px 84px 108px 40px;
+      grid-template-columns: 44px 72px 170px 130px minmax(0, 1fr) 160px 84px 108px 40px;
       gap: 8px;
       align-items: center;
       padding: 8px 10px;
@@ -366,7 +366,7 @@
 
       .offer-list-header,
       .offer-row {
-        grid-template-columns: 36px 64px 110px minmax(0, 1fr) 140px 72px 96px 36px;
+        grid-template-columns: 36px 64px 150px 110px minmax(0, 1fr) 140px 72px 96px 36px;
       }
     }
 
@@ -431,6 +431,7 @@
           <div class="offer-list-header">
             <div>Lp.</div>
             <div>Aktyw.</div>
+            <div>Przenies jako komentarz</div>
             <div>Typ</div>
             <div>Wartosc</div>
             <div>Nr</div>
@@ -447,13 +448,15 @@
     </section>
 
     <footer class="footer">
-      <button class="btn">Anuluj</button>
-      <button class="btn primary">Zapisz</button>
+      <button class="btn" type="button" id="cancelButton">Anuluj</button>
+      <button class="btn primary" type="button" id="saveButton">Zapisz</button>
     </footer>
   </main>
 
   <script>
     (function () {
+      var OFFER_COMMENT_TRANSFER_KEY = "offerRowsCommentTransfer";
+
       var valueOptions = {
         zapas: ["Blat granitowy 2 cm", "Plyta spiek kwarcowy 12 mm", "Zlew podwieszany", "Bateria stojaca"],
         usluga: ["Montaz", "Transport", "Obrobka"],
@@ -470,14 +473,16 @@
       var montazOpcje = ["Wybierz...", "Ekipa montazowa 1", "Ekipa montazowa 2", "Ekipa montazowa 3"];
 
       var rows = [
-        { active: true, type: "zapas", value: "Blat granitowy 2 cm", nr: "B-000001", qty: "1", price: "275,00" },
-        { active: true, type: "usluga", value: "Montaz", nr: "", qty: "1", price: "120,00" },
-        { active: true, type: "koszt", value: "401-01 Materialy podstawowe", nr: "K/G-401", qty: "1", price: "35,00" },
-        { active: false, type: "komentarz", value: "Uwagi do pozycji oferty...", nr: "", qty: "", price: "" }
+        { active: true, moveAsComment: false, type: "zapas", value: "Blat granitowy 2 cm", nr: "B-000001", qty: "1", price: "275,00" },
+        { active: true, moveAsComment: false, type: "usluga", value: "Montaz", nr: "", qty: "1", price: "120,00" },
+        { active: true, moveAsComment: false, type: "koszt", value: "401-01 Materialy podstawowe", nr: "K/G-401", qty: "1", price: "35,00" },
+        { active: false, moveAsComment: false, type: "komentarz", value: "Uwagi do pozycji oferty...", nr: "", qty: "", price: "" }
       ];
 
       var rowsContainer = document.getElementById("offerRows");
       var addButton = document.getElementById("addOfferRow");
+      var saveButton = document.getElementById("saveButton");
+      var cancelButton = document.getElementById("cancelButton");
 
       function escapeHtml(value) {
         return String(value)
@@ -576,6 +581,7 @@
             '<div class="offer-row">' +
               '<div class="offer-index">' + (index + 1) + '</div>' +
               '<label class="offer-check"><input type="checkbox" data-field="active" data-index="' + index + '"' + (row.active ? ' checked' : '') + '></label>' +
+              '<label class="offer-check"><input type="checkbox" data-field="moveAsComment" data-index="' + index + '"' + (row.moveAsComment ? ' checked' : '') + '></label>' +
               '<select class="offer-value" data-field="type" data-index="' + index + '">' +
                 '<option value="zapas"' + (row.type === "zapas" ? " selected" : "") + '>Zapas</option>' +
                 '<option value="usluga"' + (row.type === "usluga" ? " selected" : "") + '>Usluga</option>' +
@@ -594,6 +600,9 @@
       function normalizeRowByType(row) {
         if (typeof row.active !== "boolean") {
           row.active = true;
+        }
+        if (typeof row.moveAsComment !== "boolean") {
+          row.moveAsComment = false;
         }
 
         if (row.type === "komentarz") {
@@ -630,7 +639,7 @@
       }
 
       addButton.addEventListener("click", function () {
-        rows.push({ active: true, type: "zapas", value: valueOptions.zapas[0], nr: "", qty: "1", price: "0,00" });
+        rows.push({ active: true, moveAsComment: false, type: "zapas", value: valueOptions.zapas[0], nr: "", qty: "1", price: "0,00" });
         renderRows();
       });
 
@@ -661,6 +670,11 @@
           return;
         }
 
+        if (field === "moveAsComment") {
+          rows[index].moveAsComment = event.target.checked;
+          return;
+        }
+
         rows[index][field] = event.target.value;
         if (field === "type" || field === "value") {
           normalizeRowByType(rows[index]);
@@ -686,6 +700,57 @@
           renderRows();
         }
       });
+
+      function rowToCommentText(row) {
+        if (row.type === "komentarz") {
+          return row.value || "Komentarz";
+        }
+
+        var parts = [row.type, row.value];
+        if (row.nr) {
+          parts.push("nr: " + row.nr);
+        }
+        if (row.qty) {
+          parts.push("ilosc: " + row.qty);
+        }
+        if (row.price) {
+          parts.push("cena: " + row.price);
+        }
+
+        return parts.filter(Boolean).join(" | ");
+      }
+
+      function transferMarkedRowsToOffer() {
+        var comments = rows
+          .filter(function (row) { return row.moveAsComment; })
+          .map(rowToCommentText)
+          .filter(Boolean);
+
+        if (!comments.length) {
+          return;
+        }
+
+        var payload = {
+          timestamp: Date.now(),
+          comments: comments
+        };
+        localStorage.setItem(OFFER_COMMENT_TRANSFER_KEY, JSON.stringify(payload));
+
+        rows.forEach(function (row) {
+          row.moveAsComment = false;
+        });
+        renderRows();
+      }
+
+      if (saveButton) {
+        saveButton.addEventListener("click", transferMarkedRowsToOffer);
+      }
+
+      if (cancelButton) {
+        cancelButton.addEventListener("click", function () {
+          window.close();
+        });
+      }
 
       rows.forEach(normalizeRowByType);
       renderRows();
