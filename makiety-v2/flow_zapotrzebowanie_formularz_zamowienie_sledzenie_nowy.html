@@ -647,7 +647,8 @@
             orderQtyPieces: row.piecesQty || row.orderQtyPieces || "0",
             orderQtySquareMeters: row.orderQty || row.orderQtySquareMeters || quantityM2,
             weight: row.weight || "0 kg",
-            type: row.lineType || row.type || "Zapas"
+             type: row.lineType || row.type || "Zapas",
+             transportType: row.transportType || ""
           };
         })
       }));
