@@ -990,7 +990,7 @@
         orderQtyPieces: "4",
         orderQtySquareMeters: "20,00",
         weight: "260 kg",
-        transportType: "stojaki"
+        transportType: "skrzynie"
       }
     ];
 
@@ -1174,7 +1174,7 @@
     }
 
     function updateTransportSummary(transportType, controls) {
-      const matchingLines = lineData.filter((line) => (line.transportType || "stojaki") === transportType);
+      const matchingLines = lineData.filter((line) => (line.transportType || "skrzynie") === transportType);
       const caps = transportCaps[transportType];
       const totalWeightKg = matchingLines.reduce((sum, line) => sum + parseWeightKg(line.weight), 0);
       const totalRackUsageSquareMeters = matchingLines.reduce((sum, line) => sum + parseLocalizedNumber(line.orderQtySquareMeters), 0);
