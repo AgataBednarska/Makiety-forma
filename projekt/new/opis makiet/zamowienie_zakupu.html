@@ -1,0 +1,2739 @@
+﻿<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zamowienie zakupu FORMA SYSTEM</title>
+  <style>
+    :root {
+      --bg: #f3f2f1;
+      --panel: #ffffff;
+      --panel-muted: #faf9f8;
+      --line: #d2d0ce;
+      --line-soft: #edebe9;
+      --line-strong: #505c6d;
+      --text: #201f1e;
+      --muted: #605e5c;
+      --accent: #0078d4;
+      --accent-strong: #106ebe;
+      --ok: #107c10;
+      --warn: #a4262c;
+      --shell: #201f1e;
+      --font: "Segoe UI", "Segoe WP", Segoe, device-segoe, Tahoma, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    .top-shell {
+      height: 48px;
+      background: var(--shell);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-size: 14px;
+    }
+
+    .top-shell-title {
+      font-weight: 600;
+    }
+
+    .top-shell-meta {
+      display: flex;
+      gap: 12px;
+      color: #d2d0ce;
+      font-size: 12px;
+    }
+
+    .page {
+      width: min(1680px, calc(100vw - 24px));
+      margin: 8px auto 20px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .ribbon {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: var(--panel-muted);
+      border-bottom: 1px solid var(--line);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .ribbon-tabs {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .ribbon-tab {
+      min-height: 28px;
+      padding: 0 10px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .ribbon-tab:first-child {
+      padding-left: 0;
+    }
+
+    .ribbon-tab:last-child {
+      border-right: 0;
+    }
+
+    .ribbon-tab--active {
+      font-weight: 700;
+    }
+
+    .ribbon-tab:hover,
+    .ribbon-help:hover {
+      color: var(--accent-strong);
+    }
+
+    .ribbon-help {
+      border: 0;
+      background: transparent;
+      color: var(--accent-strong);
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .doc-title {
+      padding: 8px 16px 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .doc-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .doc-toolbar-left,
+    .doc-toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .icon-circle,
+    .icon-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: #3a96a0;
+      font-size: 14px;
+      line-height: 1;
+      border-radius: 50%;
+    }
+
+    .icon-ghost {
+      border-radius: 2px;
+      border-color: transparent;
+      width: 24px;
+      height: 24px;
+      color: #49a8b2;
+    }
+
+    .doc-caption {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .doc-kicker {
+      margin: 0 0 6px;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 1180px;
+      font-size: clamp(28px, 3.2vw, 34px);
+      line-height: 1.15;
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      color: #323130;
+    }
+
+    .section {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 16px 6px;
+      background: var(--panel-muted);
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .section-more {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .general-card,
+    .summary-card,
+    .meta-card,
+    .notes-card {
+      padding: 12px 16px 14px;
+    }
+
+    .general-grid,
+    .summary-grid,
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 28px;
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: 184px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+    }
+
+    .field-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .field-label::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px dotted #d2d0ce;
+      transform: translateY(1px);
+    }
+
+    .field-control,
+    .field-input,
+    .field-select,
+    .line-select,
+    .line-input,
+    .field-textarea {
+      min-height: 24px;
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      background: #ffffff;
+      color: #000000;
+      font: inherit;
+      font-size: 12px;
+      padding: 2px 8px;
+    }
+
+    .field-textarea {
+      min-height: 88px;
+      resize: vertical;
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+
+    .field-control {
+      display: flex;
+      align-items: center;
+      border-color: var(--line);
+      background: #f3f2f1;
+      color: var(--text);
+    }
+
+    .field-input:focus,
+    .field-select:focus,
+    .line-select:focus,
+    .field-textarea:focus,
+    .line-input:focus {
+      outline: none;
+      border-color: #00b7c3;
+      box-shadow: 0 0 0 1px #00b7c3;
+    }
+
+    .status-open {
+      color: var(--ok);
+      font-weight: 700;
+    }
+
+    .status-warning {
+      color: var(--warn);
+      font-weight: 700;
+    }
+
+    .workspace-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 10px 16px 8px;
+      border-bottom: 1px solid var(--line);
+      flex-wrap: wrap;
+      font-size: 12px;
+    }
+
+    .workspace-title {
+      font-weight: 700;
+    }
+
+    .workspace-tab {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      color: var(--text);
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .workspace-tab.is-active {
+      color: var(--accent-strong);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .subtoolbar,
+    .subtoolbar-panel {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 8px 16px 9px;
+      border-bottom: 1px solid var(--line);
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: #3a96a0;
+    }
+
+    .subtoolbar[hidden],
+    .subtoolbar-panel[hidden] {
+      display: none;
+    }
+
+    .subtoolbar-link {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      color: #3a96a0;
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .subtoolbar-link:hover {
+      text-decoration: underline;
+    }
+
+    .subtoolbar-link.is-disabled {
+      color: #a19f9d;
+      cursor: default;
+      pointer-events: none;
+      text-decoration: none;
+    }
+
+    .table-shell {
+      border-top: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .table-scroller {
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding-bottom: 8px;
+      scrollbar-gutter: stable both-edges;
+      scrollbar-width: auto;
+      scrollbar-color: #a19f9d #edebe9;
+    }
+
+    .table-scroller::-webkit-scrollbar {
+      height: 12px;
+    }
+
+    .table-scroller::-webkit-scrollbar-track {
+      background: #edebe9;
+      border-radius: 999px;
+    }
+
+    .table-scroller::-webkit-scrollbar-thumb {
+      background: #a19f9d;
+      border-radius: 999px;
+      border: 2px solid #edebe9;
+    }
+
+    table {
+      width: max-content;
+      min-width: 100%;
+      min-width: 1480px;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background: #f3f2f1;
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line-soft);
+      padding: 7px 6px;
+      text-align: left;
+      font-size: 10px;
+      color: #605e5c;
+      z-index: 2;
+      vertical-align: bottom;
+      font-weight: 400;
+    }
+
+    tbody td {
+      border-bottom: 1px solid var(--line-soft);
+      border-right: 1px solid var(--line-soft);
+      padding: 0;
+      background: #ffffff;
+      font-size: 12px;
+      vertical-align: middle;
+    }
+
+    tbody tr:nth-child(even) td {
+      background: #faf9f8;
+    }
+
+    tbody tr:hover td {
+      background: #f3f8f4;
+    }
+
+    tbody tr.is-active td {
+      background: #eaf4fb;
+    }
+
+    .selection-cell {
+      width: 24px;
+      padding: 0;
+      text-align: center;
+    }
+
+    .menu-cell {
+      width: 26px;
+      padding: 0;
+      text-align: center;
+    }
+
+    .row-marker {
+      width: 100%;
+      min-height: 24px;
+      border: 0;
+      background: transparent;
+      color: var(--accent-strong);
+      cursor: pointer;
+      font: inherit;
+      padding: 0;
+    }
+
+    .row-menu {
+      width: 100%;
+      min-height: 24px;
+      border: 0;
+      background: transparent;
+      color: #605e5c;
+      cursor: pointer;
+      font-size: 16px;
+      line-height: 1;
+      padding: 0;
+    }
+
+    tr.is-active .row-menu {
+      background: #b9e6f2;
+      color: #005b70;
+    }
+
+    .col-type { width: 116px; }
+    .col-item-no { width: 126px; }
+    .col-jumbo { width: 70px; }
+    .col-description { width: 330px; }
+    .col-location { width: 92px; }
+    .col-qty { width: 92px; }
+    .col-assemble { width: 112px; }
+    .col-uom { width: 92px; }
+    .col-unit-price { width: 98px; }
+    .col-tax-group { width: 96px; }
+    .col-discount { width: 94px; }
+    .col-line-amount { width: 102px; }
+    .col-availability { width: 48px; }
+    .col-investment { width: 118px; }
+
+    .cell {
+      min-height: 20px;
+      display: flex;
+      align-items: center;
+      padding: 3px 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cell-center {
+      justify-content: center;
+    }
+
+    .cell-right {
+      justify-content: flex-end;
+      text-align: right;
+    }
+
+    .line-input {
+      min-height: 24px;
+      border-width: 0;
+      background: transparent;
+      padding: 4px 6px;
+    }
+
+    .line-select {
+      min-height: 24px;
+      border-width: 0;
+      background: transparent;
+      padding: 2px 4px;
+    }
+
+    .line-input--compact {
+      text-align: right;
+    }
+
+    .jumbo-check {
+      width: 14px;
+      height: 14px;
+      accent-color: #605e5c;
+    }
+
+    .qty-alert {
+      color: #d13438;
+      font-weight: 700;
+    }
+
+    .comment-row td {
+      background: #ffffff;
+    }
+
+    .comment-row .cell,
+    .comment-row .line-input {
+      color: #605e5c;
+      font-size: 11px;
+    }
+
+    .summary-highlight {
+      color: var(--accent-strong);
+      font-weight: 700;
+    }
+
+    .pill-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .pill {
+      min-height: 22px;
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: #eff6fc;
+      color: #0f548c;
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+    }
+      .template-drawer {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(32, 31, 30, 0.42);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .template-drawer[hidden] {
+        display: none;
+      }
+
+      .template-drawer::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+      }
+
+      .template-drawer-header,
+      .template-grid,
+      .template-actions {
+        position: relative;
+        z-index: 1;
+      }
+
+      .template-drawer-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 12px;
+      }
+
+      .template-drawer-title {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .template-drawer-copy {
+        margin: 4px 0 0;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .template-drawer-modal {
+        width: min(600px, calc(100vw - 40px));
+        background: #ffffff;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .template-drawer > .template-drawer-header {
+        background: #ffffff;
+        border-bottom: 1px solid var(--line);
+        padding: 16px;
+        border-radius: 4px 4px 0 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .template-drawer > .template-grid {
+        background: #ffffff;
+        border-left: 1px solid var(--line);
+        border-right: 1px solid var(--line);
+        padding: 12px 16px;
+        max-height: calc(60vh - 120px);
+        overflow-y: auto;
+      }
+
+      .template-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .template-section {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .template-section:last-child {
+        border-bottom: none;
+      }
+
+      .template-section-header {
+        padding: 12px;
+        cursor: pointer;
+        background: #f9f8f7;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        transition: background-color 0.2s ease;
+        border: none;
+        width: 100%;
+        text-align: left;
+      }
+
+      .template-section-header:hover {
+        background: #f3f2f1;
+      }
+
+      .template-section.expanded .template-section-header {
+        background: #eff6fc;
+      }
+
+      .template-section-header-left {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        flex: 1;
+      }
+
+      .template-section-header-left .template-name {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .template-section-header-left .template-desc {
+        margin: 0;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .template-section-header-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+      }
+
+      .template-price {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--accent-strong);
+        white-space: nowrap;
+      }
+
+      .template-expand-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        font-size: 14px;
+        transition: transform 0.2s ease;
+      }
+
+      .template-section.expanded .template-expand-icon {
+        transform: rotate(180deg);
+      }
+
+      .template-section-content {
+        display: none;
+        padding: 12px;
+        background: #ffffff;
+        border-top: 1px solid #eff6fc;
+      }
+
+      .template-section.expanded .template-section-content {
+        display: block;
+      }
+
+      .template-items-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .template-item {
+        padding: 8px;
+        background: #faf9f8;
+        border: 1px solid #e1dfdd;
+        border-radius: 2px;
+        font-size: 11px;
+      }
+
+      .template-item-type {
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .template-item-desc {
+        color: var(--muted);
+        margin-top: 2px;
+      }
+
+      .template-item-price {
+        color: var(--accent-strong);
+        margin-top: 2px;
+        font-weight: 600;
+      }
+
+      .template-drawer > .template-actions {
+        background: #ffffff;
+        border: 1px solid var(--line);
+        border-top: 0;
+        border-radius: 0 0 4px 4px;
+        padding: 12px 16px;
+      }
+
+      .template-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .template-button {
+        min-height: 32px;
+        padding: 6px 16px;
+        border: 1px solid var(--line);
+        border-radius: 2px;
+        background: #ffffff;
+        color: var(--text);
+        font: inherit;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      .template-button--primary {
+        background: var(--accent);
+        color: #ffffff;
+        border-color: var(--accent);
+      }
+
+    .ribbon-actions-panel[hidden] { display: none; }
+
+    .investment-dialog {
+      position: fixed;
+      inset: 0;
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(32, 31, 30, 0.42);
+    }
+
+    .investment-dialog[hidden] { display: none; }
+
+    .investment-dialog-box {
+      width: min(640px, calc(100vw - 40px));
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .investment-dialog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .investment-dialog-title {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .investment-dialog-close {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .investment-dialog-body {
+      overflow-y: auto;
+    }
+
+    .investment-dialog-body table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    .investment-dialog-body th {
+      position: sticky;
+      top: 0;
+      background: #f3f2f1;
+      border-bottom: 1px solid var(--line);
+      padding: 8px 10px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .investment-dialog-body td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--line-soft);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .investment-dialog-body tr:hover td { background: #f3f8f4; }
+    .investment-dialog-body tr.is-selected td { background: #eaf4fb; }
+
+    .investment-dialog-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 12px 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .investment-dialog-button {
+      min-height: 32px;
+      padding: 6px 16px;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      background: #ffffff;
+      color: var(--text);
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .investment-dialog-button--primary {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    @media (max-width: 1180px) {
+      .general-grid,
+      .summary-grid,
+      .meta-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        background: #ffffff;
+      }
+
+      .page {
+        width: 100%;
+        margin: 0;
+        border: 0;
+      }
+
+      .top-shell,
+      .doc-toolbar,
+      .workspace-toolbar,
+      .subtoolbar,
+      .subtoolbar-panel {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .field {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .field-label::after {
+        display: none;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-shell">
+    <div class="top-shell-title">Dynamics 365 Business Central</div>
+  </header>
+
+  <main class="page">
+    <section class="ribbon">
+      <div class="ribbon-tabs">
+        <button class="ribbon-tab ribbon-tab--active" type="button">Narzedzia glowne</button>
+        <button class="ribbon-tab" type="button">Akcje</button>
+        <button class="ribbon-tab" type="button">Wersje</button>
+        <button class="ribbon-tab" type="button">Wydruk</button>
+        <button class="ribbon-tab" type="button">Powiazane</button>
+        <button class="ribbon-tab" type="button">Archiwum</button>
+        <button class="ribbon-tab" type="button">...</button>
+      </div>
+      <button class="ribbon-help" type="button">i</button>
+    </section>
+
+    <div class="subtoolbar ribbon-actions-panel" id="ribbonActionsPanel" hidden>
+      <button class="subtoolbar-link" type="button" id="linkInvestmentButton">Powi&#261;&#380; z inwestycj&#261;</button>
+    </div>
+
+    <div class="doc-title">
+      <div class="doc-toolbar">
+        <div class="doc-toolbar-left">
+          <span class="icon-circle">â†</span>
+          <span class="doc-caption">Zamowienie zakupu</span>
+        </div>
+        <div class="doc-toolbar-right">
+          <span class="icon-circle">âśŽ</span>
+          <span class="icon-ghost">â¤´</span>
+          <span class="icon-ghost">ďĽ‹</span>
+          <span class="icon-ghost">đź—‘</span>
+          <span class="doc-caption">âś“ Zapisano roboczo</span>
+          <span class="icon-ghost">â¤˘</span>
+        </div>
+      </div>
+      <p class="doc-kicker">Zamowienie zakupu</p>
+      <h1 id="documentHeading">ZZ/09/26/0001 Â· NAV24 SPOLKA Z OGRANICZONA ODPOWIEDZIALNOSCIA (LIVE)</h1>
+    </div>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Ogolne</span>
+        <span class="section-more">Pokaz wiecej</span>
+      </div>
+      <div class="general-card">
+        <div class="general-grid">
+          <label class="field">
+            <span class="field-label">Nazwa klienta</span>
+            <select class="field-select" id="customerSelect">
+              <option selected>NAV24 SPOLKA Z OGRANICZONA ODPOWIEDZIALNOSCIA (LIVE)</option>
+              <option>AUCHAN POLSKA SP. Z O.O.</option>
+              <option>Leroy Merlin Polska</option>
+              <option>OBI Centrala Systemowa</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field-label">Nr wersji oferty</span>
+            <input class="field-input" type="text" value="02">
+          </label>
+
+          <div class="field">
+            <span class="field-label">Klient</span>
+            <div class="field-control" id="customerName">NAV24 SPOLKA Z OGRANICZONA ODPOWIEDZIALNOSCIA (LIVE)</div>
+          </div>
+          <label class="field">
+            <span class="field-label">Opiekun handlowy</span>
+            <input class="field-input" type="text" value="A. Bednarska">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Kontakt</span>
+            <input class="field-input" type="text" value="Dzial zakupow inwestycyjnych">
+          </label>
+          <label class="field">
+            <span class="field-label">Kod sprzedawcy</span>
+            <input class="field-input" type="text" value="ABED">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Data dokumentu</span>
+            <input class="field-input" type="text" value="11.05.2026">
+          </label>
+          <label class="field">
+            <span class="field-label">Wazna do</span>
+            <input class="field-input" type="text" value="25.05.2026">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Nr szansy sprzedazy</span>
+            <input class="field-input" type="text" value="SZ/26/188">
+          </label>
+          <label class="field">
+            <span class="field-label">Prawdopodobienstwo</span>
+            <input class="field-input" type="text" value="70%">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Kod waluty</span>
+            <input class="field-input" type="text" value="PLN">
+          </label>
+          <label class="field">
+            <span class="field-label">Kod kampanii</span>
+            <input class="field-input" type="text" value="Q2-INVEST-2026">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Warunki platnosci</span>
+            <input class="field-input" type="text" value="14 DNI">
+          </label>
+          <div class="field">
+            <span class="field-label">Stan</span>
+            <div class="field-control status-open">Otwarte</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Inwestycja</span>
+        <span class="section-more">Pokaz wiecej</span>
+      </div>
+      <div class="general-card">
+        <div class="general-grid">
+          <div class="field"><span class="field-label">Nr inwestycji</span><div class="field-control" data-investment-field="number">INW-000123</div></div>
+          <div class="field"><span class="field-label">Nazwa inwestycji</span><div class="field-control" data-investment-field="name">Budowa hali Bielsko</div></div>
+          <div class="field"><span class="field-label">Status</span><div class="field-control status-open" data-investment-field="status">W realizacji</div></div>
+          <div class="field"><span class="field-label">Kod handlowca</span><div class="field-control" data-investment-field="salesCode">JKOW</div></div>
+          <div class="field"><span class="field-label">Handlowiec</span><div class="field-control" data-investment-field="salesperson">Jan Kowalski</div></div>
+          <div class="field"><span class="field-label">Nr nabywcy</span><div class="field-control" data-investment-field="customerNo">C10000</div></div>
+          <div class="field"><span class="field-label">Nabywca</span><div class="field-control" data-investment-field="customer">Bielsko Logistics Sp. z o.o.</div></div>
+          <div class="field"><span class="field-label">Adres</span><div class="field-control" data-investment-field="address">ul. Przemys&#322;owa 25</div></div>
+          <div class="field"><span class="field-label">Adres 2</span><div class="field-control" data-investment-field="address2">Budynek B</div></div>
+          <div class="field"><span class="field-label">Kod pocztowy</span><div class="field-control" data-investment-field="postalCode">43-300</div></div>
+          <div class="field"><span class="field-label">Miasto</span><div class="field-control" data-investment-field="city">Bielsko-Bia&#322;a</div></div>
+          <div class="field"><span class="field-label">Kod kraju</span><div class="field-control" data-investment-field="countryCode">PL</div></div>
+          <div class="field"><span class="field-label">Kod waluty</span><div class="field-control" data-investment-field="currencyCode">PLN</div></div>
+          <div class="field"><span class="field-label">Kod lokalizacji</span><div class="field-control" data-investment-field="locationCode">MAG-G&#321;</div></div>
+          <div class="field"><span class="field-label">Data utworzenia</span><div class="field-control" data-investment-field="createdAt">07.01.2026 08:15</div></div>
+          <div class="field"><span class="field-label">U&#380;ytkownik tworz&#261;cy</span><div class="field-control" data-investment-field="createdBy">JKOW</div></div>
+          <div class="field"><span class="field-label">Opis inwestycji</span><div class="field-control" data-investment-field="description">Budowa hali wysokiego sk&#322;adowania wraz z cz&#281;&#347;ci&#261; administracyjn&#261; oraz stref&#261; kompletacji zam&#243;wie&#324;.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Warunki handlowe i realizacja</span>
+        <span class="section-more">Pokaz wiecej</span>
+      </div>
+      <div class="meta-card">
+        <div class="meta-grid">
+          <label class="field">
+            <span class="field-label">Adres dostawy</span>
+            <input class="field-input" type="text" value="Warszawa, ul. Mineralna 15, magazyn A">
+          </label>
+          <label class="field">
+            <span class="field-label">Przewidywany termin realizacji</span>
+            <input class="field-input" type="text" value="03.06.2026">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Sposob dostawy</span>
+            <input class="field-input" type="text" value="Transport FORMA SYSTEM">
+          </label>
+          <label class="field">
+            <span class="field-label">Kod lokalizacji</span>
+            <input class="field-input" type="text" value="WAW-HANDEL">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Warunki Incoterms</span>
+            <input class="field-input" type="text" value="DAP Warszawa">
+          </label>
+          <label class="field">
+            <span class="field-label">Szacowany koszt transportu</span>
+            <input class="field-input" type="text" value="420,00">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Osoba decyzyjna</span>
+            <input class="field-input" type="text" value="Marta Kwiatkowska">
+          </label>
+          <label class="field">
+            <span class="field-label">Priorytet</span>
+            <input class="field-input" type="text" value="Wysoki">
+          </label>
+        </div>
+        <div class="pill-row">
+          <span class="pill">Oferta aktywna</span>
+          <span class="pill">Wymaga akceptacji klienta</span>
+          <span class="pill">Gotowa do konwersji na zamowienie</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Uwagi i zalozenia</span>
+        <span class="section-more">Pokaz wiecej</span>
+      </div>
+      <div class="notes-card">
+        <label class="field" style="grid-template-columns: 184px minmax(0, 1fr); align-items: start;">
+          <span class="field-label" style="padding-top: 8px;">Notatka oferty</span>
+          <textarea class="field-textarea">Cena zawiera konfekcjonowanie i przygotowanie dokumentacji dostawy. Termin realizacji zalezy od potwierdzenia wzorow i ostatecznej dostepnosci stanu magazynowego.</textarea>
+        </label>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="workspace-toolbar">
+        <span class="workspace-title">Wiersze</span>
+        <button class="workspace-tab is-active" type="button" data-workspace-tab="zarzadzaj">Zarzadzaj</button>
+        <button class="workspace-tab" type="button" data-workspace-tab="wiersz">Wiersz</button>
+        <button class="workspace-tab" type="button" data-workspace-tab="funkcje">Funkcje</button>
+      </div>
+      <div class="subtoolbar" id="managePanel">
+        <button class="subtoolbar-link" type="button" id="addLineButton">Nowy wiersz</button>
+        <button class="subtoolbar-link" type="button">Usun wiersz</button>
+        <button class="subtoolbar-link" type="button">Wybierz zapasy...</button>
+        <button class="subtoolbar-link" type="button">Wstaw teksty dodatk.</button>
+        <button class="subtoolbar-link" type="button">Wymiary</button>
+        <button class="subtoolbar-link" type="button">Atrybuty VAT</button>
+        <button class="subtoolbar-link" type="button" id="showOfferRowsButton">Wiersze oferty</button>
+        <button class="subtoolbar-link" type="button" id="openTemplatePanelButton">Zastosuj szablon</button>
+      </div>
+      <div class="template-drawer" id="templatePanel" hidden>
+        <div class="template-drawer-header">
+          <div>
+            <p class="template-drawer-title">Kalkulacja oferty z szablonami</p>
+            <p class="template-drawer-copy">Wybierz wariant i zastosuj go do wierszy oferty.</p>
+          </div>
+          <button class="template-button" type="button" id="closeTemplatePanelButton">Zamknij</button>
+        </div>
+        <div class="template-grid" id="templateGrid"></div>
+        <div class="template-actions">
+          <button class="template-button" type="button" id="cancelTemplateButton">Anuluj</button>
+          <button class="template-button template-button--primary" type="button" id="applyTemplateButton">Zastosuj</button>
+        </div>
+      </div>
+      <div class="subtoolbar-panel" id="linePanel" hidden>
+        <button class="subtoolbar-link" type="button">Zwolnij</button>
+        <button class="subtoolbar-link" type="button">Komentarze wiersza</button>
+        <button class="subtoolbar-link" type="button">Arkusz pozycji</button>
+        <button class="subtoolbar-link" type="button">Dostepnosc</button>
+        <button class="subtoolbar-link" type="button">Szczegoly ceny</button>
+      </div>
+      <div class="subtoolbar-panel" id="functionPanel" hidden>
+        <button class="subtoolbar-link" type="button">Utworz zamowienie</button>
+        <button class="subtoolbar-link" type="button">Utworz fakture</button>
+        <button class="subtoolbar-link" type="button">Archiwizuj dokument</button>
+        <button class="subtoolbar-link" type="button">Raport oferty</button>
+      </div>
+      <div class="table-shell">
+        <div class="table-scroller" tabindex="0" aria-label="Tabela wierszy oferty sprzedazy">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 24px;"></th>
+                <th style="width: 26px;"></th>
+                <th class="col-type">Typ</th>
+                <th class="col-item-no">Nr</th>
+                <th class="col-jumbo">JUMBO</th>
+                <th class="col-description">Opis</th>
+                <th class="col-location">Kod lokalizacji</th>
+                <th class="col-qty">Ilosc</th>
+                <th class="col-assemble">Ilosc do kompletacji na zamowienie</th>
+                <th class="col-uom">Kod jednostki miary</th>
+                <th class="col-unit-price">Cena jednostkowa bez VAT</th>
+                <th class="col-tax-group">Kod grupy podatkowej</th>
+                <th class="col-discount">Rabat wiersza (%)</th>
+                <th class="col-line-amount">Kwota wiersza bez VAT</th>
+                <th class="col-availability">Il.</th>
+                <th class="col-investment">Numer inwestycji</th>
+              </tr>
+            </thead>
+            <tbody id="lineBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span>Podsumowanie dokumentu</span>
+        <span class="section-more">Pokaz wiecej</span>
+      </div>
+      <div class="summary-card">
+        <div class="summary-grid">
+          <div class="field">
+            <span class="field-label">Suma netto</span>
+            <div class="field-control summary-highlight" id="netTotalValue">0,00</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Szacowana konwersja</span>
+            <div class="field-control" id="conversionValue">0%</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Suma VAT</span>
+            <div class="field-control" id="vatTotalValue">0,00</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Liczba wierszy aktywnych</span>
+            <div class="field-control" id="lineCountValue">0</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Suma brutto</span>
+            <div class="field-control summary-highlight" id="grossTotalValue">0,00</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Suma ilosci szt.</span>
+            <div class="field-control" id="piecesTotalValue">0</div>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Sredni rabat</span>
+            <div class="field-control" id="discountAvgValue">0,00%</div>
+          </div>
+          <div class="field">
+            <span class="field-label">Suma wagi</span>
+            <div class="field-control" id="weightTotalValue">0 kg</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  <div id="templateModal" class="modal-overlay"><div class="modal-dialog"><div class="modal-header"><h2 class="modal-title">Zastosuj szablon oferty</h2><button class="modal-close" id="modalCloseButton">✕</button></div><div class="modal-body"><div class="template-grid" id="templateGrid"></div></div><div class="modal-footer"><button class="modal-button" id="modalCancelButton">Anuluj</button><button class="modal-button modal-button--primary" id="modalApplyButton">Zastosuj</button></div></div></div>
+  <div class="investment-dialog" id="investmentDialog" hidden>
+    <div class="investment-dialog-box">
+      <div class="investment-dialog-header">
+        <h2 class="investment-dialog-title">Wybierz inwestycj&#281;</h2>
+        <button class="investment-dialog-close" type="button" id="investmentDialogCloseButton" aria-label="Zamknij">✕</button>
+      </div>
+      <div class="investment-dialog-body">
+        <table>
+          <thead><tr><th>Nr inwestycji</th><th>Nazwa inwestycji</th><th>Status</th><th>Nabywca</th></tr></thead>
+          <tbody id="investmentDialogBody"></tbody>
+        </table>
+      </div>
+      <div class="investment-dialog-footer">
+        <button class="investment-dialog-button" type="button" id="investmentDialogCancelButton">Anuluj</button>
+        <button class="investment-dialog-button investment-dialog-button--primary" type="button" id="investmentDialogOkButton">OK</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+  <script>
+    const customerSelect = document.querySelector("#customerSelect");
+    const customerName = document.querySelector("#customerName");
+    const documentHeading = document.querySelector("#documentHeading");
+    const workspaceTabs = [...document.querySelectorAll("[data-workspace-tab]")];
+    const managePanel = document.querySelector("#managePanel");
+    const linePanel = document.querySelector("#linePanel");
+    const functionPanel = document.querySelector("#functionPanel");
+    const lineBody = document.querySelector("#lineBody");
+    const addLineButton = document.querySelector("#addLineButton");
+    const showOfferRowsButton = document.querySelector("#showOfferRowsButton");
+
+    const netTotalValue = document.querySelector("#netTotalValue");
+    const vatTotalValue = document.querySelector("#vatTotalValue");
+    const grossTotalValue = document.querySelector("#grossTotalValue");
+    const conversionValue = document.querySelector("#conversionValue");
+    const lineCountValue = document.querySelector("#lineCountValue");
+    const piecesTotalValue = document.querySelector("#piecesTotalValue");
+    const discountAvgValue = document.querySelector("#discountAvgValue");
+    const weightTotalValue = document.querySelector("#weightTotalValue");
+
+    let activeRowIndex = 0;
+    let showAllOfferRows = false;
+
+    const lineData = [
+      {
+        type: "Koszt doda...",
+        itemNo: "montaz",
+        jumbo: false,
+        description: "montaz",
+        locationCode: "M02",
+        quantity: "1",
+        assembleQty: "0",
+        unitOfMeasureCode: "",
+        unitPriceNet: "500,00",
+        taxGroupCode: "",
+        lineDiscountPct: "",
+        lineAmountNet: "500,00",
+        availability: "",
+        billable: true
+      },
+      {
+        type: "Zapas",
+        itemNo: "B-000001",
+        jumbo: true,
+        description: "Blat Absolut Black Granit antyczny 2 cm",
+        locationCode: "M02",
+        quantity: "1",
+        assembleQty: "1",
+        unitOfMeasureCode: "M2",
+        unitPriceNet: "275,00",
+        taxGroupCode: "",
+        lineDiscountPct: "",
+        lineAmountNet: "275,00",
+        availability: "",
+        billable: true
+      },
+      {
+        type: "",
+        itemNo: "",
+        jumbo: false,
+        description: "2 x P-000001 | Plyta Absolut Black Granit antyczny 2 cm",
+        locationCode: "",
+        quantity: "",
+        assembleQty: "0",
+        unitOfMeasureCode: "",
+        unitPriceNet: "",
+        taxGroupCode: "",
+        lineDiscountPct: "",
+        lineAmountNet: "",
+        availability: "",
+        billable: false,
+        isComment: true
+      },
+      {
+        type: "",
+        itemNo: "",
+        jumbo: false,
+        description: "KOMENTARZ: 2 x P-000001 | Plyta Absolut Black Granit antyczny 2 cm",
+        locationCode: "",
+        quantity: "",
+        assembleQty: "0",
+        unitOfMeasureCode: "",
+        unitPriceNet: "",
+        taxGroupCode: "",
+        lineDiscountPct: "",
+        lineAmountNet: "",
+        availability: "",
+        billable: false,
+        isComment: true
+      },
+      {
+        type: "",
+        itemNo: "",
+        jumbo: false,
+        description: "KOMENTARZ: 1 x 469 | Pozostale koszty | Amortyzacja wzoru",
+        locationCode: "",
+        quantity: "",
+        assembleQty: "0",
+        unitOfMeasureCode: "",
+        unitPriceNet: "",
+        taxGroupCode: "",
+        lineDiscountPct: "",
+        lineAmountNet: "",
+        availability: "",
+        billable: false,
+        isComment: true
+      },
+      {
+        type: "",
+        itemNo: "",
+        jumbo: false,
+        description: "KOMENTARZ: 1 x 469 | Pozostale koszty | Atest i obrobka",
+        locationCode: "",
+        quantity: "",
+        assembleQty: "0",
+        unitOfMeasureCode: "",
+        unitPriceNet: "",
+        taxGroupCode: "",
+        lineDiscountPct: "",
+        lineAmountNet: "",
+        availability: "",
+        billable: false,
+        isComment: true
+      },
+      {
+        type: "",
+        itemNo: "",
+        jumbo: false,
+        description: "KOMENTARZ: 3 x P-000002 | Plyta Absolut Black Granit poler 2 cm",
+        locationCode: "",
+        quantity: "",
+        assembleQty: "0",
+        unitOfMeasureCode: "",
+        unitPriceNet: "",
+        taxGroupCode: "",
+        lineDiscountPct: "",
+        lineAmountNet: "",
+        availability: "",
+        billable: false,
+        isComment: true
+      }
+    ];
+
+    const parseLocaleNumber = (value) => Number.parseFloat(String(value).replace(/\s/g, "").replace(",", ".")) || 0;
+    const formatDecimal = (value) => value.toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const formatInteger = (value) => value.toLocaleString("pl-PL", { maximumFractionDigits: 0 });
+
+    function createLineByType(type = "Koszt dodatkowy") {
+      const isAdditionalCost = type === "Koszt dodatkowy";
+
+      return {
+        type,
+        itemNo: isAdditionalCost ? "montaz" : "ZAP-000",
+        jumbo: false,
+        description: isAdditionalCost ? "transport" : "Nowy zapas",
+        locationCode: "M02",
+        quantity: "1",
+        assembleQty: isAdditionalCost ? "0" : "1",
+        unitOfMeasureCode: isAdditionalCost ? "usl." : "M2",
+        unitPriceNet: "0,00",
+        taxGroupCode: "",
+        lineDiscountPct: "0,00",
+        lineAmountNet: "0,00",
+        availability: "",
+        billable: true
+      };
+    }
+
+    function normalizeLineByType(line) {
+      const isAdditionalCost = line.type === "Koszt dodatkowy";
+
+      if (isAdditionalCost) {
+        if (!line.description || line.description === "Nowy zapas") {
+          line.description = "transport";
+        }
+
+        if (!line.itemNo || line.itemNo === "ZAP-000") {
+          line.itemNo = "montaz";
+        }
+
+        line.assembleQty = "0";
+
+        if (!line.unitOfMeasureCode || line.unitOfMeasureCode === "M2") {
+          line.unitOfMeasureCode = "usl.";
+        }
+
+        return;
+      }
+
+      if (!line.description || line.description === "transport") {
+        line.description = "Nowy zapas";
+      }
+
+      if (!line.itemNo || line.itemNo === "montaz" || line.itemNo === "opĹ‚ata" || line.itemNo === "transport") {
+        line.itemNo = "ZAP-000";
+      }
+
+      if (parseLocaleNumber(line.assembleQty) === 0) {
+        line.assembleQty = "1";
+      }
+
+      if (!line.unitOfMeasureCode || line.unitOfMeasureCode === "usl.") {
+        line.unitOfMeasureCode = "M2";
+      }
+    }
+
+    function getVisibleLineIndexes() {
+      if (showAllOfferRows) {
+        return lineData.map((_, index) => index);
+      }
+
+      return lineData
+        .map((line, index) => ({ line, index }))
+        .filter(({ line }) => line.type === "Zapas")
+        .map(({ index }) => index);
+    }
+
+    function renderRows() {
+      lineBody.innerHTML = "";
+
+      const visibleIndexes = getVisibleLineIndexes();
+
+      if (!visibleIndexes.includes(activeRowIndex)) {
+        activeRowIndex = visibleIndexes.length ? visibleIndexes[0] : -1;
+      }
+
+      visibleIndexes.forEach((index) => {
+        const line = lineData[index];
+        const row = document.createElement("tr");
+        row.classList.toggle("is-active", index === activeRowIndex);
+        row.classList.toggle("comment-row", Boolean(line.isComment));
+
+        const quantityCell = line.billable
+          ? `<input class="line-input line-input--compact" data-field="quantity" data-row-index="${index}" value="${line.quantity}">`
+          : `<div class="cell cell-right">${line.quantity}</div>`;
+
+        const priceCell = line.billable
+          ? `<input class="line-input line-input--compact" data-field="unitPriceNet" data-row-index="${index}" value="${line.unitPriceNet}">`
+          : `<div class="cell cell-right">${line.unitPriceNet}</div>`;
+
+        const discountCell = line.billable
+          ? `<input class="line-input line-input--compact" data-field="lineDiscountPct" data-row-index="${index}" value="${line.lineDiscountPct}">`
+          : `<div class="cell cell-right">${line.lineDiscountPct}</div>`;
+
+        const typeCell = line.billable
+          ? `<select class="line-select" data-field="type" data-row-index="${index}"><option value="Koszt dodatkowy" ${line.type === "Koszt dodatkowy" || line.type === "Koszt doda..." ? "selected" : ""}>Koszt dodatkowy</option><option value="Zapas" ${line.type === "Zapas" ? "selected" : ""}>Zapas</option></select>`
+          : `<div class="cell">${line.type}</div>`;
+
+        const itemNoCell = line.billable
+          ? (line.type === "Koszt dodatkowy" || line.type === "Koszt doda...")
+            ? `<select class="line-select" data-field="itemNo" data-row-index="${index}"><option value="montaz" ${line.itemNo === "montaz" ? "selected" : ""}>montaz</option><option value="opĹ‚ata" ${line.itemNo === "opĹ‚ata" ? "selected" : ""}>opĹ‚ata</option><option value="transport" ${line.itemNo === "transport" ? "selected" : ""}>transport</option></select>`
+            : `<input class="line-input" data-field="itemNo" data-row-index="${index}" value="${line.itemNo}" placeholder="Nr zapasu">`
+          : `<div class="cell">${line.itemNo}</div>`;
+
+        const descriptionCell = line.billable
+          ? `<input class="line-input" data-field="description" data-row-index="${index}" value="${line.description}">`
+          : `<div class="cell">${line.description}</div>`;
+
+        const jumboCell = line.billable
+          ? `<div class="cell cell-center"><input class="jumbo-check" type="checkbox" data-field="jumbo" data-row-index="${index}" ${line.jumbo ? "checked" : ""}></div>`
+          : `<div class="cell cell-center"><input class="jumbo-check" type="checkbox" ${line.jumbo ? "checked" : ""}></div>`;
+
+        const cells = [
+          `<td class="selection-cell"><button class="row-marker" type="button" data-row-index="${index}">${index === activeRowIndex ? "â†’" : ""}</button></td>`,
+          `<td class="menu-cell"><button class="row-menu" type="button" aria-label="Menu wiersza">â‹®</button></td>`,
+          `<td>${typeCell}</td>`,
+          `<td>${itemNoCell}</td>`,
+          `<td>${jumboCell}</td>`,
+          `<td>${descriptionCell}</td>`,
+          `<td><div class="cell">${line.locationCode}</div></td>`,
+          `<td>${quantityCell}</td>`,
+          `<td><div class="cell cell-right ${parseLocaleNumber(line.assembleQty) === 0 ? "qty-alert" : ""}">${line.assembleQty}</div></td>`,
+          `<td><div class="cell">${line.unitOfMeasureCode}</div></td>`,
+          `<td>${priceCell}</td>`,
+          `<td><div class="cell">${line.taxGroupCode}</div></td>`,
+          `<td>${discountCell}</td>`,
+          `<td><div class="cell" data-output="lineAmountNet" data-row-index="${index}">${line.lineAmountNet}</div></td>`,
+          `<td><div class="cell cell-center">${line.availability}</div></td>`
+        ];
+
+        row.innerHTML = cells.join("");
+        lineBody.appendChild(row);
+      });
+
+      bindRowInteractions();
+    }
+
+    function recalculateLine(line) {
+      if (!line.billable) {
+        return;
+      }
+
+      const quantity = parseLocaleNumber(line.quantity);
+      const unitPriceNet = parseLocaleNumber(line.unitPriceNet);
+      const lineDiscountPct = parseLocaleNumber(line.lineDiscountPct);
+
+      const lineNet = quantity * unitPriceNet * (1 - lineDiscountPct / 100);
+
+      line.lineAmountNet = formatDecimal(lineNet);
+    }
+
+    function recalculateSummary() {
+      let netTotal = 0;
+      let vatTotal = 0;
+      let grossTotal = 0;
+      let piecesTotal = 0;
+      let weightTotal = 0;
+      let discountTotal = 0;
+      let probabilityWeighted = 0;
+      let activeBillableRows = 0;
+
+      lineData.forEach((line) => {
+        recalculateLine(line);
+
+        if (!line.billable) {
+          return;
+        }
+
+        const lineNet = parseLocaleNumber(line.lineAmountNet);
+        const lineGross = lineNet * 1.23;
+        const vatPart = lineGross - lineNet;
+        const pieces = parseLocaleNumber(line.quantity);
+        const weight = 0;
+        const probability = 100;
+        const discount = parseLocaleNumber(line.lineDiscountPct);
+
+        netTotal += lineNet;
+        grossTotal += lineGross;
+        vatTotal += vatPart;
+        piecesTotal += pieces;
+        weightTotal += weight;
+        discountTotal += discount;
+        probabilityWeighted += probability;
+        activeBillableRows += 1;
+      });
+
+      netTotalValue.textContent = formatDecimal(netTotal);
+      vatTotalValue.textContent = formatDecimal(vatTotal);
+      grossTotalValue.textContent = formatDecimal(grossTotal);
+      lineCountValue.textContent = formatInteger(activeBillableRows);
+      piecesTotalValue.textContent = formatInteger(piecesTotal);
+      weightTotalValue.textContent = `${formatInteger(weightTotal)} kg`;
+      discountAvgValue.textContent = `${formatDecimal(activeBillableRows ? discountTotal / activeBillableRows : 0)}%`;
+      conversionValue.textContent = `${formatInteger(activeBillableRows ? probabilityWeighted / activeBillableRows : 0)}%`;
+
+      document.querySelectorAll("[data-output='lineAmountNet']").forEach((node) => {
+        const index = Number.parseInt(node.dataset.rowIndex, 10);
+        node.textContent = lineData[index].lineAmountNet;
+      });
+    }
+
+    function bindRowInteractions() {
+      document.querySelectorAll("[data-row-index]").forEach((node) => {
+        if (node.matches(".row-marker")) {
+          node.addEventListener("click", () => {
+            activeRowIndex = Number.parseInt(node.dataset.rowIndex, 10);
+                const templateModal = document.querySelector("#templateModal");
+    const modalCloseButton = document.querySelector("#modalCloseButton");
+    const modalCancelButton = document.querySelector("#modalCancelButton");
+    const modalApplyButton = document.querySelector("#modalApplyButton");
+    const templateGrid = document.querySelector("#templateGrid");
+
+    let selectedTemplate = null;
+
+    const templates = [
+      { id: "premium", name: "Premium", description: "Pełny pakiet z wszytskich usługami", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "450,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" },
+        { type: "Koszt dodatkowy", itemNo: "transport", quantity: "1", unitPrice: "150,00" }
+      ]},
+      { id: "standard", name: "Standard", description: "Pakiet podstawowy bez dodatkowych usług", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "300,00" }
+      ]},
+      { id: "with-assembly", name: "Z montażem", description: "Zapas z usługą montażu", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "350,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" }
+      ]},
+      { id: "with-cuts", name: "Wycięcia", description: "Zapas z usługą wycinania i obróbki", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "400,00" },
+        { type: "Koszt dodatkowy", itemNo: "opłata", quantity: "1", unitPrice: "120,00" }
+      ]}
+    ];
+
+    function renderTemplateModal() {
+      templateGrid.innerHTML = templates.map(template => `
+        <div class="template-card ${selectedTemplate?.id === template.id ? "is-selected" : ""}" data-template-id="${template.id}">
+          <p class="template-name">${template.name}</p>
+          <p class="template-desc">${template.description}</p>
+          <p class="template-price">${template.items.reduce((s, i) => s + parseLocaleNumber(i.unitPrice), 0).toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} PLN</p>
+        </div>
+      `).join("");
+
+      document.querySelectorAll(".template-card").forEach(card => {
+        card.addEventListener("click", () => {
+          selectedTemplate = templates.find(t => t.id === card.dataset.templateId);
+          renderTemplateModal();
+        });
+      });
+    }
+
+    function applyTemplate() {
+      if (!selectedTemplate) { alert("Proszę wybrać szablon."); return; }
+      lineData.splice(0, lineData.length - lineData.filter(l => l.isComment).length);
+      selectedTemplate.items.forEach(item => {
+        lineData.push({
+          type: item.type, itemNo: item.itemNo, jumbo: false, description: item.type === "Zapas" ? "Zapas z szablonu" : item.itemNo,
+          locationCode: "M02", quantity: item.quantity, assembleQty: item.type === "Zapas" ? item.quantity : "0",
+          unitOfMeasureCode: item.type === "Zapas" ? "M2" : "usl.", unitPriceNet: item.unitPrice, taxGroupCode: "", lineDiscountPct: "0,00",
+          lineAmountNet: item.unitPrice, availability: "", billable: true
+        });
+      });
+      selectedTemplate = null; showAllOfferRows = true; closeTemplateModal(); renderRows(); recalculateSummary();
+    }
+
+    function openTemplateModal() { selectedTemplate = null; renderTemplateModal(); templateModal.classList.add("is-open"); }
+    function closeTemplateModal() { templateModal.classList.remove("is-open"); selectedTemplate = null; }
+
+    document.querySelectorAll("button.subtoolbar-link").forEach(btn => {
+      if (btn.textContent.trim() === "Zastosuj szablon") btn.addEventListener("click", openTemplateModal);
+    });
+
+    modalCloseButton.addEventListener("click", closeTemplateModal);
+    modalCancelButton.addEventListener("click", closeTemplateModal);
+    modalApplyButton.addEventListener("click", applyTemplate);
+    templateModal.addEventListener("click", (e) => { if (e.target === templateModal) closeTemplateModal(); });
+
+            renderRows();
+            recalculateSummary();
+          });
+
+          return;
+        }
+
+        if (node.matches(".jumbo-check")) {
+          node.addEventListener("change", (event) => {
+            const index = Number.parseInt(event.target.dataset.rowIndex, 10);
+            lineData[index].jumbo = event.target.checked;
+          });
+
+          return;
+        }
+
+        node.addEventListener("input", (event) => {
+          const index = Number.parseInt(event.target.dataset.rowIndex, 10);
+          const fieldName = event.target.dataset.field;
+          lineData[index][fieldName] = event.target.value;
+
+          if (fieldName === "type") {
+            normalizeLineByType(lineData[index]);
+                const templateModal = document.querySelector("#templateModal");
+    const modalCloseButton = document.querySelector("#modalCloseButton");
+    const modalCancelButton = document.querySelector("#modalCancelButton");
+    const modalApplyButton = document.querySelector("#modalApplyButton");
+    const templateGrid = document.querySelector("#templateGrid");
+
+    let selectedTemplate = null;
+
+    const templates = [
+      { id: "premium", name: "Premium", description: "Pełny pakiet z wszytskich usługami", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "450,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" },
+        { type: "Koszt dodatkowy", itemNo: "transport", quantity: "1", unitPrice: "150,00" }
+      ]},
+      { id: "standard", name: "Standard", description: "Pakiet podstawowy bez dodatkowych usług", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "300,00" }
+      ]},
+      { id: "with-assembly", name: "Z montażem", description: "Zapas z usługą montażu", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "350,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" }
+      ]},
+      { id: "with-cuts", name: "Wycięcia", description: "Zapas z usługą wycinania i obróbki", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "400,00" },
+        { type: "Koszt dodatkowy", itemNo: "opłata", quantity: "1", unitPrice: "120,00" }
+      ]}
+    ];
+
+    function renderTemplateModal() {
+      templateGrid.innerHTML = templates.map(template => `
+        <div class="template-card ${selectedTemplate?.id === template.id ? "is-selected" : ""}" data-template-id="${template.id}">
+          <p class="template-name">${template.name}</p>
+          <p class="template-desc">${template.description}</p>
+          <p class="template-price">${template.items.reduce((s, i) => s + parseLocaleNumber(i.unitPrice), 0).toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} PLN</p>
+        </div>
+      `).join("");
+
+      document.querySelectorAll(".template-card").forEach(card => {
+        card.addEventListener("click", () => {
+          selectedTemplate = templates.find(t => t.id === card.dataset.templateId);
+          renderTemplateModal();
+        });
+      });
+    }
+
+    function applyTemplate() {
+      if (!selectedTemplate) { alert("Proszę wybrać szablon."); return; }
+      lineData.splice(0, lineData.length - lineData.filter(l => l.isComment).length);
+      selectedTemplate.items.forEach(item => {
+        lineData.push({
+          type: item.type, itemNo: item.itemNo, jumbo: false, description: item.type === "Zapas" ? "Zapas z szablonu" : item.itemNo,
+          locationCode: "M02", quantity: item.quantity, assembleQty: item.type === "Zapas" ? item.quantity : "0",
+          unitOfMeasureCode: item.type === "Zapas" ? "M2" : "usl.", unitPriceNet: item.unitPrice, taxGroupCode: "", lineDiscountPct: "0,00",
+          lineAmountNet: item.unitPrice, availability: "", billable: true
+        });
+      });
+      selectedTemplate = null; showAllOfferRows = true; closeTemplateModal(); renderRows(); recalculateSummary();
+    }
+
+    function openTemplateModal() { selectedTemplate = null; renderTemplateModal(); templateModal.classList.add("is-open"); }
+    function closeTemplateModal() { templateModal.classList.remove("is-open"); selectedTemplate = null; }
+
+    document.querySelectorAll("button.subtoolbar-link").forEach(btn => {
+      if (btn.textContent.trim() === "Zastosuj szablon") btn.addEventListener("click", openTemplateModal);
+    });
+
+    modalCloseButton.addEventListener("click", closeTemplateModal);
+    modalCancelButton.addEventListener("click", closeTemplateModal);
+    modalApplyButton.addEventListener("click", applyTemplate);
+    templateModal.addEventListener("click", (e) => { if (e.target === templateModal) closeTemplateModal(); });
+
+            renderRows();
+          }
+
+          recalculateSummary();
+        });
+
+        node.addEventListener("change", (event) => {
+          const index = Number.parseInt(event.target.dataset.rowIndex, 10);
+          const fieldName = event.target.dataset.field;
+
+          if (!fieldName || fieldName === "jumbo") {
+            return;
+          }
+
+          lineData[index][fieldName] = event.target.value;
+
+          if (fieldName === "type") {
+            normalizeLineByType(lineData[index]);
+                const templateModal = document.querySelector("#templateModal");
+    const modalCloseButton = document.querySelector("#modalCloseButton");
+    const modalCancelButton = document.querySelector("#modalCancelButton");
+    const modalApplyButton = document.querySelector("#modalApplyButton");
+    const templateGrid = document.querySelector("#templateGrid");
+
+    let selectedTemplate = null;
+
+    const templates = [
+      { id: "premium", name: "Premium", description: "Pełny pakiet z wszytskich usługami", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "450,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" },
+        { type: "Koszt dodatkowy", itemNo: "transport", quantity: "1", unitPrice: "150,00" }
+      ]},
+      { id: "standard", name: "Standard", description: "Pakiet podstawowy bez dodatkowych usług", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "300,00" }
+      ]},
+      { id: "with-assembly", name: "Z montażem", description: "Zapas z usługą montażu", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "350,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" }
+      ]},
+      { id: "with-cuts", name: "Wycięcia", description: "Zapas z usługą wycinania i obróbki", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "400,00" },
+        { type: "Koszt dodatkowy", itemNo: "opłata", quantity: "1", unitPrice: "120,00" }
+      ]}
+    ];
+
+    function renderTemplateModal() {
+      templateGrid.innerHTML = templates.map(template => `
+        <div class="template-card ${selectedTemplate?.id === template.id ? "is-selected" : ""}" data-template-id="${template.id}">
+          <p class="template-name">${template.name}</p>
+          <p class="template-desc">${template.description}</p>
+          <p class="template-price">${template.items.reduce((s, i) => s + parseLocaleNumber(i.unitPrice), 0).toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} PLN</p>
+        </div>
+      `).join("");
+
+      document.querySelectorAll(".template-card").forEach(card => {
+        card.addEventListener("click", () => {
+          selectedTemplate = templates.find(t => t.id === card.dataset.templateId);
+          renderTemplateModal();
+        });
+      });
+    }
+
+    function applyTemplate() {
+      if (!selectedTemplate) { alert("Proszę wybrać szablon."); return; }
+      lineData.splice(0, lineData.length - lineData.filter(l => l.isComment).length);
+      selectedTemplate.items.forEach(item => {
+        lineData.push({
+          type: item.type, itemNo: item.itemNo, jumbo: false, description: item.type === "Zapas" ? "Zapas z szablonu" : item.itemNo,
+          locationCode: "M02", quantity: item.quantity, assembleQty: item.type === "Zapas" ? item.quantity : "0",
+          unitOfMeasureCode: item.type === "Zapas" ? "M2" : "usl.", unitPriceNet: item.unitPrice, taxGroupCode: "", lineDiscountPct: "0,00",
+          lineAmountNet: item.unitPrice, availability: "", billable: true
+        });
+      });
+      selectedTemplate = null; showAllOfferRows = true; closeTemplateModal(); renderRows(); recalculateSummary();
+    }
+
+    function openTemplateModal() { selectedTemplate = null; renderTemplateModal(); templateModal.classList.add("is-open"); }
+    function closeTemplateModal() { templateModal.classList.remove("is-open"); selectedTemplate = null; }
+
+    document.querySelectorAll("button.subtoolbar-link").forEach(btn => {
+      if (btn.textContent.trim() === "Zastosuj szablon") btn.addEventListener("click", openTemplateModal);
+    });
+
+    modalCloseButton.addEventListener("click", closeTemplateModal);
+    modalCancelButton.addEventListener("click", closeTemplateModal);
+    modalApplyButton.addEventListener("click", applyTemplate);
+    templateModal.addEventListener("click", (e) => { if (e.target === templateModal) closeTemplateModal(); });
+
+            renderRows();
+          }
+
+          recalculateSummary();
+        });
+      });
+    }
+
+    addLineButton.addEventListener("click", () => {
+      lineData.push(createLineByType());
+      activeRowIndex = lineData.length - 1;
+      showAllOfferRows = true;
+          const templateModal = document.querySelector("#templateModal");
+    const modalCloseButton = document.querySelector("#modalCloseButton");
+    const modalCancelButton = document.querySelector("#modalCancelButton");
+    const modalApplyButton = document.querySelector("#modalApplyButton");
+    const templateGrid = document.querySelector("#templateGrid");
+
+    let selectedTemplate = null;
+
+    const templates = [
+      { id: "premium", name: "Premium", description: "Pełny pakiet z wszytskich usługami", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "450,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" },
+        { type: "Koszt dodatkowy", itemNo: "transport", quantity: "1", unitPrice: "150,00" }
+      ]},
+      { id: "standard", name: "Standard", description: "Pakiet podstawowy bez dodatkowych usług", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "300,00" }
+      ]},
+      { id: "with-assembly", name: "Z montażem", description: "Zapas z usługą montażu", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "350,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" }
+      ]},
+      { id: "with-cuts", name: "Wycięcia", description: "Zapas z usługą wycinania i obróbki", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "400,00" },
+        { type: "Koszt dodatkowy", itemNo: "opłata", quantity: "1", unitPrice: "120,00" }
+      ]}
+    ];
+
+    function renderTemplateModal() {
+      templateGrid.innerHTML = templates.map(template => `
+        <div class="template-card ${selectedTemplate?.id === template.id ? "is-selected" : ""}" data-template-id="${template.id}">
+          <p class="template-name">${template.name}</p>
+          <p class="template-desc">${template.description}</p>
+          <p class="template-price">${template.items.reduce((s, i) => s + parseLocaleNumber(i.unitPrice), 0).toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} PLN</p>
+        </div>
+      `).join("");
+
+      document.querySelectorAll(".template-card").forEach(card => {
+        card.addEventListener("click", () => {
+          selectedTemplate = templates.find(t => t.id === card.dataset.templateId);
+          renderTemplateModal();
+        });
+      });
+    }
+
+    function applyTemplate() {
+      if (!selectedTemplate) { alert("Proszę wybrać szablon."); return; }
+      lineData.splice(0, lineData.length - lineData.filter(l => l.isComment).length);
+      selectedTemplate.items.forEach(item => {
+        lineData.push({
+          type: item.type, itemNo: item.itemNo, jumbo: false, description: item.type === "Zapas" ? "Zapas z szablonu" : item.itemNo,
+          locationCode: "M02", quantity: item.quantity, assembleQty: item.type === "Zapas" ? item.quantity : "0",
+          unitOfMeasureCode: item.type === "Zapas" ? "M2" : "usl.", unitPriceNet: item.unitPrice, taxGroupCode: "", lineDiscountPct: "0,00",
+          lineAmountNet: item.unitPrice, availability: "", billable: true
+        });
+      });
+      selectedTemplate = null; showAllOfferRows = true; closeTemplateModal(); renderRows(); recalculateSummary();
+    }
+
+    function openTemplateModal() { selectedTemplate = null; renderTemplateModal(); templateModal.classList.add("is-open"); }
+    function closeTemplateModal() { templateModal.classList.remove("is-open"); selectedTemplate = null; }
+
+    document.querySelectorAll("button.subtoolbar-link").forEach(btn => {
+      if (btn.textContent.trim() === "Zastosuj szablon") btn.addEventListener("click", openTemplateModal);
+    });
+
+    modalCloseButton.addEventListener("click", closeTemplateModal);
+    modalCancelButton.addEventListener("click", closeTemplateModal);
+    modalApplyButton.addEventListener("click", applyTemplate);
+    templateModal.addEventListener("click", (e) => { if (e.target === templateModal) closeTemplateModal(); });
+
+      renderRows();
+      recalculateSummary();
+    });
+
+    showOfferRowsButton.addEventListener("click", () => {
+      showAllOfferRows = true;
+          const templateModal = document.querySelector("#templateModal");
+    const modalCloseButton = document.querySelector("#modalCloseButton");
+    const modalCancelButton = document.querySelector("#modalCancelButton");
+    const modalApplyButton = document.querySelector("#modalApplyButton");
+    const templateGrid = document.querySelector("#templateGrid");
+
+    let selectedTemplate = null;
+
+    const templates = [
+      { id: "premium", name: "Premium", description: "Pełny pakiet z wszytskich usługami", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "450,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" },
+        { type: "Koszt dodatkowy", itemNo: "transport", quantity: "1", unitPrice: "150,00" }
+      ]},
+      { id: "standard", name: "Standard", description: "Pakiet podstawowy bez dodatkowych usług", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "300,00" }
+      ]},
+      { id: "with-assembly", name: "Z montażem", description: "Zapas z usługą montażu", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "350,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" }
+      ]},
+      { id: "with-cuts", name: "Wycięcia", description: "Zapas z usługą wycinania i obróbki", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "400,00" },
+        { type: "Koszt dodatkowy", itemNo: "opłata", quantity: "1", unitPrice: "120,00" }
+      ]}
+    ];
+
+    function renderTemplateModal() {
+      templateGrid.innerHTML = templates.map(template => `
+        <div class="template-card ${selectedTemplate?.id === template.id ? "is-selected" : ""}" data-template-id="${template.id}">
+          <p class="template-name">${template.name}</p>
+          <p class="template-desc">${template.description}</p>
+          <p class="template-price">${template.items.reduce((s, i) => s + parseLocaleNumber(i.unitPrice), 0).toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} PLN</p>
+        </div>
+      `).join("");
+
+      document.querySelectorAll(".template-card").forEach(card => {
+        card.addEventListener("click", () => {
+          selectedTemplate = templates.find(t => t.id === card.dataset.templateId);
+          renderTemplateModal();
+        });
+      });
+    }
+
+    function applyTemplate() {
+      if (!selectedTemplate) { alert("Proszę wybrać szablon."); return; }
+      lineData.splice(0, lineData.length - lineData.filter(l => l.isComment).length);
+      selectedTemplate.items.forEach(item => {
+        lineData.push({
+          type: item.type, itemNo: item.itemNo, jumbo: false, description: item.type === "Zapas" ? "Zapas z szablonu" : item.itemNo,
+          locationCode: "M02", quantity: item.quantity, assembleQty: item.type === "Zapas" ? item.quantity : "0",
+          unitOfMeasureCode: item.type === "Zapas" ? "M2" : "usl.", unitPriceNet: item.unitPrice, taxGroupCode: "", lineDiscountPct: "0,00",
+          lineAmountNet: item.unitPrice, availability: "", billable: true
+        });
+      });
+      selectedTemplate = null; showAllOfferRows = true; closeTemplateModal(); renderRows(); recalculateSummary();
+    }
+
+    function openTemplateModal() { selectedTemplate = null; renderTemplateModal(); templateModal.classList.add("is-open"); }
+    function closeTemplateModal() { templateModal.classList.remove("is-open"); selectedTemplate = null; }
+
+    document.querySelectorAll("button.subtoolbar-link").forEach(btn => {
+      if (btn.textContent.trim() === "Zastosuj szablon") btn.addEventListener("click", openTemplateModal);
+    });
+
+    modalCloseButton.addEventListener("click", closeTemplateModal);
+    modalCancelButton.addEventListener("click", closeTemplateModal);
+    modalApplyButton.addEventListener("click", applyTemplate);
+    templateModal.addEventListener("click", (e) => { if (e.target === templateModal) closeTemplateModal(); });
+
+      renderRows();
+      recalculateSummary();
+    });
+
+    customerSelect.addEventListener("change", () => {
+      customerName.textContent = customerSelect.value;
+      documentHeading.textContent = `OS/26/05/0002 Â· ${customerSelect.value}`;
+    });
+
+    workspaceTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        workspaceTabs.forEach((item) => item.classList.remove("is-active"));
+        tab.classList.add("is-active");
+
+        const tabName = tab.dataset.workspaceTab;
+        managePanel.hidden = tabName !== "zarzadzaj";
+        linePanel.hidden = tabName !== "wiersz";
+        functionPanel.hidden = tabName !== "funkcje";
+      });
+    });
+
+        const templateModal = document.querySelector("#templateModal");
+    const modalCloseButton = document.querySelector("#modalCloseButton");
+    const modalCancelButton = document.querySelector("#modalCancelButton");
+    const modalApplyButton = document.querySelector("#modalApplyButton");
+    const templateGrid = document.querySelector("#templateGrid");
+
+    let selectedTemplate = null;
+
+    const templates = [
+      { id: "premium", name: "Premium", description: "Pełny pakiet z wszytskich usługami", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "450,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" },
+        { type: "Koszt dodatkowy", itemNo: "transport", quantity: "1", unitPrice: "150,00" }
+      ]},
+      { id: "standard", name: "Standard", description: "Pakiet podstawowy bez dodatkowych usług", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "300,00" }
+      ]},
+      { id: "with-assembly", name: "Z montażem", description: "Zapas z usługą montażu", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "350,00" },
+        { type: "Koszt dodatkowy", itemNo: "montaz", quantity: "1", unitPrice: "200,00" }
+      ]},
+      { id: "with-cuts", name: "Wycięcia", description: "Zapas z usługą wycinania i obróbki", items: [
+        { type: "Zapas", itemNo: "B-000001", quantity: "1", unitPrice: "400,00" },
+        { type: "Koszt dodatkowy", itemNo: "opłata", quantity: "1", unitPrice: "120,00" }
+      ]}
+    ];
+
+    function renderTemplateModal() {
+      templateGrid.innerHTML = templates.map(template => `
+        <div class="template-card ${selectedTemplate?.id === template.id ? "is-selected" : ""}" data-template-id="${template.id}">
+          <p class="template-name">${template.name}</p>
+          <p class="template-desc">${template.description}</p>
+          <p class="template-price">${template.items.reduce((s, i) => s + parseLocaleNumber(i.unitPrice), 0).toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} PLN</p>
+        </div>
+      `).join("");
+
+      document.querySelectorAll(".template-card").forEach(card => {
+        card.addEventListener("click", () => {
+          selectedTemplate = templates.find(t => t.id === card.dataset.templateId);
+          renderTemplateModal();
+        });
+      });
+    }
+
+    function applyTemplate() {
+      if (!selectedTemplate) { alert("Proszę wybrać szablon."); return; }
+      lineData.splice(0, lineData.length - lineData.filter(l => l.isComment).length);
+      selectedTemplate.items.forEach(item => {
+        lineData.push({
+          type: item.type, itemNo: item.itemNo, jumbo: false, description: item.type === "Zapas" ? "Zapas z szablonu" : item.itemNo,
+          locationCode: "M02", quantity: item.quantity, assembleQty: item.type === "Zapas" ? item.quantity : "0",
+          unitOfMeasureCode: item.type === "Zapas" ? "M2" : "usl.", unitPriceNet: item.unitPrice, taxGroupCode: "", lineDiscountPct: "0,00",
+          lineAmountNet: item.unitPrice, availability: "", billable: true
+        });
+      });
+      selectedTemplate = null; showAllOfferRows = true; closeTemplateModal(); renderRows(); recalculateSummary();
+    }
+
+    function openTemplateModal() { selectedTemplate = null; renderTemplateModal(); templateModal.classList.add("is-open"); }
+    function closeTemplateModal() { templateModal.classList.remove("is-open"); selectedTemplate = null; }
+
+    document.querySelectorAll("button.subtoolbar-link").forEach(btn => {
+      if (btn.textContent.trim() === "Zastosuj szablon") btn.addEventListener("click", openTemplateModal);
+    });
+
+    modalCloseButton.addEventListener("click", closeTemplateModal);
+    modalCancelButton.addEventListener("click", closeTemplateModal);
+    modalApplyButton.addEventListener("click", applyTemplate);
+    templateModal.addEventListener("click", (e) => { if (e.target === templateModal) closeTemplateModal(); });
+
+
+    renderRows();
+    recalculateSummary();
+  </script>
+  <script>
+    (() => {
+      const modalNode = document.querySelector("#templateModal");
+      if (modalNode) {
+        modalNode.remove();
+      }
+
+      const replaceButton = (selector) => {
+        const original = document.querySelector(selector);
+        if (!original || !original.parentNode) {
+          return original;
+        }
+
+        const clone = original.cloneNode(true);
+        original.parentNode.replaceChild(clone, original);
+        return clone;
+      };
+
+      const lineBodyNode = document.querySelector("#lineBody");
+      const netNode = document.querySelector("#netTotalValue");
+      const vatNode = document.querySelector("#vatTotalValue");
+      const grossNode = document.querySelector("#grossTotalValue");
+      const conversionNode = document.querySelector("#conversionValue");
+      const lineCountNode = document.querySelector("#lineCountValue");
+      const piecesNode = document.querySelector("#piecesTotalValue");
+      const discountNode = document.querySelector("#discountAvgValue");
+      const weightNode = document.querySelector("#weightTotalValue");
+      const templatePanelNode = document.querySelector("#templatePanel");
+      const templateGridNode = document.querySelector("#templateGrid");
+
+      const addLineBtn = replaceButton("#addLineButton");
+      const showRowsBtn = replaceButton("#showOfferRowsButton");
+      const openTemplateBtn = replaceButton("#openTemplatePanelButton");
+      const closeTemplateBtn = replaceButton("#closeTemplatePanelButton");
+      const cancelTemplateBtn = replaceButton("#cancelTemplateButton");
+      const applyTemplateBtn = replaceButton("#applyTemplateButton");
+
+      const parseNumber = (value) => Number.parseFloat(String(value ?? "").replace(/\s/g, "").replace(",", ".")) || 0;
+      const formatDecimal = (value) => value.toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const formatInteger = (value) => value.toLocaleString("pl-PL", { maximumFractionDigits: 0 });
+
+      const templateDefinitions = [
+        {
+          id: "premium",
+          name: "Premium",
+          description: "Pełny pakiet z montażem i transportem.",
+          items: [
+            { type: "Zapas", itemNo: "B-000001", description: "Blat Premium", quantity: "1", unitPriceNet: "450,00" },
+            { type: "Koszt dodatkowy", itemNo: "montaz", description: "Montaż", quantity: "1", unitPriceNet: "200,00" },
+            { type: "Koszt dodatkowy", itemNo: "transport", description: "Transport", quantity: "1", unitPriceNet: "150,00" }
+          ]
+        },
+        {
+          id: "standard",
+          name: "Standard",
+          description: "Pakiet podstawowy bez usług dodatkowych.",
+          items: [
+            { type: "Zapas", itemNo: "B-000001", description: "Blat Standard", quantity: "1", unitPriceNet: "300,00" }
+          ]
+        },
+        {
+          id: "with-assembly",
+          name: "Z montażem",
+          description: "Zapas z pełną usługą montażu.",
+          items: [
+            { type: "Zapas", itemNo: "B-000001", description: "Blat z montażem", quantity: "1", unitPriceNet: "350,00" },
+            { type: "Koszt dodatkowy", itemNo: "montaz", description: "Montaż", quantity: "1", unitPriceNet: "200,00" }
+          ]
+        },
+        {
+          id: "cuts",
+          name: "Wycięcia",
+          description: "Zapas z dodatkowymi wycięciami i obróbką.",
+          items: [
+            { type: "Zapas", itemNo: "B-000001", description: "Blat z wycięciami", quantity: "1", unitPriceNet: "400,00" },
+            { type: "Koszt dodatkowy", itemNo: "opłata", description: "Opłata za wycięcia", quantity: "1", unitPriceNet: "120,00" }
+          ]
+        }
+      ];
+
+      const baseLines = [
+        {
+          type: "Koszt dodatkowy",
+          itemNo: "montaz",
+          jumbo: false,
+          description: "Montaż",
+          locationCode: "M02",
+          quantity: "1",
+          assembleQty: "0",
+          unitOfMeasureCode: "usl.",
+          unitPriceNet: "500,00",
+          taxGroupCode: "",
+          lineDiscountPct: "0,00",
+          lineAmountNet: "500,00",
+          availability: "",
+          billable: true
+        },
+        {
+          type: "Zapas",
+          itemNo: "B-000001",
+          jumbo: true,
+          description: "Blat Absolut Black Granit antyczny 2 cm",
+          locationCode: "M02",
+          quantity: "1",
+          assembleQty: "1",
+          unitOfMeasureCode: "M2",
+          unitPriceNet: "275,00",
+          taxGroupCode: "",
+          lineDiscountPct: "0,00",
+          lineAmountNet: "275,00",
+          availability: "",
+          billable: true
+        },
+        {
+          type: "",
+          itemNo: "",
+          jumbo: false,
+          description: "2 x P-000001 | Płyta Absolut Black Granit antyczny 2 cm",
+          locationCode: "",
+          quantity: "",
+          assembleQty: "0",
+          unitOfMeasureCode: "",
+          unitPriceNet: "",
+          taxGroupCode: "",
+          lineDiscountPct: "",
+          lineAmountNet: "",
+          availability: "",
+          billable: false,
+          isComment: true
+        },
+        {
+          type: "",
+          itemNo: "",
+          jumbo: false,
+          description: "KOMENTARZ: 2 x P-000001 | Płyta Absolut Black Granit antyczny 2 cm",
+          locationCode: "",
+          quantity: "",
+          assembleQty: "0",
+          unitOfMeasureCode: "",
+          unitPriceNet: "",
+          taxGroupCode: "",
+          lineDiscountPct: "",
+          lineAmountNet: "",
+          availability: "",
+          billable: false,
+          isComment: true
+        }
+      ];
+
+      let stateLines = baseLines.map((line) => ({ ...line }));
+      let stateActiveRow = 1;
+      let stateShowAll = false;
+      let selectedTemplateId = null;
+
+      const createInvestmentLines = (items, locationCode) => items.map((item) => ({
+        type: "Zapas",
+        itemNo: item.itemNo,
+        jumbo: false,
+        description: item.description,
+        locationCode,
+        quantity: item.quantity,
+        assembleQty: item.quantity,
+        unitOfMeasureCode: item.unitOfMeasureCode,
+        unitPriceNet: item.unitPriceNet,
+        taxGroupCode: "",
+        lineDiscountPct: "0,00",
+        lineAmountNet: item.unitPriceNet,
+        availability: "",
+        billable: true
+      }));
+
+      const investmentOfferProfiles = {
+        "INW-000123": {
+          offerNumber: "ZZ/09/26/0001",
+          number: "INW-000123", name: "Budowa hali Bielsko", status: "W realizacji", salesCode: "JKOW", salesperson: "Jan Kowalski",
+          customerNo: "C10000", customer: "Bielsko Logistics Sp. z o.o.", address: "ul. Przemysłowa 25", address2: "Budynek B", postalCode: "43-300", city: "Bielsko-Biała", countryCode: "PL", currencyCode: "PLN", locationCode: "MAG-GŁ", createdAt: "07.01.2026 08:15", createdBy: "JKOW", description: "Budowa hali wysokiego składowania wraz z częścią administracyjną oraz strefą kompletacji zamówień.",
+          lines: createInvestmentLines([{ itemNo: "HALA-001", description: "Konstrukcja hali wysokiego składowania", quantity: "1", unitOfMeasureCode: "szt.", unitPriceNet: "145000,00" }, { itemNo: "KOMP-001", description: "Strefa kompletacji zamówień", quantity: "1", unitOfMeasureCode: "szt.", unitPriceNet: "100000,00" }], "MAG-GŁ")
+        },
+        "INW-000124": {
+          offerNumber: "ZZ/09/26/0002",
+          number: "INW-000124", name: "Modernizacja magazynu Kraków", status: "Nowa", salesCode: "ANOW", salesperson: "Anna Nowak",
+          customerNo: "C10001", customer: "Krak-Mag Sp. z o.o.", address: "ul. Magazynowa 12", address2: "Hala 3", postalCode: "30-001", city: "Kraków", countryCode: "PL", currencyCode: "PLN", locationCode: "MAG-KRK", createdAt: "14.01.2026 10:20", createdBy: "ANOW", description: "Modernizacja powierzchni magazynowej i infrastruktury przeładunkowej.",
+          lines: createInvestmentLines([{ itemNo: "MOD-001", description: "Modernizacja regałów magazynowych", quantity: "1", unitOfMeasureCode: "kpl.", unitPriceNet: "82000,00" }, { itemNo: "MOD-002", description: "Infrastruktura przeładunkowa", quantity: "1", unitOfMeasureCode: "kpl.", unitPriceNet: "46000,00" }], "MAG-KRK")
+        },
+        "INW-000125": {
+          offerNumber: "ZZ/09/26/0003",
+          number: "INW-000125", name: "Rozbudowa centrum logistycznego Poznań", status: "Zamknięta", salesCode: "PWSZ", salesperson: "Piotr Wiśniewski",
+          customerNo: "C10002", customer: "Logistic Center SA", address: "ul. Logistyczna 8", address2: "Budynek A", postalCode: "60-001", city: "Poznań", countryCode: "PL", currencyCode: "PLN", locationCode: "MAG-POZ", createdAt: "01.09.2025 09:00", createdBy: "PWSZ", description: "Rozbudowa centrum logistycznego o dodatkową strefę składowania.",
+          lines: createInvestmentLines([{ itemNo: "LOG-001", description: "Dodatkowa strefa składowania", quantity: "1", unitOfMeasureCode: "kpl.", unitPriceNet: "210000,00" }, { itemNo: "LOG-002", description: "Rozbudowa doków przeładunkowych", quantity: "2", unitOfMeasureCode: "szt.", unitPriceNet: "38000,00" }], "MAG-POZ")
+        }
+      };
+
+      const selectedInvestmentId = new URLSearchParams(window.location.search).get("investment") || "INW-000123";
+      let selectedInvestment = investmentOfferProfiles[selectedInvestmentId] || investmentOfferProfiles["INW-000123"];
+      const applyInvestmentSelection = (investmentId) => {
+        selectedInvestment = investmentOfferProfiles[investmentId] || selectedInvestment;
+        document.querySelectorAll("[data-investment-field]").forEach((field) => {
+          field.textContent = selectedInvestment[field.dataset.investmentField];
+        });
+        customerSelect.innerHTML = `<option selected>${selectedInvestment.customer}</option>`;
+        customerName.textContent = selectedInvestment.customer;
+        documentHeading.textContent = `${selectedInvestment.offerNumber} · ${selectedInvestment.customer}`;
+        renderRows();
+      };
+
+      const ribbonActionsPanel = document.querySelector("#ribbonActionsPanel");
+      document.querySelectorAll(".ribbon-tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          document.querySelectorAll(".ribbon-tab").forEach((item) => item.classList.remove("ribbon-tab--active"));
+          tab.classList.add("ribbon-tab--active");
+          ribbonActionsPanel.hidden = tab.textContent.trim() !== "Akcje";
+        });
+      });
+
+      const investmentDialog = document.querySelector("#investmentDialog");
+      const investmentDialogBody = document.querySelector("#investmentDialogBody");
+      let pickedInvestmentId = selectedInvestment.number;
+
+      const renderInvestmentDialog = () => {
+        investmentDialogBody.innerHTML = Object.values(investmentOfferProfiles).map((investment) => `
+          <tr class="${investment.number === pickedInvestmentId ? "is-selected" : ""}" data-investment-id="${investment.number}">
+            <td>${investment.number}</td>
+            <td>${investment.name}</td>
+            <td>${investment.status}</td>
+            <td>${investment.customer}</td>
+          </tr>
+        `).join("");
+
+        investmentDialogBody.querySelectorAll("tr").forEach((row) => {
+          row.addEventListener("click", () => {
+            pickedInvestmentId = row.dataset.investmentId;
+            renderInvestmentDialog();
+          });
+        });
+      };
+
+      const openInvestmentDialog = () => {
+        pickedInvestmentId = selectedInvestment.number;
+        renderInvestmentDialog();
+        investmentDialog.hidden = false;
+      };
+
+      const closeInvestmentDialog = () => { investmentDialog.hidden = true; };
+
+      document.querySelector("#linkInvestmentButton").addEventListener("click", openInvestmentDialog);
+      document.querySelector("#investmentDialogCloseButton").addEventListener("click", closeInvestmentDialog);
+      document.querySelector("#investmentDialogCancelButton").addEventListener("click", closeInvestmentDialog);
+      document.querySelector("#investmentDialogOkButton").addEventListener("click", () => {
+        applyInvestmentSelection(pickedInvestmentId);
+        closeInvestmentDialog();
+      });
+      investmentDialog.addEventListener("click", (event) => {
+        if (event.target === investmentDialog) closeInvestmentDialog();
+      });
+      document.querySelectorAll("[data-investment-field]").forEach((field) => {
+        field.textContent = selectedInvestment[field.dataset.investmentField];
+      });
+      customerSelect.innerHTML = `<option selected>${selectedInvestment.customer}</option>`;
+      customerName.textContent = selectedInvestment.customer;
+      documentHeading.textContent = `${selectedInvestment.offerNumber} · ${selectedInvestment.customer}`;
+      stateLines = [];
+      stateActiveRow = -1;
+      stateShowAll = true;
+
+      const normalizeLine = (line) => {
+        if (line.type === "Koszt dodatkowy") {
+          if (!["montaz", "opłata", "transport"].includes(line.itemNo)) {
+            line.itemNo = "montaz";
+          }
+          line.description = line.itemNo === "montaz" ? "Montaż" : line.itemNo === "opłata" ? "Opłata" : "Transport";
+          line.assembleQty = "0";
+          line.unitOfMeasureCode = "usl.";
+          return;
+        }
+
+        if (!line.itemNo || ["montaz", "opłata", "transport"].includes(line.itemNo)) {
+          line.itemNo = "ZAP-000";
+        }
+        if (!line.description || ["Montaż", "Opłata", "Transport"].includes(line.description)) {
+          line.description = "Nowy zapas";
+        }
+        if (parseNumber(line.assembleQty) === 0) {
+          line.assembleQty = "1";
+        }
+        line.unitOfMeasureCode = "M2";
+      };
+
+      const recalculateLine = (line) => {
+        if (!line.billable) {
+          return;
+        }
+        const amount = parseNumber(line.quantity) * parseNumber(line.unitPriceNet) * (1 - parseNumber(line.lineDiscountPct) / 100);
+        line.lineAmountNet = formatDecimal(amount);
+      };
+
+      const updateSummary = () => {
+        let net = 0;
+        let vat = 0;
+        let gross = 0;
+        let pieces = 0;
+        let discount = 0;
+        let active = 0;
+
+        stateLines.forEach((line) => {
+          recalculateLine(line);
+          if (!line.billable) {
+            return;
+          }
+          const lineNet = parseNumber(line.lineAmountNet);
+          const lineGross = lineNet * 1.23;
+          net += lineNet;
+          vat += lineGross - lineNet;
+          gross += lineGross;
+          pieces += parseNumber(line.quantity);
+          discount += parseNumber(line.lineDiscountPct);
+          active += 1;
+        });
+
+        netNode.textContent = formatDecimal(net);
+        vatNode.textContent = formatDecimal(vat);
+        grossNode.textContent = formatDecimal(gross);
+        conversionNode.textContent = `${formatInteger(active ? 100 : 0)}%`;
+        lineCountNode.textContent = formatInteger(active);
+        piecesNode.textContent = formatInteger(pieces);
+        discountNode.textContent = `${formatDecimal(active ? discount / active : 0)}%`;
+        weightNode.textContent = `${formatInteger(0)} kg`;
+      };
+
+      const getVisibleIndexes = () => stateShowAll
+        ? stateLines.map((_, index) => index)
+        : stateLines.map((line, index) => ({ line, index })).filter(({ line }) => line.type === "Zapas").map(({ index }) => index);
+
+      const bindRowEvents = () => {
+        lineBodyNode.querySelectorAll("[data-row-index]").forEach((node) => {
+          if (node.matches(".row-marker")) {
+            node.addEventListener("click", () => {
+              stateActiveRow = Number.parseInt(node.dataset.rowIndex, 10);
+              renderRows();
+            });
+            return;
+          }
+
+          if (node.matches(".jumbo-check")) {
+            node.addEventListener("change", (event) => {
+              const index = Number.parseInt(event.target.dataset.rowIndex, 10);
+              stateLines[index].jumbo = event.target.checked;
+            });
+            return;
+          }
+
+          const syncField = (event) => {
+            const index = Number.parseInt(event.target.dataset.rowIndex, 10);
+            const field = event.target.dataset.field;
+            if (!field) {
+              return;
+            }
+            stateLines[index][field] = event.target.value;
+            if (field === "type") {
+              normalizeLine(stateLines[index]);
+              renderRows();
+              return;
+            }
+            if (field === "itemNo" && stateLines[index].type === "Koszt dodatkowy") {
+              normalizeLine(stateLines[index]);
+              renderRows();
+              return;
+            }
+            updateSummary();
+          };
+
+          node.addEventListener("input", syncField);
+          node.addEventListener("change", syncField);
+        });
+      };
+
+      function renderRows() {
+        lineBodyNode.innerHTML = "";
+        const visibleIndexes = getVisibleIndexes();
+        if (!visibleIndexes.includes(stateActiveRow)) {
+          stateActiveRow = visibleIndexes.length ? visibleIndexes[0] : -1;
+        }
+
+        visibleIndexes.forEach((index) => {
+          const line = stateLines[index];
+          const row = document.createElement("tr");
+          row.classList.toggle("is-active", index === stateActiveRow);
+          row.classList.toggle("comment-row", Boolean(line.isComment));
+
+          const typeCell = line.billable
+            ? `<select class="line-select" data-field="type" data-row-index="${index}"><option value="Koszt dodatkowy" ${line.type === "Koszt dodatkowy" ? "selected" : ""}>Koszt dodatkowy</option><option value="Zapas" ${line.type === "Zapas" ? "selected" : ""}>Zapas</option></select>`
+            : `<div class="cell">${line.type}</div>`;
+
+          const itemCell = line.billable
+            ? line.type === "Koszt dodatkowy"
+              ? `<select class="line-select" data-field="itemNo" data-row-index="${index}"><option value="montaz" ${line.itemNo === "montaz" ? "selected" : ""}>montaz</option><option value="opłata" ${line.itemNo === "opłata" ? "selected" : ""}>opłata</option><option value="transport" ${line.itemNo === "transport" ? "selected" : ""}>transport</option></select>`
+              : `<input class="line-input" data-field="itemNo" data-row-index="${index}" value="${line.itemNo}" placeholder="Nr zapasu">`
+            : `<div class="cell">${line.itemNo}</div>`;
+
+          const descriptionCell = line.billable
+            ? `<input class="line-input" data-field="description" data-row-index="${index}" value="${line.description}">`
+            : `<div class="cell">${line.description}</div>`;
+
+          row.innerHTML = [
+            `<td class="selection-cell"><button class="row-marker" type="button" data-row-index="${index}">${index === stateActiveRow ? "→" : ""}</button></td>`,
+            `<td class="menu-cell"><button class="row-menu" type="button" aria-label="Menu wiersza">⋮</button></td>`,
+            `<td>${typeCell}</td>`,
+            `<td>${itemCell}</td>`,
+            `<td><div class="cell cell-center"><input class="jumbo-check" type="checkbox" data-field="jumbo" data-row-index="${index}" ${line.jumbo ? "checked" : ""} ${line.billable ? "" : "disabled"}></div></td>`,
+            `<td>${descriptionCell}</td>`,
+            `<td><div class="cell">${line.locationCode}</div></td>`,
+            `<td>${line.billable ? `<input class="line-input line-input--compact" data-field="quantity" data-row-index="${index}" value="${line.quantity}">` : `<div class="cell cell-right">${line.quantity}</div>`}</td>`,
+            `<td><div class="cell cell-right ${parseNumber(line.assembleQty) === 0 ? "qty-alert" : ""}">${line.assembleQty}</div></td>`,
+            `<td><div class="cell">${line.unitOfMeasureCode}</div></td>`,
+            `<td>${line.billable ? `<input class="line-input line-input--compact" data-field="unitPriceNet" data-row-index="${index}" value="${line.unitPriceNet}">` : `<div class="cell cell-right">${line.unitPriceNet}</div>`}</td>`,
+            `<td><div class="cell">${line.taxGroupCode}</div></td>`,
+            `<td>${line.billable ? `<input class="line-input line-input--compact" data-field="lineDiscountPct" data-row-index="${index}" value="${line.lineDiscountPct}">` : `<div class="cell cell-right">${line.lineDiscountPct}</div>`}</td>`,
+            `<td><div class="cell">${line.lineAmountNet}</div></td>`,
+            `<td><div class="cell cell-center">${line.availability}</div></td>`,
+            `<td><div class="cell">${selectedInvestment.number}</div></td>`
+          ].join("");
+
+          lineBodyNode.appendChild(row);
+        });
+
+        bindRowEvents();
+        updateSummary();
+      }
+
+      const renderTemplatePanel = () => {
+        templateGridNode.innerHTML = templateDefinitions.map((template) => {
+          const total = template.items.reduce((sum, item) => sum + parseNumber(item.unitPriceNet), 0);
+          const isExpanded = selectedTemplateId === template.id;
+          return `
+            <div class="template-section ${isExpanded ? "expanded" : ""}" data-template-id="${template.id}">
+              <button class="template-section-header" type="button">
+                <div class="template-section-header-left">
+                  <p class="template-name">${template.name}</p>
+                  <p class="template-desc">${template.description}</p>
+                </div>
+                <div class="template-section-header-right">
+                  <p class="template-price">${formatDecimal(total)} PLN</p>
+                  <span class="template-expand-icon">▼</span>
+                </div>
+              </button>
+              <div class="template-section-content">
+                <div class="template-items-list">
+                  ${template.items.map(item => `
+                    <div class="template-item">
+                      <div class="template-item-type">${item.type}</div>
+                      <div class="template-item-desc">${item.description}</div>
+                      <div class="template-item-price">Ilość: ${item.quantity}, Cena: ${item.unitPriceNet} PLN</div>
+                    </div>
+                  `).join("")}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join("");
+
+        templateGridNode.querySelectorAll(".template-section-header").forEach((header) => {
+          header.addEventListener("click", () => {
+            const section = header.closest(".template-section");
+            const templateId = section.dataset.templateId;
+            selectedTemplateId = selectedTemplateId === templateId ? null : templateId;
+            renderTemplatePanel();
+          });
+        });
+      };
+
+      const closeTemplatePanel = () => {
+        templatePanelNode.hidden = true;
+        selectedTemplateId = null;
+        renderTemplatePanel();
+      };
+
+      const openTemplatePanel = () => {
+        templatePanelNode.hidden = false;
+        renderTemplatePanel();
+      };
+
+      addLineBtn.addEventListener("click", () => {
+        stateLines.push({
+          type: "Koszt dodatkowy",
+          itemNo: "montaz",
+          jumbo: false,
+          description: "Montaż",
+          locationCode: "M02",
+          quantity: "1",
+          assembleQty: "0",
+          unitOfMeasureCode: "usl.",
+          unitPriceNet: "0,00",
+          taxGroupCode: "",
+          lineDiscountPct: "0,00",
+          lineAmountNet: "0,00",
+          availability: "",
+          billable: true
+        });
+        stateShowAll = true;
+        stateActiveRow = stateLines.length - 1;
+        renderRows();
+      });
+
+      showRowsBtn.addEventListener("click", () => {
+        stateShowAll = true;
+        renderRows();
+      });
+
+      openTemplateBtn.addEventListener("click", openTemplatePanel);
+      templatePanelNode.addEventListener("click", (event) => {
+        if (event.target === templatePanelNode) {
+          closeTemplatePanel();
+        }
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !templatePanelNode.hidden) {
+          closeTemplatePanel();
+        }
+      });
+
+      closeTemplateBtn.addEventListener("click", closeTemplatePanel);
+      cancelTemplateBtn.addEventListener("click", closeTemplatePanel);
+      applyTemplateBtn.addEventListener("click", () => {
+        const selectedTemplate = templateDefinitions.find((template) => template.id === selectedTemplateId);
+        if (!selectedTemplate) {
+          alert("Proszę wybrać szablon.");
+          return;
+        }
+
+        stateLines = selectedTemplate.items.map((item) => ({
+          type: item.type,
+          itemNo: item.itemNo,
+          jumbo: false,
+          description: item.description,
+          locationCode: "M02",
+          quantity: item.quantity,
+          assembleQty: item.type === "Zapas" ? item.quantity : "0",
+          unitOfMeasureCode: item.type === "Zapas" ? "M2" : "usl.",
+          unitPriceNet: item.unitPriceNet,
+          taxGroupCode: "",
+          lineDiscountPct: "0,00",
+          lineAmountNet: item.unitPriceNet,
+          availability: "",
+          billable: true
+        }));
+        stateShowAll = true;
+        stateActiveRow = 0;
+        closeTemplatePanel();
+        renderRows();
+      });
+
+      renderTemplatePanel();
+      renderRows();
+    })();
+  </script>
+</body>
+</html>
+</body>
+</html>
+
+

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inwestycje | Business Central</title>
+  <style>
+    :root {
+      --bg: #f3f2f1;
+      --panel: #ffffff;
+      --panel-muted: #faf9f8;
+      --line: #d2d0ce;
+      --line-soft: #edebe9;
+      --line-strong: #505c6d;
+      --text: #201f1e;
+      --muted: #605e5c;
+      --accent: #0078d4;
+      --accent-strong: #106ebe;
+      --shell: #201f1e;
+      --focus: #00b7c3;
+      --font: "Segoe UI", "Segoe WP", Segoe, device-segoe, Tahoma, Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 12pt;
+    }
+
+    button { font: inherit; }
+
+    .top-shell {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 16px;
+      background: var(--shell);
+      color: #ffffff;
+      font-size: 14px;
+    }
+
+    .top-shell-title { font-weight: 600; }
+    .top-shell-meta { display: flex; gap: 12px; color: #d2d0ce; font-size: 12px; }
+
+    .page {
+      width: min(1500px, calc(100vw - 24px));
+      margin: 8px auto 20px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .ribbon {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel-muted);
+    }
+
+    .ribbon-tabs { display: flex; align-items: center; flex-wrap: wrap; }
+
+    .ribbon-tab {
+      min-height: 28px;
+      padding: 0 12px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .ribbon-tab:first-child { padding-left: 0; }
+    .ribbon-tab:last-child { border-right: 0; }
+    .ribbon-tab.is-active { color: var(--accent-strong); font-weight: 700; }
+    .ribbon-tab:hover, .ribbon-help:hover { color: var(--accent-strong); }
+
+    .ribbon-help {
+      border: 0;
+      background: transparent;
+      color: var(--accent-strong);
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 7px 16px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .breadcrumb a { color: var(--accent); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .page-heading {
+      padding: 12px 16px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .page-kicker {
+      margin: 0 0 5px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: #323130;
+      font-size: 30px;
+      font-weight: 300;
+      line-height: 1.2;
+    }
+
+    .section { border-bottom: 1px solid var(--line); }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      min-height: 38px;
+      padding: 8px 16px;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel-muted);
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .section-header:hover { color: var(--accent-strong); }
+    .section-header::after { content: "\\2303"; color: var(--muted); font-size: 16px; }
+    .section.is-collapsed .section-header::after { content: "\\2304"; }
+    .section-content { padding: 12px 16px 16px; }
+    .section.is-collapsed .section-content { display: none; }
+
+    .action-panel {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-height: 44px;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .action-link {
+      border: 0;
+      background: transparent;
+      color: var(--accent);
+      cursor: pointer;
+      padding: 0;
+      font-size: 12px;
+      text-align: left;
+    }
+
+    .action-link:hover { text-decoration: underline; }
+    .action-panel[hidden] { display: none; }
+
+    .table-shell { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      min-width: 1060px;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    th {
+      padding: 8px 7px;
+      border-right: 1px solid var(--line-soft);
+      border-bottom: 1px solid var(--line);
+      background: #f3f2f1;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 400;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 8px 7px;
+      border-right: 1px solid var(--line-soft);
+      border-bottom: 1px solid var(--line-soft);
+      background: #ffffff;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    tbody tr:nth-child(even) td { background: #faf9f8; }
+    tbody tr:hover td { background: #f3f8f4; }
+    tbody tr.is-selected td { background: #eaf4fb; }
+
+    .investment-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .investment-link:hover { text-decoration: underline; }
+    .status { color: #107c10; font-weight: 600; }
+    .date { white-space: nowrap; }
+
+    @media (max-width: 720px) {
+      body { background: #ffffff; }
+      .page { width: 100%; margin: 0; border: 0; }
+      .top-shell { padding: 0 12px; }
+      .top-shell-meta { display: none; }
+      .ribbon, .breadcrumb, .page-heading, .section-content { padding-left: 12px; padding-right: 12px; }
+      h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-shell">
+    <div class="top-shell-title">Dynamics 365 Business Central</div>
+  </header>
+
+  <main class="page">
+    <nav class="ribbon" aria-label="Wst&#281;&#380;ka akcji">
+      <div class="ribbon-tabs">
+        <button class="ribbon-tab is-active" type="button" data-tab="home">Strona g&#322;&#243;wna</button>
+        <button class="ribbon-tab" type="button" data-tab="actions">Akcje</button>
+      </div>
+      <button class="ribbon-help" type="button" aria-label="Pomoc">i</button>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="../makieta.html">Role center</a>
+      <span aria-hidden="true">&gt;</span>
+      <span>Inwestycje</span>
+    </nav>
+
+    <header class="page-heading">
+      <p class="page-kicker">Lista</p>
+      <h1>Inwestycje</h1>
+    </header>
+
+    <div class="action-panel" id="actionPanel" hidden>
+      <button class="action-link" type="button" id="newInvestmentButton">Nowa inwestycja</button>
+    </div>
+
+    <section class="section" data-section>
+      <button class="section-header" type="button" aria-expanded="true">
+        <span>Lista inwestycji</span>
+        <span>Pokaz wi&#281;cej</span>
+      </button>
+      <div class="section-content">
+        <div class="table-shell">
+          <table aria-label="Lista inwestycji">
+            <thead>
+              <tr>
+                <th>Nr inwestycji</th>
+                <th>Nazwa inwestycji</th>
+                <th>Status</th>
+                <th>Nabywca</th>
+                <th>Handlowiec</th>
+                <th>Data utworzenia</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="is-selected">
+                <td><a class="investment-link" href="inwestycja.html?investment=INW-000123">INW-000123</a></td>
+                <td>Budowa hali Bielsko</td>
+                <td class="status">W realizacji</td>
+                <td>Bielsko Logistics Sp. z o.o.</td>
+                <td>Jan Kowalski</td>
+                <td class="date">07.01.2026</td>
+              </tr>
+              <tr>
+                <td><a class="investment-link" href="inwestycja.html?investment=INW-000124">INW-000124</a></td>
+                <td>Modernizacja magazynu Krak&#243;w</td>
+                <td>Nowa</td>
+                <td>Krak-Mag Sp. z o.o.</td>
+                <td>Anna Nowak</td>
+                <td class="date">14.01.2026</td>
+              </tr>
+              <tr>
+                <td><a class="investment-link" href="inwestycja.html?investment=INW-000125">INW-000125</a></td>
+                <td>Rozbudowa centrum logistycznego Pozna&#324;</td>
+                <td>Zamkni&#281;ta</td>
+                <td>Logistic Center SA</td>
+                <td>Piotr Wi&#347;niewski</td>
+                <td class="date">01.09.2025</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const actionPanel = document.querySelector("#actionPanel");
+    const ribbonTabs = document.querySelectorAll("[data-tab]");
+
+    ribbonTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        ribbonTabs.forEach((item) => item.classList.toggle("is-active", item === tab));
+        actionPanel.hidden = tab.dataset.tab !== "actions";
+      });
+    });
+
+    document.querySelectorAll("[data-section]").forEach((section) => {
+      const header = section.querySelector(".section-header");
+      header.addEventListener("click", () => {
+        const isCollapsed = section.classList.toggle("is-collapsed");
+        header.setAttribute("aria-expanded", String(!isCollapsed));
+      });
+    });
+
+    document.querySelector("#newInvestmentButton").addEventListener("click", () => {
+      window.alert("Makieta tworzenia nowej inwestycji.");
+    });
+  </script>
+</body>
+</html>
