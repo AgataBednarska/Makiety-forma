@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zam&#243;wienie sprzeda&#380;y JUMBO | Business Central</title>
+  <style>
+    :root { --bg:#f3f2f1; --panel:#fff; --muted:#605e5c; --line:#d2d0ce; --soft:#edebe9; --text:#201f1e; --accent:#0078d4; --ok:#107c10; --shell:#201f1e; --font:"Segoe UI",Tahoma,Arial,sans-serif; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:var(--font); font-size:12pt; }
+    button,input,select { font:inherit; }
+    .top-shell { min-height:48px; display:flex; align-items:center; padding:0 16px; background:var(--shell); color:#fff; font-size:14px; }
+    .top-shell-title { font-weight:600; }
+    .page { width:min(1680px,calc(100vw - 24px)); margin:8px auto 20px; border:1px solid var(--line); background:var(--panel); }
+    .ribbon { display:flex; justify-content:space-between; padding:8px 12px; background:#faf9f8; border-bottom:1px solid var(--line); }
+    .ribbon-tabs { display:flex; flex-wrap:wrap; }
+    .ribbon-tab { min-height:28px; padding:0 10px; border:0; border-right:1px solid var(--line); background:transparent; color:var(--text); cursor:pointer; font-size:12px; }
+    .ribbon-tab:first-child { padding-left:0; }
+    .ribbon-tab.is-active,.ribbon-tab:hover { color:#106ebe; font-weight:700; }
+    .ribbon-help { border:0; background:transparent; color:#106ebe; cursor:pointer; }
+    .action-panel { display:flex; gap:20px; padding:8px 16px; border-bottom:1px solid var(--line); }
+    .action-panel[hidden] { display:none; }
+    .action-link { border:0; padding:0; background:transparent; color:var(--accent); cursor:pointer; font-size:12px; }
+    .action-link:hover { text-decoration:underline; }
+    .doc-title { padding:10px 16px 12px; border-bottom:1px solid var(--line); }
+    .doc-toolbar { display:flex; justify-content:space-between; color:var(--muted); font-size:12px; margin-bottom:8px; }
+    .doc-kicker { margin:0 0 6px; color:var(--muted); font-size:11px; font-weight:700; text-transform:uppercase; }
+    h1 { margin:0; color:#323130; font-size:34px; font-weight:300; }
+    .section { border-bottom:1px solid var(--line); }
+    .section-header { width:100%; display:flex; justify-content:space-between; padding:8px 16px; border:0; border-bottom:1px solid var(--line); background:#faf9f8; color:var(--text); cursor:pointer; text-align:left; font-size:13px; font-weight:700; }
+    .section-header::after { content:"\\2303"; color:var(--muted); }
+    .section.is-collapsed .section-header::after { content:"\\2304"; }
+    .section.is-collapsed .section-body { display:none; }
+    .section-body { padding:12px 16px 14px; }
+    .field-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px 28px; }
+    .field { display:grid; grid-template-columns:184px minmax(0,1fr); align-items:center; gap:10px; }
+    .field-label { display:flex; gap:8px; color:var(--muted); font-size:12px; white-space:nowrap; }
+    .field-label::after { content:""; flex:1; border-bottom:1px dotted var(--line); }
+    .field-value,.field-input { width:100%; min-height:24px; padding:2px 8px; border:1px solid var(--line); border-radius:2px; background:#f3f2f1; color:var(--text); font-size:12px; }
+    .field-input { background:#fff; border-color:#505c6d; }
+    .status { color:var(--ok); font-weight:700; }
+    .workspace-toolbar { display:flex; gap:18px; padding:10px 16px 8px; border-bottom:1px solid var(--line); font-size:12px; }
+    .workspace-title { font-weight:700; }
+    .workspace-tab { border:0; padding:0; background:transparent; cursor:pointer; font-size:12px; }
+    .workspace-tab.is-active { color:#106ebe; text-decoration:underline; }
+    .subtoolbar { display:flex; gap:20px; padding:8px 16px; border-bottom:1px solid var(--line); color:#3a96a0; }
+    .subtoolbar button { border:0; padding:0; background:transparent; color:#3a96a0; cursor:pointer; font-size:12px; }
+    .table-scroller { overflow-x:auto; }
+    table { width:100%; min-width:1900px; border-collapse:separate; border-spacing:0; }
+    th { padding:7px 6px; border-right:1px solid var(--soft); border-bottom:1px solid var(--line); background:#f3f2f1; color:var(--muted); font-size:10px; font-weight:400; text-align:left; white-space:nowrap; }
+    td { padding:0; border-right:1px solid var(--soft); border-bottom:1px solid var(--soft); font-size:12px; background:#fff; }
+    tbody tr:nth-child(even) td { background:#faf9f8; }
+    tbody tr:hover td { background:#f3f8f4; }
+    .cell { min-height:26px; display:flex; align-items:center; padding:3px 6px; white-space:nowrap; }
+    .cell-right { justify-content:flex-end; text-align:right; }
+    .line-input { width:100%; min-height:26px; padding:3px 6px; border:0; background:transparent; font-size:12px; }
+    .line-input:focus { outline:none; border:1px solid #00b7c3; }
+    .checkbox-cell { text-align:center; }
+    .jumbo-replaced td { background:#eff6fc; font-weight:600; }
+    .info { padding:8px 16px; border-bottom:1px solid var(--line); background:#eff6fc; color:#0f548c; font-size:12px; }
+    .summary-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px 28px; }
+    .summary-highlight { color:#106ebe; font-weight:700; }
+    @media (max-width:1180px) { .field-grid,.summary-grid { grid-template-columns:1fr; } }
+    @media (max-width:720px) { body{background:#fff}.page{width:100%;margin:0;border:0}.field{grid-template-columns:1fr;gap:4px}.field-label::after{display:none}.field-grid,.summary-grid{grid-template-columns:1fr}.top-shell,.doc-title,.section-body,.workspace-toolbar,.subtoolbar{padding-left:12px;padding-right:12px} }
+  </style>
+</head>
+<body>
+  <header class="top-shell"><div class="top-shell-title">Dynamics 365 Business Central</div></header>
+  <main class="page">
+    <nav class="ribbon"><div class="ribbon-tabs"><button class="ribbon-tab is-active" data-tab="main" type="button">Narz&#281;dzia g&#322;&#243;wne</button><button class="ribbon-tab" data-tab="actions" type="button">Akcje</button><button class="ribbon-tab" type="button">Wersje</button><button class="ribbon-tab" type="button">Wydruk</button><button class="ribbon-tab" type="button">Powi&#261;zane</button></div><button class="ribbon-help" type="button">i</button></nav>
+    <div class="action-panel" id="actionPanel" hidden><button class="action-link" type="button" id="openOfferButton">Otw&#243;rz ofert&#281; &#378;r&#243;d&#322;ow&#261;</button><button class="action-link" type="button">Zwolnij zam&#243;wienie</button></div>
+    <header class="doc-title"><div class="doc-toolbar"><span>Zam&#243;wienie sprzeda&#380;y JUMBO</span><span>Zapisano roboczo</span></div><p class="doc-kicker">Zam&#243;wienie sprzeda&#380;y JUMBO</p><h1 id="documentHeading">ZS/09/26/0001 &middot; Bielsko Logistics Sp. z o.o.</h1></header>
+    <div class="info">Oferta zosta&#322;a przekszta&#322;cona w zam&#243;wienie. Pozycje opcjonalne nie zosta&#322;y przeniesione.</div>
+
+    <section class="section" data-section><button class="section-header" type="button"><span>Og&#243;lne</span><span>Pokaz wi&#281;cej</span></button><div class="section-body"><div class="field-grid">
+      <div class="field"><span class="field-label">Nr zam&#243;wienia</span><div class="field-value">ZS/09/26/0001</div></div><div class="field"><span class="field-label">Nr inwestycji</span><div class="field-value" data-field="number">INW-000123</div></div>
+      <div class="field"><span class="field-label">Nabywca</span><div class="field-value" data-field="customer">Bielsko Logistics Sp. z o.o.</div></div><div class="field"><span class="field-label">Nr nabywcy</span><div class="field-value" data-field="customerNo">C10000</div></div>
+      <div class="field"><span class="field-label">Status inwestycji</span><div class="field-value status" data-field="status">W realizacji</div></div><div class="field"><span class="field-label">Kod lokalizacji</span><div class="field-value" data-field="locationCode">MAG-G&#321;</div></div>
+      <div class="field"><span class="field-label">Planowana data monta&#380;u</span><input class="field-input" type="date" value="2026-06-03"></div><div class="field"><span class="field-label">Kod waluty</span><input class="field-input" value="PLN"></div>
+    </div></div></section>
+
+    <section class="section" data-section><button class="section-header" type="button"><span>Wiersze zam&#243;wienia</span><span>Pokaz wi&#281;cej</span></button><div class="workspace-toolbar"><span class="workspace-title">Wiersze</span><button class="workspace-tab is-active" type="button">Zarz&#261;dzaj</button><button class="workspace-tab" type="button">Wiersz</button><button class="workspace-tab" type="button">Funkcje</button></div><div class="subtoolbar"><button type="button" id="addLineButton">Nowy wiersz</button><button type="button">Usu&#324; wiersz</button><button type="button">Wymiary</button></div><div class="table-scroller"><table><thead><tr><th>Typ</th><th>Nr</th><th>JUMBO</th><th>Opis</th><th>Nr inwestycji</th><th>Ilo&#347;&#263;</th><th>Jedn.</th><th>Cena jednostkowa sprzeda&#380;y</th><th>% prowizji</th><th>Kwota prowizji</th><th>Pozycja opcjonalna</th><th>Ilo&#347;&#263; - pozycja opcjonalna</th><th>Kwota wiersza - pozycja opcjonalna</th><th>Zamro&#378; cen&#281; JUMBO</th><th>Wyklucz z prowizji</th><th>Kwota wiersza</th></tr></thead><tbody id="lineBody"></tbody></table></div></section>
+
+    <section class="section" data-section><button class="section-header" type="button"><span>Podsumowanie dokumentu</span><span>Pokaz wi&#281;cej</span></button><div class="section-body"><div class="summary-grid"><div class="field"><span class="field-label">Suma bez VAT</span><div class="field-value summary-highlight" id="netValue">0,00 PLN</div></div><div class="field"><span class="field-label">Suma prowizji PLN</span><div class="field-value" id="commissionValue">0,00 PLN</div></div><div class="field"><span class="field-label">Suma VAT</span><div class="field-value" id="vatValue">0,00 PLN</div></div><div class="field"><span class="field-label">Razem z VAT</span><div class="field-value summary-highlight" id="grossValue">0,00 PLN</div></div></div></div></section>
+  </main>
+  <script>
+    const profiles = {
+      "INW-000123": { number: "INW-000123", customer: "Bielsko Logistics Sp. z o.o.", customerNo: "C10000", status: "W realizacji", locationCode: "MAG-GŁ", name: "Budowa hali Bielsko", offer: "OS/26/05/0002", lines: [
+        { type: "Zapas docelowy", itemNo: "KON-001", jumbo: false, description: "Konstrukcja hali wysokiego składowania", quantity: 1, unit: "kpl.", price: 149350, commissionPct: 0, optional: false, optionalQty: 0, optionalAmount: 0, frozen: false, excluded: false, source: "HALA-001 (JUMBO)" },
+        { type: "Zapas", itemNo: "KOMP-001", jumbo: false, description: "Strefa kompletacji zamówień", quantity: 1, unit: "szt.", price: 100000, commissionPct: 3, optional: false, optionalQty: 0, optionalAmount: 0, frozen: false, excluded: false, source: "Oferta JUMBO" }
+      ] },
+      "INW-000124": { number: "INW-000124", customer: "Krak-Mag Sp. z o.o.", customerNo: "C10001", status: "Nowa", locationCode: "MAG-KRK", name: "Modernizacja magazynu Kraków", offer: "OS/26/05/0003", lines: [{ type: "Zapas docelowy", itemNo: "MOD-001", jumbo: false, description: "Modernizacja regałów magazynowych", quantity: 1, unit: "kpl.", price: 84460, commissionPct: 0, optional: false, optionalQty: 0, optionalAmount: 0, frozen: false, excluded: false, source: "JUMBO" }] },
+      "INW-000125": { number: "INW-000125", customer: "Logistic Center SA", customerNo: "C10002", status: "Zamknięta", locationCode: "MAG-POZ", name: "Rozbudowa centrum logistycznego Poznań", offer: "OS/26/05/0004", lines: [{ type: "Zapas docelowy", itemNo: "LOG-001", jumbo: false, description: "Dodatkowa strefa składowania", quantity: 1, unit: "kpl.", price: 216300, commissionPct: 3, optional: false, optionalQty: 0, optionalAmount: 0, frozen: false, excluded: false, source: "JUMBO" }] }
+    };
+    const selectedId = new URLSearchParams(location.search).get("investment") || "INW-000123";
+    const selected = profiles[selectedId] || profiles["INW-000123"];
+    let lines = selected.lines.map((line) => ({ ...line }));
+    const money = (value) => `${value.toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} PLN`;
+    const amount = (line) => line.optional ? 0 : line.price * line.quantity * (1 + (line.excluded ? 0 : line.commissionPct / 100));
+    document.querySelectorAll("[data-field]").forEach((field) => field.textContent = selected[field.dataset.field]);
+    document.querySelector("#documentHeading").textContent = `ZS/09/26/0001 · ${selected.customer}`;
+    document.querySelector("#openOfferButton").addEventListener("click", () => { location.href = `oferta_sprzedazy_jumbo.html?investment=${selected.number}`; });
+    function renderRows() {
+      document.querySelector("#lineBody").innerHTML = lines.map((line, index) => `<tr class="${line.source === "HALA-001 (JUMBO)" ? "jumbo-replaced" : ""}"><td><div class="cell">${line.type}</div></td><td><input class="line-input" data-index="${index}" data-key="itemNo" value="${line.itemNo}"></td><td class="checkbox-cell"><input type="checkbox" disabled ${line.jumbo ? "checked" : ""}></td><td><input class="line-input" data-index="${index}" data-key="description" value="${line.description}"></td><td><div class="cell">${selected.number}</div></td><td><input class="line-input" data-index="${index}" data-key="quantity" value="${line.quantity}"></td><td><div class="cell">${line.unit}</div></td><td><input class="line-input" data-index="${index}" data-key="price" value="${line.price}"></td><td><input class="line-input" data-index="${index}" data-key="commissionPct" value="${line.commissionPct}"></td><td><div class="cell cell-right">${money(line.price * line.quantity * line.commissionPct / 100)}</div></td><td class="checkbox-cell"><input type="checkbox" disabled></td><td><div class="cell">-</div></td><td><div class="cell cell-right">0,00 PLN</div></td><td class="checkbox-cell"><input type="checkbox" disabled ${line.frozen ? "checked" : ""}></td><td class="checkbox-cell"><input type="checkbox" disabled ${line.excluded ? "checked" : ""}></td><td><div class="cell cell-right">${money(amount(line))}</div></td></tr>`).join("");
+      document.querySelectorAll("[data-index]").forEach((input) => input.addEventListener("input", (event) => { const line = lines[Number(event.currentTarget.dataset.index)]; const key = event.currentTarget.dataset.key; line[key] = key === "description" || key === "itemNo" ? event.currentTarget.value : Number(event.currentTarget.value.replace(",", ".")) || 0; renderRows(); updateSummary(); }));
+      updateSummary();
+    }
+    function updateSummary() { const net = lines.reduce((sum, line) => sum + amount(line), 0); const commission = lines.reduce((sum, line) => sum + line.price * line.quantity * line.commissionPct / 100, 0); document.querySelector("#netValue").textContent = money(net); document.querySelector("#commissionValue").textContent = money(commission); document.querySelector("#vatValue").textContent = money(net * .23); document.querySelector("#grossValue").textContent = money(net * 1.23); }
+    document.querySelector("#addLineButton").addEventListener("click", () => { lines.push({ type: "Zapas", itemNo: "ZAP-000", jumbo: false, description: "Nowy zapas", quantity: 1, unit: "szt.", price: 0, commissionPct: 0, optional: false, optionalQty: 0, optionalAmount: 0, frozen: false, excluded: false, source: "Dodany ręcznie" }); renderRows(); });
+    document.querySelectorAll("[data-section]").forEach((section) => section.querySelector(".section-header").addEventListener("click", () => section.classList.toggle("is-collapsed")));
+    document.querySelectorAll("[data-tab]").forEach((tab) => tab.addEventListener("click", () => { document.querySelectorAll("[data-tab]").forEach((item) => item.classList.toggle("is-active", item === tab)); document.querySelector("#actionPanel").hidden = tab.dataset.tab !== "actions"; }));
+    renderRows();
+  </script>
+</body>
+</html>

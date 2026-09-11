@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oferta sprzeda&#380;y JUMBO | Business Central</title>
+  <style>
+    :root {
+      --bg: #f3f2f1;
+      --panel: #fff;
+      --muted-panel: #faf9f8;
+      --line: #d2d0ce;
+      --line-soft: #edebe9;
+      --line-strong: #505c6d;
+      --text: #201f1e;
+      --muted: #605e5c;
+      --accent: #0078d4;
+      --accent-strong: #106ebe;
+      --ok: #107c10;
+      --warn: #a4262c;
+      --shell: #201f1e;
+      --focus: #00b7c3;
+      --font: "Segoe UI", "Segoe WP", Segoe, device-segoe, Tahoma, Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 12pt; }
+    button, input, select { font: inherit; }
+    .top-shell { min-height: 48px; display: flex; align-items: center; padding: 0 16px; background: var(--shell); color: #fff; font-size: 14px; }
+    .top-shell-title { font-weight: 600; }
+    .page { width: min(1680px, calc(100vw - 24px)); margin: 8px auto 20px; border: 1px solid var(--line); background: var(--panel); }
+    .ribbon { display: flex; justify-content: space-between; padding: 8px 12px; background: var(--muted-panel); border-bottom: 1px solid var(--line); }
+    .ribbon-tabs { display: flex; flex-wrap: wrap; }
+    .ribbon-tab { min-height: 28px; padding: 0 10px; border: 0; border-right: 1px solid var(--line); background: transparent; color: var(--text); cursor: pointer; font-size: 12px; }
+    .ribbon-tab:first-child { padding-left: 0; }
+    .ribbon-tab.is-active, .ribbon-tab:hover { color: var(--accent-strong); font-weight: 700; }
+    .ribbon-help { border: 0; background: transparent; color: var(--accent-strong); cursor: pointer; }
+    .action-panel { display: flex; gap: 20px; padding: 8px 16px; border-bottom: 1px solid var(--line); }
+    .action-panel[hidden] { display: none; }
+    .action-link { border: 0; padding: 0; background: transparent; color: var(--accent); cursor: pointer; font-size: 12px; }
+    .action-link:hover { text-decoration: underline; }
+    .doc-title { padding: 8px 16px 10px; border-bottom: 1px solid var(--line); }
+    .doc-toolbar { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; color: var(--muted); font-size: 12px; }
+    .doc-toolbar-left, .doc-toolbar-right { display: flex; align-items: center; gap: 10px; }
+    .icon-circle { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 1px solid var(--line); border-radius: 50%; color: #3a96a0; }
+    .doc-kicker { margin: 0 0 6px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; }
+    h1 { margin: 0; color: #323130; font-size: clamp(28px, 3.2vw, 34px); font-weight: 300; line-height: 1.15; }
+    .section { border-bottom: 1px solid var(--line); }
+    .section-header { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 8px 16px 6px; border: 0; border-bottom: 1px solid var(--line); background: var(--muted-panel); color: var(--text); cursor: pointer; text-align: left; font-size: 13px; font-weight: 700; }
+    .section-header::after { content: "\\2303"; color: var(--muted); font-size: 16px; }
+    .section.is-collapsed .section-header::after { content: "\\2304"; }
+    .section.is-collapsed .section-body { display: none; }
+    .section-body { padding: 12px 16px 14px; }
+    .field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 28px; }
+    .field { display: grid; grid-template-columns: 184px minmax(0, 1fr); align-items: center; gap: 10px; }
+    .field-label { display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .field-label::after { content: ""; flex: 1; border-bottom: 1px dotted var(--line); }
+    .field-value, .field-input, .field-select { width: 100%; min-height: 24px; padding: 2px 8px; border: 1px solid var(--line-strong); border-radius: 2px; background: #fff; color: var(--text); font-size: 12px; }
+    .field-value { display: flex; align-items: center; border-color: var(--line); background: #f3f2f1; }
+    .status-open { color: var(--ok); font-weight: 700; }
+    .field-input:focus, .field-select:focus, .line-input:focus, .line-select:focus { outline: none; border-color: var(--focus); box-shadow: 0 0 0 1px var(--focus); }
+    .workspace-toolbar { display: flex; align-items: center; gap: 18px; padding: 10px 16px 8px; border-bottom: 1px solid var(--line); font-size: 12px; flex-wrap: wrap; }
+    .workspace-title { font-weight: 700; }
+    .workspace-tab { border: 0; padding: 0; background: transparent; color: var(--text); cursor: pointer; font-size: 12px; }
+    .workspace-tab.is-active { color: var(--accent-strong); text-decoration: underline; text-underline-offset: 3px; }
+    .subtoolbar { display: flex; gap: 20px; padding: 8px 16px; border-bottom: 1px solid var(--line); color: #3a96a0; flex-wrap: wrap; }
+    .subtoolbar-link { border: 0; padding: 0; background: transparent; color: #3a96a0; cursor: pointer; font-size: 12px; }
+    .subtoolbar-link:hover { text-decoration: underline; }
+    .table-scroller { overflow-x: auto; }
+    table { width: 100%; min-width: 1860px; border-collapse: separate; border-spacing: 0; }
+    th { padding: 7px 6px; border-right: 1px solid var(--line-soft); border-bottom: 1px solid var(--line); background: #f3f2f1; color: var(--muted); font-size: 10px; font-weight: 400; text-align: left; vertical-align: bottom; white-space: nowrap; }
+    td { padding: 0; border-right: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); background: #fff; font-size: 12px; vertical-align: middle; }
+    tbody tr:nth-child(even) td { background: #faf9f8; }
+    tbody tr:hover td { background: #f3f8f4; }
+    tbody tr.is-active td { background: #eaf4fb; }
+    .cell { min-height: 26px; display: flex; align-items: center; padding: 3px 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cell-right { justify-content: flex-end; text-align: right; }
+    .cell-center { justify-content: center; }
+    .line-input, .line-select { width: 100%; min-height: 26px; padding: 3px 6px; border: 0; background: transparent; color: var(--text); font-size: 12px; }
+    .line-input--number { text-align: right; }
+    .checkbox-cell { text-align: center; }
+    .jumbo-row td { background: #eff6fc; font-weight: 600; }
+    .optional-row td { color: #605e5c; background: #fffdf5; }
+    .optional-row .cell, .optional-row .line-input { font-style: italic; }
+    .frozen-price { color: var(--accent-strong); font-weight: 700; }
+    .summary-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 28px; }
+    .summary-highlight { color: var(--accent-strong); font-weight: 700; }
+    .pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .pill { padding: 2px 10px; border-radius: 999px; background: #eff6fc; color: #0f548c; font-size: 11px; }
+    .empty-state { padding: 22px 8px; color: var(--muted); text-align: center; }
+    .dialog { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(32, 31, 30, .42); }
+    .dialog[hidden] { display: none; }
+    .dialog-box { width: min(760px, calc(100vw - 40px)); max-height: 82vh; overflow: auto; background: #fff; border: 1px solid var(--line); border-radius: 2px; }
+    .dialog-header, .dialog-footer { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+    .dialog-footer { justify-content: flex-end; border-top: 1px solid var(--line); border-bottom: 0; gap: 8px; }
+    .dialog-title { margin: 0; font-size: 14px; }
+    .dialog-close, .dialog-button { min-height: 32px; padding: 6px 16px; border: 1px solid var(--line); border-radius: 2px; background: #fff; color: var(--text); cursor: pointer; font-size: 12px; }
+    .dialog-close { border: 0; padding: 0 4px; color: var(--muted); }
+    .dialog-button--primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .dialog-content { padding: 12px 16px; }
+    .dialog-content table { min-width: 0; }
+    .dialog-content th, .dialog-content td { padding: 8px; }
+    .dialog-content tr.is-selected td { background: #eaf4fb; }
+    .structure-select { width: 14px; height: 14px; accent-color: var(--accent); }
+    .dialog-content tr:hover td { background: #f3f8f4; cursor: pointer; }
+    .structure-dialog .dialog-box { width: min(900px, calc(100vw - 40px)); }
+    .structure-dialog .dialog-content table { min-width: 760px; }
+    .structure-dialog .dialog-content th, .structure-dialog .dialog-content td { padding: 8px; }
+    .structure-level-1 td:first-child { padding-left: 26px; }
+    .structure-level-2 td:first-child { padding-left: 46px; }
+    .structure-status { margin: 10px 0 0; color: var(--muted); font-size: 12px; }
+    .structure-status.is-success { color: var(--ok); }
+    .structure-status.is-warning { color: var(--warn); }
+    .dialog-footer { flex-wrap: wrap; }
+    @media (max-width: 1180px) { .field-grid, .summary-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 720px) { body { background: #fff; } .page { width: 100%; margin: 0; border: 0; } .field { grid-template-columns: 1fr; gap: 4px; } .field-label::after { display: none; } .top-shell, .doc-title, .section-body, .workspace-toolbar, .subtoolbar { padding-left: 12px; padding-right: 12px; } }
+  </style>
+</head>
+<body>
+  <header class="top-shell"><div class="top-shell-title">Dynamics 365 Business Central</div></header>
+  <main class="page">
+    <nav class="ribbon"><div class="ribbon-tabs">
+      <button class="ribbon-tab is-active" type="button" data-tab="main">Narz&#281;dzia g&#322;&#243;wne</button>
+      <button class="ribbon-tab" type="button" data-tab="actions">Akcje</button>
+      <button class="ribbon-tab" type="button">Wersje</button><button class="ribbon-tab" type="button">Wydruk</button><button class="ribbon-tab" type="button">Powi&#261;zane</button>
+    </div><button class="ribbon-help" type="button">i</button></nav>
+    <div class="action-panel" id="actionPanel" hidden><button class="action-link" type="button" id="resetJumboButton">Restartuj JUMBO</button><button class="action-link" type="button" id="showStructureButton">Poka&#380; struktur&#281; JUMBO</button><button class="action-link" type="button" id="showComponentsButton" data-structure-action>Sk&#322;adowe JUMBO</button><button class="action-link" type="button" id="optionalStockButton">Pobierz zapasy opcjonalne</button><button class="action-link" type="button" id="createSalesOrderButton">Utw&#243;rz zam&#243;wienie sprzeda&#380;y</button><button class="action-link" type="button" id="linkInvestmentButton">Powi&#261;&#380; z inwestycj&#261;</button></div>
+
+    <header class="doc-title"><div class="doc-toolbar"><div class="doc-toolbar-left"><span class="icon-circle">&larr;</span><span>Oferta sprzeda&#380;y JUMBO</span></div><div class="doc-toolbar-right"><span>Zapisano roboczo</span></div></div><p class="doc-kicker">Oferta sprzeda&#380;y JUMBO</p><h1 id="documentHeading">OS/26/05/0002 &middot; Bielsko Logistics Sp. z o.o.</h1></header>
+
+    <section class="section" data-section><button class="section-header" type="button"><span>Og&#243;lne</span><span>Pokaz wi&#281;cej</span></button><div class="section-body"><div class="field-grid">
+      <label class="field"><span class="field-label">Nazwa klienta</span><select class="field-select" id="customerSelect"><option>Bielsko Logistics Sp. z o.o.</option></select></label>
+      <label class="field"><span class="field-label">Nr wersji oferty</span><input class="field-input" value="02"></label>
+      <div class="field"><span class="field-label">Klient</span><div class="field-value" id="customerName">Bielsko Logistics Sp. z o.o.</div></div>
+      <label class="field"><span class="field-label">Opiekun handlowy</span><input class="field-input" value="Jan Kowalski"></label>
+      <label class="field"><span class="field-label">Kontakt</span><input class="field-input" value="Dzia&#322; zakup&#243;w inwestycyjnych"></label>
+      <label class="field"><span class="field-label">Kod sprzedawcy</span><input class="field-input" value="JKOW"></label>
+      <label class="field"><span class="field-label">Data dokumentu</span><input class="field-input" value="11.05.2026"></label>
+      <label class="field"><span class="field-label">Planowana data monta&#380;u</span><input class="field-input" type="date" value="2026-06-03"></label>
+      <label class="field"><span class="field-label">Kod waluty</span><input class="field-input" value="PLN"></label>
+      <div class="field"><span class="field-label">Stan</span><div class="field-value status-open">Otwarte</div></div>
+    </div></div></section>
+
+    <section class="section" data-section><button class="section-header" type="button"><span>Inwestycja i nabywca</span><span>Pokaz wi&#281;cej</span></button><div class="section-body"><div class="field-grid">
+      <div class="field"><span class="field-label">Nr inwestycji</span><div class="field-value" data-field="number">INW-000123</div></div><div class="field"><span class="field-label">Nazwa inwestycji</span><div class="field-value" data-field="name">Budowa hali Bielsko</div></div>
+      <div class="field"><span class="field-label">Status</span><div class="field-value status-open" data-field="status">W realizacji</div></div><div class="field"><span class="field-label">Nr nabywcy</span><div class="field-value" data-field="customerNo">C10000</div></div>
+      <div class="field"><span class="field-label">Nabywca</span><div class="field-value" data-field="customer">Bielsko Logistics Sp. z o.o.</div></div><div class="field"><span class="field-label">Adres</span><div class="field-value" data-field="address">ul. Przemys&#322;owa 25</div></div>
+      <div class="field"><span class="field-label">Kod lokalizacji</span><div class="field-value" data-field="locationCode">MAG-G&#321;</div></div><div class="field"><span class="field-label">Opis inwestycji</span><div class="field-value" data-field="description">Budowa hali wysokiego sk&#322;adowania wraz z cz&#281;&#347;ci&#261; administracyjn&#261;.</div></div>
+    </div></div></section>
+
+    <section class="section" data-section><div class="workspace-toolbar"><span class="workspace-title">Wiersze oferty</span><button class="workspace-tab is-active" type="button">Zarz&#261;dzaj</button><button class="workspace-tab" type="button">Wiersz</button><button class="workspace-tab" type="button">Funkcje</button></div><div class="subtoolbar"><button class="subtoolbar-link" type="button" id="addLineButton">Nowy wiersz</button><button class="subtoolbar-link" type="button" id="addCommissionButton">Dodaj prowizj&#281;</button><button class="subtoolbar-link" type="button" id="addOptionalButton">Dodaj pozycj&#281; opcjonaln&#261;</button><button class="subtoolbar-link" type="button" id="showStructureButtonInline">Poka&#380; struktur&#281; JUMBO</button><button class="subtoolbar-link" type="button" id="showStructureButton2">Sk&#322;ad JUMBO</button><button class="subtoolbar-link" type="button" id="createSalesOrderButtonInline">Utw&#243;rz zam&#243;wienie sprzeda&#380;y</button></div><div class="table-scroller"><table><thead><tr><th>Typ</th><th>Nr</th><th>JUMBO</th><th>Opis</th><th>Nr inwestycji</th><th>Ilo&#347;&#263;</th><th>Jedn.</th><th>Cena jednostkowa sprzeda&#380;y</th><th>% prowizji</th><th>Kwota prowizji</th><th>Pozycja opcjonalna</th><th>Ilo&#347;&#263; - pozycja opcjonalna</th><th>Kwota wiersza - pozycja opcjonalna</th><th>Zamro&#380; cen&#281; JUMBO</th><th>Wyklucz z prowizji</th><th>Kwota wiersza</th></tr></thead><tbody id="lineBody"></tbody></table></div></section>
+
+    <section class="section" data-section><button class="section-header" type="button"><span>Podsumowanie dokumentu</span><span>Pokaz wi&#281;cej</span></button><div class="section-body"><div class="summary-grid"><div class="field"><span class="field-label">Suma cz&#281;&#347;ciowa bez VAT</span><div class="field-value summary-highlight" id="subtotalValue">0,00 PLN</div></div><div class="field"><span class="field-label">Suma bez VAT</span><div class="field-value summary-highlight" id="netValue">0,00 PLN</div></div><div class="field"><span class="field-label">Suma VAT</span><div class="field-value" id="vatValue">0,00 PLN</div></div><div class="field"><span class="field-label">Razem z VAT</span><div class="field-value summary-highlight" id="grossValue">0,00 PLN</div></div></div><div class="pill-row"><span class="pill">Cena JUMBO liczona ze sk&#322;adowych</span><span class="pill">Pozycje opcjonalne wy&#322;&#261;czone z podsumowania</span></div></div></section>
+
+    <section class="section" data-section><button class="section-header" type="button"><span>Mar&#380;a i prowizje</span><span>Pokaz wi&#281;cej</span></button><div class="section-body"><div class="field-grid"><div class="field"><span class="field-label">Suma prowizji PLN</span><div class="field-value" id="commissionValue">0,00 PLN</div></div><div class="field"><span class="field-label">Rodzaj prowizji</span><select class="field-select"><option>Prowizja % (wszystko)</option><option>Prowizja % (tylko zapasy)</option><option>Prowizja kwotowa</option></select></div><div class="field"><span class="field-label">Mar&#380;a kwotowa PLN</span><div class="field-value" id="marginValue">0,00 PLN</div></div><div class="field"><span class="field-label">Cena zamro&#380;ona JUMBO</span><div class="field-value" id="frozenValue">Nie</div></div></div></div></section>
+  </main>
+
+  <div class="dialog" id="investmentDialog" hidden><div class="dialog-box"><div class="dialog-header"><h2 class="dialog-title">Wybierz inwestycj&#281;</h2><button class="dialog-close" type="button" id="dialogClose">X</button></div><div class="dialog-content"><table><thead><tr><th>Nr inwestycji</th><th>Nazwa inwestycji</th><th>Status</th><th>Nabywca</th></tr></thead><tbody id="investmentList"></tbody></table></div><div class="dialog-footer"><button class="dialog-button" type="button" id="dialogCancel">Anuluj</button><button class="dialog-button dialog-button--primary" type="button" id="dialogOk">OK</button></div></div></div>
+  <div class="dialog structure-dialog" id="structureDialog" hidden><div class="dialog-box"><div class="dialog-header"><h2 class="dialog-title">Struktura JUMBO</h2><button class="dialog-close" type="button" id="structureClose">X</button></div><div class="dialog-content"><table><thead><tr><th>Wyb&#243;r</th><th>Poziom</th><th>Typ</th><th>Nr</th><th>Opis</th><th>Ilo&#347;&#263;</th><th>Jednostka</th><th>Monta&#380;</th><th>Produkcja</th></tr></thead><tbody id="structureList"></tbody></table><p class="structure-status" id="structureStatus"></p></div><div class="dialog-footer"><button class="dialog-button" type="button" id="addStructureComponentButton">Dodaj sk&#322;adnik</button><button class="dialog-button" type="button" id="refreshDescriptionsButton">Aktualizuj opisy</button><button class="dialog-button" type="button" id="checkCycleButton">Sprawd&#378; zap&#281;tlowanie</button><button class="dialog-button" type="button" id="structureCancel">Anuluj</button><button class="dialog-button dialog-button--primary" type="button" id="structureOk">OK</button></div></div></div>
+
+  <script>
+    const investments = [
+      { number: "INW-000123", name: "Budowa hali Bielsko", status: "W realizacji", customerNo: "C10000", customer: "Bielsko Logistics Sp. z o.o.", address: "ul. Przemys&#322;owa 25", locationCode: "MAG-G&#321;", description: "Budowa hali wysokiego sk&#322;adowania wraz z cz&#281;&#347;ci&#261; administracyjn&#261;." },
+      { number: "INW-000124", name: "Modernizacja magazynu Krak&#243;w", status: "Nowa", customerNo: "C10001", customer: "Krak-Mag Sp. z o.o.", address: "ul. Magazynowa 12", locationCode: "MAG-KRK", description: "Modernizacja powierzchni magazynowej." },
+      { number: "INW-000125", name: "Rozbudowa centrum logistycznego Pozna&#324;", status: "Zamkni&#281;ta", customerNo: "C10002", customer: "Logistic Center SA", address: "ul. Logistyczna 8", locationCode: "MAG-POZ", description: "Rozbudowa centrum logistycznego." }
+    ];
+
+    const lineData = [
+      { type: "Zapas", itemNo: "HALA-001", jumbo: true, description: "Konstrukcja hali wysokiego sk&#322;adowania", quantity: 1, unit: "szt.", price: 145000, commissionPct: 3, optional: false, optionalQty: 0, optionalAmount: 0, frozen: false, excluded: false },
+      { type: "Zapas", itemNo: "KOMP-001", jumbo: false, description: "Strefa kompletacji zam&#243;wie&#324;", quantity: 1, unit: "szt.", price: 100000, commissionPct: 3, optional: false, optionalQty: 0, optionalAmount: 0, frozen: false, excluded: false },
+      { type: "Zapas", itemNo: "OPC-001", jumbo: false, description: "Dodatkowe rega&#322;y magazynowe", quantity: 1, unit: "kpl.", price: 18000, commissionPct: 0, optional: true, optionalQty: 1, optionalAmount: 18000, frozen: false, excluded: false }
+    ];
+
+    const lineBody = document.querySelector("#lineBody");
+    let selectedInvestment = investments[0];
+    let activeIndex = 0;
+    let pickedInvestment = selectedInvestment;
+    let selectedStructureIndex = 0;
+    const customStructureItems = [];
+    const jumboStructures = {
+      "HALA-001": [
+        { level: 0, type: "Zapas JUMBO", number: "HALA-001", description: "Konstrukcja hali wysokiego sk&#322;adowania", quantity: 1, unit: "szt.", assembly: true, production: false },
+        { level: 1, type: "Zapas JUMBO", number: "KON-001", description: "Konstrukcja stalowa", quantity: 1, unit: "kpl.", assembly: false, production: true },
+        { level: 2, type: "Zapas", number: "STAL-001", description: "Profile stalowe", quantity: 24, unit: "szt.", assembly: false, production: true },
+        { level: 1, type: "Zasób", number: "MON-001", description: "Monta&#380; konstrukcji", quantity: 16, unit: "h", assembly: true, production: false },
+        { level: 1, type: "Komentarz", number: "", description: "Elementy zgodne z dokumentacj&#261; projektow&#261;", quantity: "", unit: "", assembly: false, production: false }
+      ]
+    };
+    const money = (value) => `${value.toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} PLN`;
+    const number = (value) => Number.parseFloat(String(value).replace(",", ".")) || 0;
+
+    function lineAmount(line) {
+      if (line.optional) return 0;
+      const base = line.price * line.quantity;
+      return line.excluded ? base : base * (1 + number(line.commissionPct) / 100);
+    }
+
+    function renderRows() {
+      lineBody.innerHTML = lineData.length ? lineData.map((line, index) => `
+        <tr class="${index === activeIndex ? "is-active" : ""} ${line.jumbo ? "jumbo-row" : ""} ${line.optional ? "optional-row" : ""}" data-line-index="${index}">
+          <td><select class="line-select" data-index="${index}" data-key="type"><option>Zapas</option><option>Element JUMBO</option><option>Projekcja</option><option>Komentarz</option><option>Prowizja</option></select></td>
+          <td><input class="line-input" data-index="${index}" data-key="itemNo" value="${line.itemNo}"></td>
+          <td class="checkbox-cell"><input type="checkbox" data-index="${index}" data-key="jumbo" ${line.jumbo ? "checked" : ""}></td>
+          <td><input class="line-input" data-index="${index}" data-key="description" value="${line.description}"></td>
+          <td><div class="cell">${selectedInvestment.number}</div></td>
+          <td><input class="line-input line-input--number" data-index="${index}" data-key="quantity" value="${line.quantity}"></td>
+          <td><div class="cell">${line.unit}</div></td>
+          <td><input class="line-input line-input--number" data-index="${index}" data-key="price" value="${line.price.toLocaleString("pl-PL")}"></td>
+          <td><input class="line-input line-input--number" data-index="${index}" data-key="commissionPct" value="${line.commissionPct}"></td>
+          <td><div class="cell cell-right">${money(line.price * line.quantity * number(line.commissionPct) / 100)}</div></td>
+          <td class="checkbox-cell"><input type="checkbox" data-index="${index}" data-key="optional" ${line.optional ? "checked" : ""}></td>
+          <td><input class="line-input line-input--number" data-index="${index}" data-key="optionalQty" value="${line.optionalQty}"></td>
+          <td><div class="cell cell-right">${money(line.optional ? line.optionalAmount : 0)}</div></td>
+          <td class="checkbox-cell"><input type="checkbox" data-index="${index}" data-key="frozen" ${line.frozen ? "checked" : ""}></td>
+          <td class="checkbox-cell"><input type="checkbox" data-index="${index}" data-key="excluded" ${line.excluded ? "checked" : ""}></td>
+          <td><div class="cell cell-right ${line.frozen ? "frozen-price" : ""}">${money(lineAmount(line))}</div></td>
+        </tr>
+      `).join("") : `<tr><td colspan="16"><div class="empty-state">Brak wierszy oferty</div></td></tr>`;
+      lineBody.querySelectorAll("[data-line-index]").forEach((row) => row.addEventListener("click", (event) => {
+        if (!event.target.matches("input, select, option")) {
+          activeIndex = Number(row.dataset.lineIndex);
+          renderRows();
+        }
+      }));
+      lineBody.querySelectorAll("[data-index]").forEach((input) => input.addEventListener(input.type === "checkbox" ? "change" : "input", updateLine));
+      updateSummary();
+    }
+
+    function updateLine(event) {
+      const input = event.currentTarget;
+      const line = lineData[Number(input.dataset.index)];
+      line[input.dataset.key] = input.type === "checkbox" ? input.checked : input.dataset.key === "description" || input.dataset.key === "itemNo" ? input.value : number(input.value);
+      activeIndex = Number(input.dataset.index);
+      renderRows();
+    }
+
+    function updateSummary() {
+      const subtotal = lineData.filter((line) => !line.optional).reduce((sum, line) => sum + line.price * line.quantity, 0);
+      const commission = lineData.filter((line) => !line.optional && !line.excluded).reduce((sum, line) => sum + line.price * line.quantity * number(line.commissionPct) / 100, 0);
+      const net = subtotal + commission;
+      document.querySelector("#subtotalValue").textContent = money(subtotal);
+      document.querySelector("#commissionValue").textContent = money(commission);
+      document.querySelector("#netValue").textContent = money(net);
+      document.querySelector("#vatValue").textContent = money(net * .23);
+      document.querySelector("#grossValue").textContent = money(net * 1.23);
+      document.querySelector("#frozenValue").textContent = lineData.some((line) => line.frozen) ? "Tak" : "Nie";
+      document.querySelector("#marginValue").textContent = money(net * .298);
+    }
+
+    function addLine(line) { lineData.push(line); activeIndex = lineData.length - 1; renderRows(); }
+    document.querySelector("#addLineButton").addEventListener("click", () => addLine({ type: "Zapas", itemNo: "ZAP-000", jumbo: false, description: "Nowy zapas", quantity: 1, unit: "szt.", price: 0, commissionPct: 0, optional: false, optionalQty: 0, optionalAmount: 0, frozen: false, excluded: false }));
+    document.querySelector("#addCommissionButton").addEventListener("click", () => addLine({ type: "Prowizja", itemNo: "KP-001", jumbo: false, description: "Prowizja dodatkowa", quantity: 1, unit: "szt.", price: 0, commissionPct: 5, optional: false, optionalQty: 0, optionalAmount: 0, frozen: false, excluded: false }));
+    document.querySelector("#addOptionalButton").addEventListener("click", () => addLine({ type: "Zapas", itemNo: "OPC-000", jumbo: false, description: "Nowy zapas opcjonalny", quantity: 1, unit: "szt.", price: 0, commissionPct: 0, optional: true, optionalQty: 1, optionalAmount: 0, frozen: false, excluded: false }));
+
+    document.querySelectorAll("[data-section]").forEach((section) => {
+      const sectionHeader = section.querySelector(".section-header");
+      if (sectionHeader) sectionHeader.addEventListener("click", () => section.classList.toggle("is-collapsed"));
+    });
+    document.querySelectorAll("[data-tab]").forEach((tab) => tab.addEventListener("click", () => { document.querySelectorAll("[data-tab]").forEach((item) => item.classList.toggle("is-active", item === tab)); document.querySelector("#actionPanel").hidden = tab.dataset.tab !== "actions"; }));
+
+    const dialog = document.querySelector("#investmentDialog");
+    const investmentList = document.querySelector("#investmentList");
+    function renderInvestments() { investmentList.innerHTML = investments.map((investment) => `<tr class="${investment.number === pickedInvestment.number ? "is-selected" : ""}" data-number="${investment.number}"><td>${investment.number}</td><td>${investment.name}</td><td>${investment.status}</td><td>${investment.customer}</td></tr>`).join(""); investmentList.querySelectorAll("tr").forEach((row) => row.addEventListener("click", () => { pickedInvestment = investments.find((item) => item.number === row.dataset.number); renderInvestments(); })); }
+    document.querySelector("#linkInvestmentButton").addEventListener("click", () => { renderInvestments(); dialog.hidden = false; });
+    document.querySelector("#dialogCancel").addEventListener("click", () => { dialog.hidden = true; });
+    document.querySelector("#dialogClose").addEventListener("click", () => { dialog.hidden = true; });
+    document.querySelector("#dialogOk").addEventListener("click", () => { selectedInvestment = pickedInvestment; document.querySelectorAll("[data-field]").forEach((field) => field.textContent = pickedInvestment[field.dataset.field]); document.querySelector("#customerName").textContent = pickedInvestment.customer; document.querySelector("#customerSelect").innerHTML = `<option>${pickedInvestment.customer}</option>`; document.querySelector("#documentHeading").textContent = `OS/26/05/0002 · ${pickedInvestment.customer}`; dialog.hidden = true; renderRows(); });
+    dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.hidden = true; });
+
+    const structureDialog = document.querySelector("#structureDialog");
+    const structureList = document.querySelector("#structureList");
+    const structureStatus = document.querySelector("#structureStatus");
+    let structureMode = "all";
+    const getStructureForLine = (rootLine) => {
+      const defaultStructure = [{ level: 0, type: "Zapas JUMBO", number: rootLine?.itemNo || "-", description: rootLine?.description || "Nowy zapas JUMBO", quantity: rootLine?.quantity || 1, unit: rootLine?.unit || "szt.", assembly: false, production: false }];
+      return (jumboStructures[rootLine?.itemNo] || defaultStructure).concat(customStructureItems.filter((item) => item.root === (rootLine?.itemNo || "-")));
+    };
+    const renderStructure = (mode = "all", targetIndex = activeIndex) => {
+      const jumboLines = lineData.map((line, index) => ({ line, index })).filter(({ line }) => line.jumbo);
+      const selectedRoot = lineData[targetIndex]?.jumbo ? lineData[targetIndex] : jumboLines[0]?.line;
+      const roots = mode === "components" ? (selectedRoot ? [{ line: selectedRoot, index: targetIndex }] : []) : jumboLines;
+      const structure = roots.flatMap(({ line, index }) => getStructureForLine(line).map((item) => ({ ...item, rootIndex: index })));
+      document.querySelector("#structureDialog .dialog-title").textContent = mode === "components" ? `Sk&#322;ad JUMBO: ${selectedRoot?.itemNo || "-"}` : "Struktura JUMBO";
+      structureList.innerHTML = structure.map((item, index) => `<tr class="structure-level-${item.level} ${index === selectedStructureIndex ? "is-selected" : ""}" data-structure-index="${index}"><td><input class="structure-select" type="radio" name="structureSelection" ${index === selectedStructureIndex ? "checked" : ""} aria-label="Wybierz ${item.number || "komentarz"}"></td><td>${item.level}</td><td>${item.type}</td><td>${item.number || "-"}</td><td>${item.description}</td><td>${item.quantity || "-"}</td><td>${item.unit || "-"}</td><td>${item.assembly ? "Tak" : "Nie"}</td><td>${item.production ? "Tak" : "Nie"}</td></tr>`).join("");
+      structureList.querySelectorAll("[data-structure-index]").forEach((row) => row.addEventListener("click", () => { selectedStructureIndex = Number(row.dataset.structureIndex); renderStructure(structureMode, targetIndex); }));
+      structureStatus.textContent = mode === "components" ? `Sk&#322;ad wiersza ${selectedRoot?.itemNo || "-"}. Poziomy: ${new Set(structure.map((item) => item.level)).size}.` : `Ca&#322;a struktura oferty. Liczba JUMBO: ${roots.length}. Poziomy: ${new Set(structure.map((item) => item.level)).size}.`;
+      structureStatus.className = "structure-status";
+    };
+    const openStructure = () => { selectedStructureIndex = 0; structureMode = "all"; renderStructure(structureMode); structureDialog.hidden = false; };
+    const openComponents = () => { selectedStructureIndex = 0; structureMode = "components"; renderStructure(structureMode, activeIndex); structureDialog.hidden = false; };
+    const closeStructure = () => { structureDialog.hidden = true; };
+    document.querySelector("#showStructureButton").addEventListener("click", openStructure);
+    document.querySelector("#showComponentsButton").addEventListener("click", openComponents);
+    document.querySelector("#showStructureButtonInline").addEventListener("click", openStructure);
+    document.querySelector("#showStructureButton2").addEventListener("click", openComponents);
+    document.addEventListener("click", (event) => {
+      if (event.target.closest("[data-structure-action]")) openComponents();
+    });
+    document.querySelector("#structureClose").addEventListener("click", closeStructure);
+    document.querySelector("#structureCancel").addEventListener("click", closeStructure);
+    document.querySelector("#structureOk").addEventListener("click", closeStructure);
+    document.querySelector("#addStructureComponentButton").addEventListener("click", () => {
+      const rootLine = lineData[activeIndex]?.jumbo ? lineData[activeIndex] : lineData.find((line) => line.jumbo) || lineData[0];
+      const rootNumber = rootLine?.itemNo || "-";
+      const defaultStructure = [{ level: 0, type: "Zapas JUMBO", number: rootNumber, description: rootLine?.description || "Nowy zapas JUMBO", quantity: rootLine?.quantity || 1, unit: rootLine?.unit || "szt.", assembly: false, production: false }];
+      const currentStructure = (jumboStructures[rootNumber] || defaultStructure).concat(customStructureItems.filter((item) => item.root === rootNumber));
+      const selectedItem = currentStructure[selectedStructureIndex] || currentStructure[0];
+      customStructureItems.push({ root: rootNumber, parent: selectedItem?.number || rootNumber, level: (selectedItem?.level || 0) + 1, type: "Zapas", number: `SKL-${String(customStructureItems.length + 1).padStart(3, "0")}`, description: "Nowy sk&#322;adnik JUMBO", quantity: 1, unit: "szt.", assembly: false, production: false });
+      selectedStructureIndex = 0;
+      renderStructure();
+      structureStatus.textContent = "Dodano nowy sk&#322;adnik do wybranego JUMBO.";
+      structureStatus.className = "structure-status is-success";
+    });
+    document.querySelector("#checkCycleButton").addEventListener("click", () => {
+      const structure = jumboStructures["HALA-001"];
+      const jumboNumbers = structure.filter((item) => item.type.includes("JUMBO")).map((item) => item.number);
+      const hasCycle = jumboNumbers.some((numberValue, index) => jumboNumbers.indexOf(numberValue) !== index);
+      structureStatus.textContent = hasCycle ? "Wykryto zap&#281;tlenie struktury JUMBO." : "Struktura JUMBO jest poprawna. Nie wykryto zap&#281;tlenia.";
+      structureStatus.className = `structure-status ${hasCycle ? "is-warning" : "is-success"}`;
+    });
+    document.querySelector("#refreshDescriptionsButton").addEventListener("click", () => {
+      lineData.filter((line) => line.jumbo || line.itemNo === "STAL-001").forEach((line) => {
+        if (line.itemNo === "HALA-001") line.description = "Konstrukcja hali wysokiego sk&#322;adowania";
+        if (line.itemNo === "STAL-001") line.description = "Profile stalowe";
+      });
+      renderRows();
+      structureStatus.textContent = "Opisy zapas&#243;w sk&#322;adowych zosta&#322;y zaktualizowane.";
+      structureStatus.className = "structure-status is-success";
+    });
+    document.querySelector("#resetJumboButton").addEventListener("click", () => {
+      lineData[0].price = 145000;
+      lineData[0].quantity = 1;
+      lineData[0].frozen = false;
+      renderRows();
+    });
+    document.querySelector("#optionalStockButton").addEventListener("click", () => {
+      if (!lineData.some((line) => line.itemNo === "OPC-001")) {
+        lineData.push({ type: "Zapas", itemNo: "OPC-001", jumbo: false, description: "Dodatkowe rega&#322;y magazynowe", quantity: 1, unit: "kpl.", price: 18000, commissionPct: 0, optional: true, optionalQty: 1, optionalAmount: 18000, frozen: false, excluded: false });
+        renderRows();
+      }
+    });
+    document.querySelector("#createSalesOrderButton").addEventListener("click", () => {
+      window.location.href = `zamowienie_sprzedazy_jumbo.html?investment=${selectedInvestment.number}`;
+    });
+    document.querySelector("#createSalesOrderButtonInline").addEventListener("click", () => {
+      window.location.href = `zamowienie_sprzedazy_jumbo.html?investment=${selectedInvestment.number}`;
+    });
+    renderRows();
+  </script>
+</body>
+</html>
