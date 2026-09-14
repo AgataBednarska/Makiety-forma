@@ -61,6 +61,7 @@
     .field-input:focus, .field-select:focus, .line-input:focus, .line-select:focus { outline: none; border-color: var(--focus); box-shadow: 0 0 0 1px var(--focus); }
     .workspace-toolbar { display: flex; align-items: center; gap: 18px; padding: 10px 16px 8px; border-bottom: 1px solid var(--line); font-size: 12px; flex-wrap: wrap; }
     .workspace-title { font-weight: 700; }
+    .active-line-indicator { color: var(--accent-strong); font-size: 12px; font-weight: 600; }
     .workspace-tab { border: 0; padding: 0; background: transparent; color: var(--text); cursor: pointer; font-size: 12px; }
     .workspace-tab.is-active { color: var(--accent-strong); text-decoration: underline; text-underline-offset: 3px; }
     .subtoolbar { display: flex; gap: 20px; padding: 8px 16px; border-bottom: 1px solid var(--line); color: #3a96a0; flex-wrap: wrap; }
@@ -73,6 +74,9 @@
     tbody tr:nth-child(even) td { background: #faf9f8; }
     tbody tr:hover td { background: #f3f8f4; }
     tbody tr.is-active td { background: #eaf4fb; }
+    tbody tr.is-active td,
+    tbody tr.is-active.jumbo-row td,
+    tbody tr.is-active.optional-row td { background: #c7e4f5; }
     .cell { min-height: 26px; display: flex; align-items: center; padding: 3px 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .cell-right { justify-content: flex-end; text-align: right; }
     .cell-center { justify-content: center; }
@@ -101,16 +105,20 @@
     .dialog-content table { min-width: 0; }
     .dialog-content th, .dialog-content td { padding: 8px; }
     .dialog-content tr.is-selected td { background: #eaf4fb; }
-    .structure-select { width: 14px; height: 14px; accent-color: var(--accent); }
+    .structure-toggle { width: 24px; min-height: 24px; border: 0; background: transparent; color: var(--accent-strong); cursor: pointer; font-size: 16px; }
+    .structure-toggle.is-leaf { color: transparent; cursor: default; }
+    .structure-level-1 td:first-child { padding-left: 28px; }
+    .structure-level-2 td:first-child { padding-left: 52px; }
     .dialog-content tr:hover td { background: #f3f8f4; cursor: pointer; }
     .structure-dialog .dialog-box { width: min(900px, calc(100vw - 40px)); }
     .structure-dialog .dialog-content table { min-width: 760px; }
     .structure-dialog .dialog-content th, .structure-dialog .dialog-content td { padding: 8px; }
-    .structure-level-1 td:first-child { padding-left: 26px; }
-    .structure-level-2 td:first-child { padding-left: 46px; }
     .structure-status { margin: 10px 0 0; color: var(--muted); font-size: 12px; }
     .structure-status.is-success { color: var(--ok); }
     .structure-status.is-warning { color: var(--warn); }
+    .structure-commission { color: var(--accent-strong); font-weight: 600; }
+    .composition-dialog .dialog-box { width: min(900px, calc(100vw - 40px)); }
+    .composition-dialog .dialog-content table { min-width: 760px; }
     .dialog-footer { flex-wrap: wrap; }
     @media (max-width: 1180px) { .field-grid, .summary-grid { grid-template-columns: 1fr; } }
     @media (max-width: 720px) { body { background: #fff; } .page { width: 100%; margin: 0; border: 0; } .field { grid-template-columns: 1fr; gap: 4px; } .field-label::after { display: none; } .top-shell, .doc-title, .section-body, .workspace-toolbar, .subtoolbar { padding-left: 12px; padding-right: 12px; } }
@@ -148,7 +156,7 @@
       <div class="field"><span class="field-label">Kod lokalizacji</span><div class="field-value" data-field="locationCode">MAG-G&#321;</div></div><div class="field"><span class="field-label">Opis inwestycji</span><div class="field-value" data-field="description">Budowa hali wysokiego sk&#322;adowania wraz z cz&#281;&#347;ci&#261; administracyjn&#261;.</div></div>
     </div></div></section>
 
-    <section class="section" data-section><div class="workspace-toolbar"><span class="workspace-title">Wiersze oferty</span><button class="workspace-tab is-active" type="button">Zarz&#261;dzaj</button><button class="workspace-tab" type="button">Wiersz</button><button class="workspace-tab" type="button">Funkcje</button></div><div class="subtoolbar"><button class="subtoolbar-link" type="button" id="addLineButton">Nowy wiersz</button><button class="subtoolbar-link" type="button" id="addCommissionButton">Dodaj prowizj&#281;</button><button class="subtoolbar-link" type="button" id="addOptionalButton">Dodaj pozycj&#281; opcjonaln&#261;</button><button class="subtoolbar-link" type="button" id="showStructureButtonInline">Poka&#380; struktur&#281; JUMBO</button><button class="subtoolbar-link" type="button" id="showStructureButton2">Sk&#322;ad JUMBO</button><button class="subtoolbar-link" type="button" id="createSalesOrderButtonInline">Utw&#243;rz zam&#243;wienie sprzeda&#380;y</button></div><div class="table-scroller"><table><thead><tr><th>Typ</th><th>Nr</th><th>JUMBO</th><th>Opis</th><th>Nr inwestycji</th><th>Ilo&#347;&#263;</th><th>Jedn.</th><th>Cena jednostkowa sprzeda&#380;y</th><th>% prowizji</th><th>Kwota prowizji</th><th>Pozycja opcjonalna</th><th>Ilo&#347;&#263; - pozycja opcjonalna</th><th>Kwota wiersza - pozycja opcjonalna</th><th>Zamro&#380; cen&#281; JUMBO</th><th>Wyklucz z prowizji</th><th>Kwota wiersza</th></tr></thead><tbody id="lineBody"></tbody></table></div></section>
+    <section class="section" data-section><div class="workspace-toolbar"><span class="workspace-title">Wiersze oferty</span><span class="active-line-indicator" id="activeLineIndicator">Aktywny wiersz: HALA-001</span><button class="workspace-tab is-active" type="button">Zarz&#261;dzaj</button><button class="workspace-tab" type="button">Wiersz</button><button class="workspace-tab" type="button">Funkcje</button></div><div class="subtoolbar"><button class="subtoolbar-link" type="button" id="addLineButton">Nowy wiersz</button><button class="subtoolbar-link" type="button" id="addCommissionButton">Dodaj prowizj&#281; do sk&#322;adu JUMBO</button><button class="subtoolbar-link" type="button" id="addOptionalButton">Dodaj pozycj&#281; opcjonaln&#261;</button><button class="subtoolbar-link" type="button" id="showStructureButtonInline">Poka&#380; struktur&#281; JUMBO</button><button class="subtoolbar-link" type="button" id="showStructureButton2">Sk&#322;ad JUMBO</button><button class="subtoolbar-link" type="button" id="createSalesOrderButtonInline">Utw&#243;rz zam&#243;wienie sprzeda&#380;y</button></div><div class="table-scroller"><table><thead><tr><th>Typ</th><th>Nr</th><th>JUMBO</th><th>Opis</th><th>Nr inwestycji</th><th>Ilo&#347;&#263;</th><th>Jedn.</th><th>Cena jednostkowa sprzeda&#380;y</th><th>Pozycja opcjonalna</th><th>Ilo&#347;&#263; - pozycja opcjonalna</th><th>Kwota wiersza - pozycja opcjonalna</th><th>Zamro&#380; cen&#281; JUMBO</th><th>Wyklucz z prowizji</th><th>Kwota wiersza</th></tr></thead><tbody id="lineBody"></tbody></table></div></section>
 
     <section class="section" data-section><button class="section-header" type="button"><span>Podsumowanie dokumentu</span><span>Pokaz wi&#281;cej</span></button><div class="section-body"><div class="summary-grid"><div class="field"><span class="field-label">Suma cz&#281;&#347;ciowa bez VAT</span><div class="field-value summary-highlight" id="subtotalValue">0,00 PLN</div></div><div class="field"><span class="field-label">Suma bez VAT</span><div class="field-value summary-highlight" id="netValue">0,00 PLN</div></div><div class="field"><span class="field-label">Suma VAT</span><div class="field-value" id="vatValue">0,00 PLN</div></div><div class="field"><span class="field-label">Razem z VAT</span><div class="field-value summary-highlight" id="grossValue">0,00 PLN</div></div></div><div class="pill-row"><span class="pill">Cena JUMBO liczona ze sk&#322;adowych</span><span class="pill">Pozycje opcjonalne wy&#322;&#261;czone z podsumowania</span></div></div></section>
 
@@ -156,7 +164,8 @@
   </main>
 
   <div class="dialog" id="investmentDialog" hidden><div class="dialog-box"><div class="dialog-header"><h2 class="dialog-title">Wybierz inwestycj&#281;</h2><button class="dialog-close" type="button" id="dialogClose">X</button></div><div class="dialog-content"><table><thead><tr><th>Nr inwestycji</th><th>Nazwa inwestycji</th><th>Status</th><th>Nabywca</th></tr></thead><tbody id="investmentList"></tbody></table></div><div class="dialog-footer"><button class="dialog-button" type="button" id="dialogCancel">Anuluj</button><button class="dialog-button dialog-button--primary" type="button" id="dialogOk">OK</button></div></div></div>
-  <div class="dialog structure-dialog" id="structureDialog" hidden><div class="dialog-box"><div class="dialog-header"><h2 class="dialog-title">Struktura JUMBO</h2><button class="dialog-close" type="button" id="structureClose">X</button></div><div class="dialog-content"><table><thead><tr><th>Wyb&#243;r</th><th>Poziom</th><th>Typ</th><th>Nr</th><th>Opis</th><th>Ilo&#347;&#263;</th><th>Jednostka</th><th>Monta&#380;</th><th>Produkcja</th></tr></thead><tbody id="structureList"></tbody></table><p class="structure-status" id="structureStatus"></p></div><div class="dialog-footer"><button class="dialog-button" type="button" id="addStructureComponentButton">Dodaj sk&#322;adnik</button><button class="dialog-button" type="button" id="refreshDescriptionsButton">Aktualizuj opisy</button><button class="dialog-button" type="button" id="checkCycleButton">Sprawd&#378; zap&#281;tlowanie</button><button class="dialog-button" type="button" id="structureCancel">Anuluj</button><button class="dialog-button dialog-button--primary" type="button" id="structureOk">OK</button></div></div></div>
+  <div class="dialog structure-dialog" id="structureDialog" hidden><div class="dialog-box"><div class="dialog-header"><h2 class="dialog-title">Struktura JUMBO</h2><button class="dialog-close" type="button" id="structureClose">X</button></div><div class="dialog-content"><table><thead><tr><th></th><th>Poziom</th><th>Typ</th><th>Nr</th><th>Opis</th><th>Ilo&#347;&#263;</th><th>Jednostka</th><th>Monta&#380;</th><th>Produkcja</th><th>% prowizji</th></tr></thead><tbody id="structureList"></tbody></table><p class="structure-status" id="structureStatus"></p></div><div class="dialog-footer"><button class="dialog-button" type="button" id="structureCancel">Zamknij</button></div></div></div>
+  <div class="dialog composition-dialog" id="compositionDialog" hidden><div class="dialog-box"><div class="dialog-header"><h2 class="dialog-title" id="compositionTitle">Sk&#322;ad JUMBO</h2><button class="dialog-close" type="button" id="compositionClose">X</button></div><div class="dialog-content"><table><thead><tr><th>Poziom</th><th>Typ</th><th>Nr</th><th>Opis</th><th>Ilo&#347;&#263;</th><th>Jednostka</th><th>Monta&#380;</th><th>Produkcja</th><th>% prowizji</th></tr></thead><tbody id="compositionList"></tbody></table><p class="structure-status" id="compositionStatus"></p></div><div class="dialog-footer"><button class="dialog-button" type="button" id="addStructureComponentButton">Dodaj sk&#322;adnik</button><button class="dialog-button" type="button" id="refreshDescriptionsButton">Aktualizuj opisy</button><button class="dialog-button" type="button" id="checkCycleButton">Sprawd&#378; zap&#281;tlenie</button><button class="dialog-button" type="button" id="compositionCancel">Zamknij</button></div></div></div>
 
   <script>
     const investments = [
@@ -172,11 +181,12 @@
     ];
 
     const lineBody = document.querySelector("#lineBody");
+    const activeLineIndicator = document.querySelector("#activeLineIndicator");
     let selectedInvestment = investments[0];
     let activeIndex = 0;
     let pickedInvestment = selectedInvestment;
-    let selectedStructureIndex = 0;
     const customStructureItems = [];
+    const expandedStructureNodes = new Set();
     const jumboStructures = {
       "HALA-001": [
         { level: 0, type: "Zapas JUMBO", number: "HALA-001", description: "Konstrukcja hali wysokiego sk&#322;adowania", quantity: 1, unit: "szt.", assembly: true, production: false },
@@ -196,6 +206,8 @@
     }
 
     function renderRows() {
+      const activeLine = lineData[activeIndex];
+      activeLineIndicator.textContent = activeLine ? `Aktywny wiersz: ${activeIndex + 1} - ${activeLine.itemNo}` : "Aktywny wiersz: brak";
       lineBody.innerHTML = lineData.length ? lineData.map((line, index) => `
         <tr class="${index === activeIndex ? "is-active" : ""} ${line.jumbo ? "jumbo-row" : ""} ${line.optional ? "optional-row" : ""}" data-line-index="${index}">
           <td><select class="line-select" data-index="${index}" data-key="type"><option>Zapas</option><option>Element JUMBO</option><option>Projekcja</option><option>Komentarz</option><option>Prowizja</option></select></td>
@@ -206,8 +218,6 @@
           <td><input class="line-input line-input--number" data-index="${index}" data-key="quantity" value="${line.quantity}"></td>
           <td><div class="cell">${line.unit}</div></td>
           <td><input class="line-input line-input--number" data-index="${index}" data-key="price" value="${line.price.toLocaleString("pl-PL")}"></td>
-          <td><input class="line-input line-input--number" data-index="${index}" data-key="commissionPct" value="${line.commissionPct}"></td>
-          <td><div class="cell cell-right">${money(line.price * line.quantity * number(line.commissionPct) / 100)}</div></td>
           <td class="checkbox-cell"><input type="checkbox" data-index="${index}" data-key="optional" ${line.optional ? "checked" : ""}></td>
           <td><input class="line-input line-input--number" data-index="${index}" data-key="optionalQty" value="${line.optionalQty}"></td>
           <td><div class="cell cell-right">${money(line.optional ? line.optionalAmount : 0)}</div></td>
@@ -216,11 +226,17 @@
           <td><div class="cell cell-right ${line.frozen ? "frozen-price" : ""}">${money(lineAmount(line))}</div></td>
         </tr>
       `).join("") : `<tr><td colspan="16"><div class="empty-state">Brak wierszy oferty</div></td></tr>`;
-      lineBody.querySelectorAll("[data-line-index]").forEach((row) => row.addEventListener("click", (event) => {
-        if (!event.target.matches("input, select, option")) {
-          activeIndex = Number(row.dataset.lineIndex);
-          renderRows();
-        }
+      lineBody.querySelectorAll("[data-line-index]").forEach((row) => row.addEventListener("pointerdown", () => {
+        activeIndex = Number(row.dataset.lineIndex);
+        lineBody.querySelectorAll("[data-line-index]").forEach((item) => item.classList.toggle("is-active", item === row));
+        const activeLine = lineData[activeIndex];
+        activeLineIndicator.textContent = `Aktywny wiersz: ${activeIndex + 1} - ${activeLine.itemNo}`;
+      }));
+      lineBody.querySelectorAll("[data-line-index]").forEach((row) => row.addEventListener("click", () => {
+        activeIndex = Number(row.dataset.lineIndex);
+        lineBody.querySelectorAll("[data-line-index]").forEach((item) => item.classList.toggle("is-active", item === row));
+        const activeLine = lineData[activeIndex];
+        activeLineIndicator.textContent = `Aktywny wiersz: ${activeIndex + 1} - ${activeLine.itemNo}`;
       }));
       lineBody.querySelectorAll("[data-index]").forEach((input) => input.addEventListener(input.type === "checkbox" ? "change" : "input", updateLine));
       updateSummary();
@@ -249,7 +265,16 @@
 
     function addLine(line) { lineData.push(line); activeIndex = lineData.length - 1; renderRows(); }
     document.querySelector("#addLineButton").addEventListener("click", () => addLine({ type: "Zapas", itemNo: "ZAP-000", jumbo: false, description: "Nowy zapas", quantity: 1, unit: "szt.", price: 0, commissionPct: 0, optional: false, optionalQty: 0, optionalAmount: 0, frozen: false, excluded: false }));
-    document.querySelector("#addCommissionButton").addEventListener("click", () => addLine({ type: "Prowizja", itemNo: "KP-001", jumbo: false, description: "Prowizja dodatkowa", quantity: 1, unit: "szt.", price: 0, commissionPct: 5, optional: false, optionalQty: 0, optionalAmount: 0, frozen: false, excluded: false }));
+    document.querySelector("#addCommissionButton").addEventListener("click", () => {
+      const selectedRoot = lineData[activeIndex]?.jumbo ? lineData[activeIndex] : null;
+      if (!selectedRoot) {
+        activeLineIndicator.textContent = "Aktywny wiersz nie jest oznaczony jako JUMBO";
+        return;
+      }
+      customStructureItems.push({ root: selectedRoot.itemNo, level: 1, type: "Prowizja", number: `KP-${String(customStructureItems.length + 1).padStart(3, "0")}`, description: "Prowizja % (wszystko)", quantity: "-", unit: "%", commissionPct: 5, assembly: false, production: false });
+      renderComposition();
+      compositionDialog.hidden = false;
+    });
     document.querySelector("#addOptionalButton").addEventListener("click", () => addLine({ type: "Zapas", itemNo: "OPC-000", jumbo: false, description: "Nowy zapas opcjonalny", quantity: 1, unit: "szt.", price: 0, commissionPct: 0, optional: true, optionalQty: 1, optionalAmount: 0, frozen: false, excluded: false }));
 
     document.querySelectorAll("[data-section]").forEach((section) => {
@@ -273,60 +298,99 @@
     let structureMode = "all";
     const getStructureForLine = (rootLine) => {
       const defaultStructure = [{ level: 0, type: "Zapas JUMBO", number: rootLine?.itemNo || "-", description: rootLine?.description || "Nowy zapas JUMBO", quantity: rootLine?.quantity || 1, unit: rootLine?.unit || "szt.", assembly: false, production: false }];
-      return (jumboStructures[rootLine?.itemNo] || defaultStructure).concat(customStructureItems.filter((item) => item.root === (rootLine?.itemNo || "-")));
+      const structure = [...(jumboStructures[rootLine?.itemNo] || defaultStructure)];
+      const commission = number(rootLine?.commissionPct);
+      if (commission > 0) structure.splice(1, 0, { level: 1, type: "Prowizja", number: "KP-001", description: "Prowizja % (wszystko)", quantity: "-", unit: "%", commissionPct: commission, assembly: false, production: false });
+      return structure;
     };
     const renderStructure = (mode = "all", targetIndex = activeIndex) => {
       const jumboLines = lineData.map((line, index) => ({ line, index })).filter(({ line }) => line.jumbo);
       const selectedRoot = lineData[targetIndex]?.jumbo ? lineData[targetIndex] : jumboLines[0]?.line;
       const roots = mode === "components" ? (selectedRoot ? [{ line: selectedRoot, index: targetIndex }] : []) : jumboLines;
-      const structure = roots.flatMap(({ line, index }) => getStructureForLine(line).map((item) => ({ ...item, rootIndex: index })));
-      document.querySelector("#structureDialog .dialog-title").textContent = mode === "components" ? `Sk&#322;ad JUMBO: ${selectedRoot?.itemNo || "-"}` : "Struktura JUMBO";
-      structureList.innerHTML = structure.map((item, index) => `<tr class="structure-level-${item.level} ${index === selectedStructureIndex ? "is-selected" : ""}" data-structure-index="${index}"><td><input class="structure-select" type="radio" name="structureSelection" ${index === selectedStructureIndex ? "checked" : ""} aria-label="Wybierz ${item.number || "komentarz"}"></td><td>${item.level}</td><td>${item.type}</td><td>${item.number || "-"}</td><td>${item.description}</td><td>${item.quantity || "-"}</td><td>${item.unit || "-"}</td><td>${item.assembly ? "Tak" : "Nie"}</td><td>${item.production ? "Tak" : "Nie"}</td></tr>`).join("");
-      structureList.querySelectorAll("[data-structure-index]").forEach((row) => row.addEventListener("click", () => { selectedStructureIndex = Number(row.dataset.structureIndex); renderStructure(structureMode, targetIndex); }));
-      structureStatus.textContent = mode === "components" ? `Sk&#322;ad wiersza ${selectedRoot?.itemNo || "-"}. Poziomy: ${new Set(structure.map((item) => item.level)).size}.` : `Ca&#322;a struktura oferty. Liczba JUMBO: ${roots.length}. Poziomy: ${new Set(structure.map((item) => item.level)).size}.`;
+      const nodes = roots.flatMap(({ line, index: rootIndex }) => {
+        const source = getStructureForLine(line);
+        const parents = [];
+        return source.map((item, itemIndex) => {
+          while (parents.length > item.level) parents.pop();
+          const node = { ...item, id: `${rootIndex}:${itemIndex}`, parentId: parents[item.level - 1] || null, rootIndex };
+          parents[item.level] = node.id;
+          return node;
+        });
+      });
+      const visible = nodes.filter((node) => {
+        let parentId = node.parentId;
+        while (parentId) {
+          if (!expandedStructureNodes.has(parentId)) return false;
+          parentId = nodes.find((candidate) => candidate.id === parentId)?.parentId;
+        }
+        return true;
+      });
+      document.querySelector("#structureDialog .dialog-title").textContent = mode === "components" ? `Skład JUMBO: ${selectedRoot?.itemNo || "-"}` : "Struktura JUMBO";
+      structureList.innerHTML = visible.map((item) => {
+        const hasChildren = nodes.some((candidate) => candidate.parentId === item.id);
+        const expanded = expandedStructureNodes.has(item.id);
+        const commission = item.type === "Prowizja" ? `${item.commissionPct}%` : "-";
+        return `<tr class="structure-level-${item.level} ${item.type === "Prowizja" ? "structure-commission" : ""}" data-structure-id="${item.id}"><td><button class="structure-toggle ${hasChildren ? "" : "is-leaf"}" type="button" data-toggle-id="${item.id}" aria-label="${expanded ? "Zwi&#324;" : "Rozwi&#324;"}">${hasChildren ? (expanded ? "&#8722;" : "+") : "&bull;"}</button></td><td>${item.level}</td><td>${item.type}</td><td>${item.number || "-"}</td><td>${item.description}</td><td>${item.quantity || "-"}</td><td>${item.unit || "-"}</td><td>${item.assembly ? "Tak" : "Nie"}</td><td>${item.production ? "Tak" : "Nie"}</td><td>${commission}</td></tr>`;
+      }).join("");
+      structureList.querySelectorAll("[data-toggle-id]").forEach((button) => button.addEventListener("click", (event) => { event.stopPropagation(); const id = button.dataset.toggleId; if (expandedStructureNodes.has(id)) expandedStructureNodes.delete(id); else expandedStructureNodes.add(id); renderStructure(mode, targetIndex); }));
+      structureStatus.textContent = mode === "components" ? `Skład wiersza ${selectedRoot?.itemNo || "-"}. Rozwiń poziomy według potrzeb.` : `Cała struktura oferty. Liczba JUMBO: ${roots.length}. Rozwiń dowolny poziom.`;
       structureStatus.className = "structure-status";
     };
-    const openStructure = () => { selectedStructureIndex = 0; structureMode = "all"; renderStructure(structureMode); structureDialog.hidden = false; };
-    const openComponents = () => { selectedStructureIndex = 0; structureMode = "components"; renderStructure(structureMode, activeIndex); structureDialog.hidden = false; };
+    const openStructure = () => { structureMode = "all"; expandedStructureNodes.clear(); renderStructure(structureMode); structureDialog.hidden = false; };
+    const compositionDialog = document.querySelector("#compositionDialog");
+    const compositionList = document.querySelector("#compositionList");
+    const compositionStatus = document.querySelector("#compositionStatus");
+    const getActiveJumboLine = () => lineData[activeIndex]?.jumbo ? lineData[activeIndex] : null;
+    const renderComposition = () => {
+      const selectedRoot = getActiveJumboLine();
+      compositionDialog.querySelector("#compositionTitle").textContent = `Skład JUMBO: ${selectedRoot?.itemNo || "brak JUMBO"}`;
+      if (!selectedRoot) {
+        compositionList.innerHTML = "";
+        compositionStatus.textContent = "Zaznacz wiersz zapasu oznaczony jako JUMBO.";
+        return;
+      }
+      const composition = getStructureForLine(selectedRoot);
+      compositionList.innerHTML = composition.map((item) => `<tr class="${item.type === "Prowizja" ? "structure-commission" : ""}"><td>${item.level}</td><td>${item.type}</td><td>${item.number || "-"}</td><td>${item.description}</td><td>${item.quantity || "-"}</td><td>${item.unit || "-"}</td><td>${item.assembly ? "Tak" : "Nie"}</td><td>${item.production ? "Tak" : "Nie"}</td><td>${item.type === "Prowizja" ? `${item.commissionPct}%` : "-"}</td></tr>`).join("");
+      compositionStatus.textContent = `Skład wiersza ${selectedRoot.itemNo}. Wszystkie składniki są widoczne.`;
+      compositionStatus.className = "structure-status";
+    };
+    const openComponents = () => { renderComposition(); compositionDialog.hidden = false; };
     const closeStructure = () => { structureDialog.hidden = true; };
     document.querySelector("#showStructureButton").addEventListener("click", openStructure);
     document.querySelector("#showComponentsButton").addEventListener("click", openComponents);
     document.querySelector("#showStructureButtonInline").addEventListener("click", openStructure);
     document.querySelector("#showStructureButton2").addEventListener("click", openComponents);
+    document.querySelector("#compositionClose").addEventListener("click", () => { compositionDialog.hidden = true; });
+    document.querySelector("#compositionCancel").addEventListener("click", () => { compositionDialog.hidden = true; });
     document.addEventListener("click", (event) => {
       if (event.target.closest("[data-structure-action]")) openComponents();
     });
-    document.querySelector("#structureClose").addEventListener("click", closeStructure);
-    document.querySelector("#structureCancel").addEventListener("click", closeStructure);
-    document.querySelector("#structureOk").addEventListener("click", closeStructure);
     document.querySelector("#addStructureComponentButton").addEventListener("click", () => {
-      const rootLine = lineData[activeIndex]?.jumbo ? lineData[activeIndex] : lineData.find((line) => line.jumbo) || lineData[0];
-      const rootNumber = rootLine?.itemNo || "-";
-      const defaultStructure = [{ level: 0, type: "Zapas JUMBO", number: rootNumber, description: rootLine?.description || "Nowy zapas JUMBO", quantity: rootLine?.quantity || 1, unit: rootLine?.unit || "szt.", assembly: false, production: false }];
-      const currentStructure = (jumboStructures[rootNumber] || defaultStructure).concat(customStructureItems.filter((item) => item.root === rootNumber));
-      const selectedItem = currentStructure[selectedStructureIndex] || currentStructure[0];
-      customStructureItems.push({ root: rootNumber, parent: selectedItem?.number || rootNumber, level: (selectedItem?.level || 0) + 1, type: "Zapas", number: `SKL-${String(customStructureItems.length + 1).padStart(3, "0")}`, description: "Nowy sk&#322;adnik JUMBO", quantity: 1, unit: "szt.", assembly: false, production: false });
-      selectedStructureIndex = 0;
-      renderStructure();
-      structureStatus.textContent = "Dodano nowy sk&#322;adnik do wybranego JUMBO.";
-      structureStatus.className = "structure-status is-success";
-    });
-    document.querySelector("#checkCycleButton").addEventListener("click", () => {
-      const structure = jumboStructures["HALA-001"];
-      const jumboNumbers = structure.filter((item) => item.type.includes("JUMBO")).map((item) => item.number);
-      const hasCycle = jumboNumbers.some((numberValue, index) => jumboNumbers.indexOf(numberValue) !== index);
-      structureStatus.textContent = hasCycle ? "Wykryto zap&#281;tlenie struktury JUMBO." : "Struktura JUMBO jest poprawna. Nie wykryto zap&#281;tlenia.";
-      structureStatus.className = `structure-status ${hasCycle ? "is-warning" : "is-success"}`;
+      const selectedRoot = getActiveJumboLine();
+      if (!selectedRoot) return;
+      customStructureItems.push({ root: selectedRoot.itemNo, level: 1, type: "Zapas", number: `SKL-${String(customStructureItems.length + 1).padStart(3, "0")}`, description: "Nowy sk&#322;adnik JUMBO", quantity: 1, unit: "szt.", assembly: false, production: false });
+      renderComposition();
+      compositionStatus.textContent = `Dodano składnik do JUMBO ${selectedRoot.itemNo}.`;
+      compositionStatus.className = "structure-status is-success";
     });
     document.querySelector("#refreshDescriptionsButton").addEventListener("click", () => {
-      lineData.filter((line) => line.jumbo || line.itemNo === "STAL-001").forEach((line) => {
-        if (line.itemNo === "HALA-001") line.description = "Konstrukcja hali wysokiego sk&#322;adowania";
-        if (line.itemNo === "STAL-001") line.description = "Profile stalowe";
-      });
-      renderRows();
-      structureStatus.textContent = "Opisy zapas&#243;w sk&#322;adowych zosta&#322;y zaktualizowane.";
-      structureStatus.className = "structure-status is-success";
+      const selectedRoot = getActiveJumboLine();
+      if (!selectedRoot) return;
+      renderComposition();
+      compositionStatus.textContent = `Zaktualizowano opisy składników JUMBO ${selectedRoot.itemNo}.`;
+      compositionStatus.className = "structure-status is-success";
     });
+    document.querySelector("#checkCycleButton").addEventListener("click", () => {
+      const selectedRoot = getActiveJumboLine();
+      if (!selectedRoot) return;
+      const composition = getStructureForLine(selectedRoot);
+      const jumboNumbers = composition.filter((item) => item.type.includes("JUMBO")).map((item) => item.number);
+      const hasCycle = new Set(jumboNumbers).size !== jumboNumbers.length || jumboNumbers.includes(selectedRoot.itemNo) && jumboNumbers.length > 1;
+      compositionStatus.textContent = hasCycle ? "Wykryto zapętlenie struktury JUMBO." : "Struktura JUMBO jest poprawna. Nie wykryto zapętlenia.";
+      compositionStatus.className = `structure-status ${hasCycle ? "is-warning" : "is-success"}`;
+    });
+    document.querySelector("#structureClose").addEventListener("click", closeStructure);
+    document.querySelector("#structureCancel").addEventListener("click", closeStructure);
     document.querySelector("#resetJumboButton").addEventListener("click", () => {
       lineData[0].price = 145000;
       lineData[0].quantity = 1;
