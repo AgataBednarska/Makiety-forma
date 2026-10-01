@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="E-commerce channel configuration and inventory location overrides based on SAL.04 and SAL.XX.">
+  <title>E-Commerce Channel Setup | FORMA SYSTEM</title>
+  <style>
+    :root {
+      --canvas: #f5f5f5;
+      --surface: #fff;
+      --subtle: #faf9f8;
+      --border: #e1dfdd;
+      --border-strong: #8a8886;
+      --text: #242424;
+      --muted: #616161;
+      --teal: #007681;
+      --teal-hover: #00636b;
+      --blue: #0067a5;
+      --green: #107c10;
+      --amber: #8a6d1f;
+      --red: #a4262c;
+      --font: "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--canvas); color: var(--text); font: 13px/1.45 var(--font); }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    .app-shell { height: 48px; display: flex; align-items: center; gap: 16px; padding: 0 16px; background: #282828; color: white; }
+    .app-name { font-size: 15px; font-weight: 600; white-space: nowrap; }
+    .shell-spacer { flex: 1; }
+    .environment { display: flex; align-items: center; gap: 9px; font-size: 11px; color: #e6e6e6; }
+    .environment-mark { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: #59ccb4; color: #173b36; font-weight: 700; }
+    .shell-button { width: 34px; height: 34px; border: 0; border-radius: 3px; background: transparent; color: white; }
+    .shell-button:hover { background: #414141; }
+    .workspace { width: min(1560px, calc(100% - 32px)); margin: 14px auto 26px; background: var(--surface); border: 1px solid var(--border); }
+    .page-heading { padding: 17px 22px 0; }
+    .breadcrumb { margin: 0 0 4px; color: var(--muted); font-size: 12px; }
+    .heading-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; }
+    h1 { margin: 0; font-weight: 300; line-height: 1.15; font-size: clamp(25px, 3vw, 34px); }
+    .subtitle { margin: 5px 0 15px; color: var(--muted); }
+    .environment-badge { padding: 4px 9px; background: #edf7ed; border: 1px solid #c8e6c9; border-radius: 12px; color: #256029; font-size: 11px; white-space: nowrap; }
+    .tabs { min-height: 38px; display: flex; border-top: 1px solid var(--border); }
+    .tab { min-height: 38px; padding: 0 14px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: #424242; }
+    .tab.active { border-bottom-color: var(--teal); color: var(--teal); font-weight: 600; }
+    .commandbar { display: flex; align-items: center; gap: 5px; min-height: 52px; padding: 8px 18px; border-block: 1px solid var(--border); background: var(--subtle); flex-wrap: wrap; }
+    .command { min-height: 34px; padding: 0 11px; border: 1px solid transparent; border-radius: 3px; background: transparent; color: #333; }
+    .command:hover { border-color: var(--border); background: white; }
+    .command .icon { margin-right: 5px; color: var(--teal); }
+    .command.primary { background: var(--teal); color: white; font-weight: 600; }
+    .command.primary .icon { color: white; }
+    .command.primary:hover { background: var(--teal-hover); }
+    .spacer { flex: 1; }
+    .main { padding: 17px 18px 20px; }
+    .list-view[hidden], .detail-view[hidden] { display: none; }
+    .bc-section { margin-bottom: 16px; border: 1px solid var(--border); background: #fff; }
+    .bc-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 12px; border-bottom: 1px solid var(--border); background: var(--subtle); font-size: 13px; font-weight: 600; }
+    .bc-section-heading small { color: var(--muted); font-size: 11px; font-weight: 400; }
+    .bc-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 26px; padding: 13px 14px 15px; }
+    .bc-field { display: grid; grid-template-columns: 165px minmax(0, 1fr); align-items: center; gap: 10px; }
+    .bc-field-label { color: var(--muted); font-size: 12px; }
+    .bc-field-value { min-height: 26px; display: flex; align-items: center; padding: 3px 8px; border: 1px solid var(--border); background: #f3f2f1; color: #323130; font-size: 12px; }
+    .bc-market-table { min-width: 1020px; }
+    .bc-market-table tbody tr.is-current td { background: #eaf4fb; }
+    .bc-market-detail { margin-top: 15px; }
+    .bc-market-detail[hidden] { display: none; }
+    .info-banner { display: flex; gap: 10px; margin-bottom: 15px; padding: 10px 12px; border: 1px solid #b7d7f0; background: #eef6fc; color: #0f548c; }
+    .info-icon { font-size: 17px; }
+    .info-banner strong { display: block; }
+    .summary-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 11px; margin-bottom: 15px; }
+    .summary-card { padding: 10px 13px; border: 1px solid var(--border); }
+    .summary-label { color: var(--muted); font-size: 11px; }
+    .summary-value { margin-top: 3px; font-size: 22px; font-weight: 600; }
+    .summary-note { color: var(--muted); font-size: 11px; }
+    .list-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 8px 0; color: var(--muted); flex-wrap: wrap; }
+    .search { width: min(370px, 100%); height: 33px; padding: 5px 9px; border: 1px solid var(--border-strong); background: white; }
+    .table-frame { border: 1px solid var(--border); }
+    .table-scroll { overflow: auto; }
+    table { width: 100%; min-width: 980px; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+    th, td { height: 42px; padding: 7px 10px; border-right: 1px solid #edebe9; border-bottom: 1px solid #edebe9; text-align: left; vertical-align: middle; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    th { height: 38px; background: #f7f7f7; color: #424242; font-size: 11px; font-weight: 600; }
+    tbody tr { cursor: pointer; }
+    tbody tr:hover td { background: #f1f8fb; }
+    tbody tr.selected td { background: #eaf4fb; }
+    .channel-link { padding: 0; border: 0; background: transparent; color: var(--blue); font-weight: 600; }
+    .channel-link:hover { text-decoration: underline; }
+    .platform-chip { display: inline-block; padding: 3px 8px; border: 1px solid #d9e7f2; border-radius: 10px; background: #f1f7fb; color: #315c77; font-size: 11px; }
+    .bool-yes, .bool-no { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; }
+    .bool-yes { color: var(--green); }
+    .bool-no { color: var(--muted); }
+    .table-footer { display: flex; justify-content: space-between; padding: 10px 12px; color: var(--muted); font-size: 12px; flex-wrap: wrap; gap: 10px; }
+    .table-footer strong { color: var(--text); }
+    .detail-top { display: flex; align-items: center; gap: 12px; margin: 0 0 13px; }
+    .back-button { min-height: 32px; padding: 0 10px; border: 1px solid var(--border-strong); background: white; color: #333; }
+    .back-button:hover { border-color: var(--teal); }
+    .detail-title { font-size: 22px; font-weight: 400; }
+    .detail-description { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
+    .detail-layout { display: grid; grid-template-columns: minmax(0, 1fr) 275px; gap: 15px; align-items: start; }
+    .form-card, .side-card { border: 1px solid var(--border); background: white; }
+    .card-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 13px; border-bottom: 1px solid var(--border); background: var(--subtle); font-weight: 600; }
+    .card-header small { color: var(--muted); font-weight: 400; }
+    .form-section { padding: 13px 15px 16px; border-bottom: 1px solid var(--border); }
+    .form-section:last-child { border-bottom: 0; }
+    .section-title { display: flex; justify-content: space-between; margin: 0 0 12px; font-size: 13px; font-weight: 600; }
+    .section-hint { color: var(--muted); font-size: 11px; font-weight: 400; }
+    .field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px 22px; }
+    .field { display: grid; gap: 4px; min-width: 0; }
+    .field.full { grid-column: 1 / -1; }
+    .field-label { color: #505050; font-size: 11px; font-weight: 600; }
+    .required { color: var(--red); }
+    .input-wrap { display: flex; min-width: 0; }
+    .field-input, .field-select { width: 100%; height: 33px; min-width: 0; padding: 5px 9px; border: 1px solid var(--border-strong); border-radius: 2px; background: white; color: var(--text); }
+    textarea.field-input { height: 62px; resize: vertical; }
+    .field-input:focus, .field-select:focus { outline: 2px solid #00b7c3; outline-offset: -1px; }
+    .field-input[readonly] { background: #f3f2f1; border-color: var(--border); }
+    .lookup { flex: 0 0 34px; height: 33px; border: 1px solid var(--border-strong); border-left: 0; background: #fafafa; color: var(--teal); }
+    .field-help { color: var(--muted); font-size: 10px; }
+    .toggle-row { min-height: 33px; display: flex; align-items: center; gap: 9px; }
+    .toggle-row input { width: 16px; height: 16px; accent-color: var(--teal); }
+    .toggle-state { color: var(--muted); font-size: 11px; }
+    .secret-field { position: relative; }
+    .secret-field .field-input { padding-right: 66px; }
+    .reveal-secret { position: absolute; top: 1px; right: 1px; height: 31px; padding: 0 9px; border: 0; background: #f8f8f8; color: var(--blue); font-size: 11px; }
+    .sensitive-note { margin-top: 3px; color: var(--amber); font-size: 10px; }
+    .detail-actions { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 15px; border-top: 1px solid var(--border); background: var(--subtle); }
+    .side-card { padding-bottom: 9px; }
+    .side-body { padding: 11px 13px; }
+    .side-row { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
+    .side-row:last-child { border-bottom: 0; }
+    .side-label { color: var(--muted); }
+    .side-value { font-weight: 600; text-align: right; }
+    .key-value { padding: 8px; border: 1px solid var(--border); background: #f8f8f8; font-family: Consolas, monospace; font-size: 11px; }
+    .toast { position: fixed; right: 22px; bottom: 22px; z-index: 5; max-width: 360px; padding: 11px 15px; border: 1px solid #a8d5a2; background: #f1faf0; color: #246b24; box-shadow: 0 8px 24px rgba(0,0,0,.12); opacity: 0; transform: translateY(8px); pointer-events: none; transition: .2s ease; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    @media (max-width: 950px) { .detail-layout { grid-template-columns: 1fr; } .detail-layout aside { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } }
+    @media (max-width: 650px) {
+      .workspace { width: calc(100% - 14px); margin: 7px auto; }
+      .page-heading { padding: 13px 12px 0; }
+      .main { padding: 12px; }
+      .heading-row { flex-direction: column; gap: 0; }
+      .environment-badge { margin-bottom: 9px; }
+      .summary-row { grid-template-columns: 1fr; gap: 7px; }
+      .summary-card { min-height: 0; }
+      .field-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .bc-fields { grid-template-columns: 1fr; }
+      .bc-field { grid-template-columns: 140px minmax(0, 1fr); }
+      .detail-layout aside { display: grid; grid-template-columns: 1fr; }
+      .commandbar { padding-inline: 9px; }
+      .tab { padding-inline: 9px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-shell" aria-label="Pasek aplikacji Business Central">
+    <div class="app-name">Dynamics 365 Business Central</div><div class="shell-spacer"></div>
+    <div class="environment"><span class="environment-mark">BL</span><span>Beso Lux Sp. z o.o.<br><strong>BESOLUX_PL · LIVE</strong></span></div>
+    <button class="shell-button" type="button" aria-label="Search" title="Search">⌕</button>
+    <button class="shell-button" type="button" aria-label="Settings" title="Settings">⚙</button>
+    <button class="shell-button" type="button" aria-label="User profile" title="User profile">AB</button>
+  </header>
+
+  <main class="workspace">
+    <div class="page-heading">
+      <p class="breadcrumb">Setup &gt; E-commerce &gt; Sales Channels</p>
+      <div class="heading-row"><div><h1>E-Commerce Channel Setup</h1><p class="subtitle">Configure connections and default settings for each sales channel</p></div><span class="environment-badge">● LIVE environment</span></div>
+      <nav class="tabs" aria-label="Configuration pages"><button class="tab active" type="button" data-page="listView">Home</button><button class="tab" type="button" data-page="overridesView">Item Location Overrides</button></nav>
+    </div>
+    <div class="commandbar" role="toolbar" aria-label="Setup actions">
+      <button class="command" id="refreshList" type="button"><span class="icon">↻</span>Refresh</button>
+      <div class="spacer"></div><span id="currentAction" style="color:#616161;font-size:11px">E-commerce channel settings</span>
+    </div>
+
+    <div class="main">
+      <section class="list-view" id="listView">
+        <div class="info-banner"><span class="info-icon">ⓘ</span><div><strong>Marketplace Setup</strong>Select the MDM or H24MP row to open its Customer Mapping list. Select a market row there to open its configuration card.</div></div>
+        <section class="summary-row" aria-label="Marketplace summary">
+          <article class="summary-card"><div class="summary-label">Marketplaces</div><div class="summary-value" id="channelCount">2</div><div class="summary-note">Top-level integrations</div></article>
+          <article class="summary-card"><div class="summary-label">Default Warehouse</div><div class="summary-value">KPN_VIRT</div><div class="summary-note">Default for the supplied examples</div></article>
+          <article class="summary-card"><div class="summary-label">Marketplace Types</div><div class="summary-value">2</div><div class="summary-note">Mirakl and H24MP</div></article>
+        </section>
+        <div class="list-toolbar"><strong id="listCount">2 marketplaces</strong><input class="search" id="searchChannels" type="search" placeholder="Search marketplace…" aria-label="Search marketplaces"></div>
+        <section class="table-frame" aria-label="Marketplace list">
+          <div class="table-scroll"><table style="min-width:760px">
+            <thead><tr><th style="width:190px">Marketplace</th><th style="width:150px">Platform Type</th><th style="width:210px">Connection Profile</th><th style="width:140px">Market Rows</th><th style="width:170px">Default Warehouse</th></tr></thead>
+            <tbody id="channelsBody">
+              <tr tabindex="0" data-marketplace="MDM" data-platform="Mirakl" data-connection="MDM shared connection"><td><button class="channel-link" type="button">MDM</button></td><td><span class="platform-chip">Mirakl</span></td><td>MDM shared connection</td><td>4 markets</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="H24MP" data-platform="Other" data-connection="H24MP shared connection"><td><button class="channel-link" type="button">H24MP</button></td><td><span class="platform-chip">Other</span></td><td>H24MP shared connection</td><td>4 markets</td><td>KPN_VIRT</td></tr>
+            </tbody>
+          </table></div>
+          <div class="table-footer"><span>Rows: <strong id="footerCount">2</strong></span><span>Select a marketplace row to open its Customer Mapping.</span></div>
+        </section>
+      </section>
+
+      <section class="list-view" id="marketplaceSetupView" hidden>
+        <div class="detail-top"><button class="back-button" id="backToMarketplaces" type="button">← Marketplaces</button><div><div class="detail-title" id="marketplacePageTitle">MDM Customer Mapping</div><p class="detail-description">One shared connection with separate setup rows per market</p></div></div>
+        <div class="info-banner"><span class="info-icon">ⓘ</span><div><strong id="marketplaceInfoTitle">MDM · one connection, four market setups</strong><span id="marketplaceInfoDescription">The API connection is shared once. Each market has a separate setup row and customer mapping. This page uses standard Business Central list-and-card conventions.</span></div></div>
+        <section class="bc-section" aria-label="Shared MDM connection setup">
+          <div class="bc-section-heading"><span>Shared Connection Setup</span><div style="display:flex;align-items:center;gap:12px"><small id="sharedConnectionCaption">One connection for this marketplace</small><button class="small-button" id="openConnectionCard" type="button">Open API Connection</button></div></div>
+          <div class="bc-fields">
+            <div class="bc-field"><span class="bc-field-label">Connection Code</span><span class="bc-field-value" id="sharedConnectionCode">MDM-MIRAKL</span></div>
+            <div class="bc-field"><span class="bc-field-label">Platform Type</span><span class="bc-field-value" id="sharedPlatformType">Mirakl</span></div>
+            <div class="bc-field"><span class="bc-field-label">API Endpoint</span><span class="bc-field-value">Shared · configure once</span></div>
+            <div class="bc-field"><span class="bc-field-label">API Key / Token</span><span class="bc-field-value">Shared secure credential · not displayed</span></div>
+          </div>
+        </section>
+        <form id="sharedConnectionCard" class="form-card bc-market-detail" style="margin-bottom:16px" hidden>
+          <div class="card-header"><span id="sharedConnectionCardTitle">MDM API Connection</span><small>Shared by all market rows in this marketplace</small></div>
+          <section class="form-section"><h2 class="section-title">Connection Details</h2><div class="field-grid">
+            <label class="field"><span class="field-label">Connection Code</span><input class="field-input" name="connectionCode" readonly></label>
+            <label class="field"><span class="field-label">Platform Type</span><input class="field-input" name="platformType" readonly></label>
+            <label class="field full"><span class="field-label">API Endpoint</span><input class="field-input" name="endpoint" type="url" placeholder="Enter the shared marketplace API endpoint"></label>
+            <label class="field full"><span class="field-label">API Key / Token</span><span class="input-wrap secret-field"><input class="field-input" name="token" type="password" autocomplete="new-password" placeholder="Enter the shared API credential"><button class="reveal-secret" id="toggleSharedToken" type="button">Show</button></span><span class="sensitive-note">Demo only. Do not enter a production secret here.</span></label>
+          </div></section>
+          <div class="detail-actions"><button class="command" id="cancelSharedConnection" type="button">Cancel</button><button class="command primary" type="submit">Save Connection</button></div>
+        </form>
+        <section class="bc-section" aria-label="Marketplace customer mappings">
+          <div class="bc-section-heading"><span id="marketRowsHeading">MDM Customer Mapping</span><small>Each market has its own customer and number-series configuration</small></div>
+          <div class="table-scroll"><table class="bc-market-table">
+            <thead><tr><th style="width:160px">Channel Code</th><th style="width:150px">Platform Type</th><th style="width:190px">Connection Code</th><th style="width:210px">One-Time Customer No.</th><th style="width:160px">No. Series</th><th style="width:170px">Default Location Code</th><th style="width:170px">Stock Check Location Code</th></tr></thead>
+            <tbody id="marketSetupRows"></tbody>
+          </table></div>
+          <div class="table-footer"><span>Rows: <strong id="marketRowsCount">4</strong></span><span>Select a row to open its setup card.</span></div>
+        </section>
+        <form id="mdmMarketCard" class="form-card bc-market-detail" hidden>
+          <div class="card-header"><span id="mdmMarketCardTitle">MDM_FR</span><small>Market-specific channel card</small></div>
+          <section class="form-section"><h2 class="section-title">Market Routing</h2><div class="field-grid">
+            <label class="field"><span class="field-label">Channel Code</span><input class="field-input" name="channelCode" readonly></label>
+            <label class="field"><span class="field-label">Shared Connection</span><input class="field-input" name="connectionCode" value="MDM shared connection" readonly></label>
+            <label class="field"><span class="field-label">Market / Country Key</span><input class="field-input" name="marketKey" placeholder="Confirm field from MDM order payload"><span class="field-help">Route using the market identifier in the order, not website language alone.</span></label>
+            <label class="field"><span class="field-label">Platform Type</span><input class="field-input" name="platformType" value="Mirakl" readonly></label>
+            <label class="field"><span class="field-label">API Endpoint</span><input class="field-input" name="sharedEndpointDisplay" value="Inherited from shared connection" readonly></label>
+            <label class="field"><span class="field-label">API Key / Token</span><input class="field-input" name="sharedTokenDisplay" value="Stored in shared connection" readonly></label>
+            <div class="field"><span class="field-label">API Connection</span><button class="small-button" id="openMarketConnection" type="button">Open shared API connection card</button></div>
+          </div></section>
+          <section class="form-section"><h2 class="section-title">Market-Specific Defaults</h2><div class="field-grid">
+            <label class="field"><span class="field-label">Default Customer No. B2C</span><input class="field-input" name="customerNo" placeholder="Set one-time customer for this market"></label>
+            <label class="field"><span class="field-label">No. Series</span><input class="field-input" name="noSeries" placeholder="Set number series for this market"></label>
+            <label class="field"><span class="field-label">Default Location Code</span><input class="field-input" name="defaultLocation" value="KPN_VIRT"></label>
+            <label class="field"><span class="field-label">Default Shipment Method</span><input class="field-input" name="shipmentMethod" placeholder="Set shipment method"></label>
+            <label class="field"><span class="field-label">Stock Check Location Code</span><input class="field-input" name="stockLocation" value="KPN_VIRT"></label>
+            <div class="field"><span class="field-label">Prepayment Required</span><label class="toggle-row"><input type="checkbox" name="prepayment"><span>Required</span><span class="toggle-state" data-market-state="prepayment">Not set</span></label></div>
+            <div class="field"><span class="field-label">Prices Incl. VAT</span><label class="toggle-row"><input type="checkbox" name="vat"><span>Prices include VAT</span><span class="toggle-state" data-market-state="vat">Not set</span></label></div>
+          </div></section>
+          <div class="detail-actions"><button class="command" id="closeMdmMarketCard" type="button">Close</button><button class="command primary" type="submit">Save Market Setup</button></div>
+        </form>
+        <div class="route-note"><strong>Routing rule:</strong> order import must identify the market from a reliable country/market field in the marketplace payload. Confirm the exact API field before implementation.</div>
+      </section>
+
+      <section class="list-view" id="overridesView" hidden>
+        <div class="info-banner"><span class="info-icon">ⓘ</span><div><strong>Per-channel inventory location overrides</strong>This optional SAL.XX extension maps a sales channel and item to a dedicated warehouse. If no override exists, the channel's Stock Check Location Code is used. Confirm this optional scope before implementation.</div></div>
+        <div class="list-toolbar"><strong id="overrideCount">0 item location overrides</strong><div style="display:flex;gap:8px;align-items:center"><button class="command primary" id="createOverride" type="button">＋ New Override</button><input class="search" id="searchOverrides" type="search" placeholder="Search channel, item, or location…" aria-label="Search item location overrides"></div></div>
+        <section class="table-frame" aria-label="Item location overrides">
+          <div class="table-scroll"><table style="min-width:780px"><thead><tr><th style="width:190px">Sales Channel Code</th><th style="width:190px">Item No.</th><th style="width:190px">Dedicated Location Code</th><th style="width:190px">Default Channel Location</th></tr></thead>
+            <tbody id="overridesBody"></tbody>
+          </table></div>
+          <div class="empty-state" id="overridesEmpty" style="display:block;padding:18px;color:#616161;text-align:center">No item-specific overrides are shown. No item numbers or override locations were provided; the channel default KPN_VIRT applies.</div>
+          <div class="table-footer"><span>Rows: <strong id="overrideFooterCount">0</strong></span><span>Select an override to edit its dedicated inventory location.</span></div>
+        </section>
+        <form id="overrideForm" class="form-card" style="margin-top:14px" hidden>
+          <div class="card-header"><span id="overrideFormTitle">Edit Item Location Override</span><small>Optional SAL.XX table</small></div>
+          <section class="form-section"><div class="field-grid">
+            <label class="field"><span class="field-label">Sales Channel Code <span class="required">*</span></span><select class="field-select" name="channel" required><option>MDM_FR</option><option>MDM_FS</option><option>MDM_IT</option><option>MDM_DE</option><option>H24MP_</option><option>H24MP_AT_</option><option>H24MP_FR_</option><option>H24MP_NL_</option></select></label>
+            <label class="field"><span class="field-label">Item No. <span class="required">*</span></span><input class="field-input" name="item" required maxlength="20" placeholder="Item number"></label>
+            <label class="field"><span class="field-label">Location Code <span class="required">*</span></span><input class="field-input" name="location" required maxlength="10" placeholder="Dedicated warehouse"></label>
+            <div class="field"><span class="field-label">Default Channel Location Code</span><div class="field-input" id="overrideDefaultLocation" style="display:flex;align-items:center;background:#f3f2f1">—</div></div>
+          </div></section>
+          <div class="detail-actions"><button class="command" id="cancelOverride" type="button">Cancel</button><button class="command primary" type="submit">Save Override</button></div>
+        </form>
+      </section>
+
+      <section class="detail-view" id="detailView" hidden>
+        <div class="detail-top"><button class="back-button" id="backToList" type="button">← Channel List</button><div><div class="detail-title" id="detailHeading">MDM_FR</div><p class="detail-description">Sales channel setup card</p></div><span class="environment-badge" id="detailStatus">Example entry</span></div>
+        <div class="detail-layout">
+          <form class="form-card" id="channelForm">
+            <div class="card-header"><span>Channel Settings</span><small>Fields listed in SAL.04 · section 11</small></div>
+            <section class="form-section"><h2 class="section-title">Channel Identification <span class="section-hint">Channel code and sales platform</span></h2>
+              <div class="field-grid">
+                <label class="field"><span class="field-label">Channel Code <span class="required">*</span></span><input class="field-input" name="code" maxlength="20" required></label>
+                <label class="field"><span class="field-label">Platform Type <span class="required">*</span></span><select class="field-select" name="platform"><option>Mirakl</option><option>Other</option></select></label>
+              </div>
+            </section>
+            <section class="form-section"><h2 class="section-title">Default Sales Settings <span class="section-hint">Used when importing orders</span></h2>
+              <div class="field-grid">
+                <label class="field"><span class="field-label">Default Customer No. B2C</span><span class="input-wrap"><input class="field-input" name="customer" maxlength="20" placeholder="One-time customer number"><button class="lookup" type="button" data-lookup="customer" aria-label="Select customer">⌕</button></span><span class="field-help">One-time customer assigned to this channel.</span></label>
+                <label class="field"><span class="field-label">Default Location Code</span><span class="input-wrap"><input class="field-input" name="location" maxlength="10" placeholder="Location code"><button class="lookup" type="button" data-lookup="location" aria-label="Select location">⌕</button></span><span class="field-help">Default warehouse/location code.</span></label>
+                <label class="field"><span class="field-label">Default Shipment Method</span><span class="input-wrap"><input class="field-input" name="shipment" maxlength="10" placeholder="Shipment method"><button class="lookup" type="button" data-lookup="shipment" aria-label="Select shipment method">⌕</button></span><span class="field-help">Default shipment method (Incoterms).</span></label>
+                <label class="field"><span class="field-label">Stock Check Location Code</span><span class="input-wrap"><input class="field-input" name="stock" placeholder="Location used for stock checks"><button class="lookup" type="button" data-lookup="stock" aria-label="Select stock check location">⌕</button></span><span class="field-help">BC location used to check availability and as the default inventory export source.</span></label>
+              </div>
+            </section>
+            <section class="form-section"><h2 class="section-title">Commercial Settings <span class="section-hint">Per-channel options</span></h2>
+              <div class="field-grid">
+                <div class="field"><span class="field-label">Prepayment Required</span><label class="toggle-row"><input type="checkbox" name="prepayment"><span>Prepayment is required</span><span class="toggle-state" data-state="prepayment">No</span></label><span class="field-help">SAL.04 specifies TRUE for Poland.</span></div>
+                <div class="field"><span class="field-label">Prices Incl. VAT</span><label class="toggle-row"><input type="checkbox" name="vat"><span>Platform prices include VAT</span><span class="toggle-state" data-state="vat">Yes</span></label></div>
+              </div>
+            </section>
+            <section class="form-section"><h2 class="section-title">Platform Connection <span class="section-hint">Channel API details</span></h2>
+              <div class="field-grid">
+                <label class="field full"><span class="field-label">API Endpoint</span><textarea class="field-input" name="endpoint" placeholder="https://…" spellcheck="false"></textarea><span class="field-help">URL endpointu API platformy.</span></label>
+                <label class="field full"><span class="field-label">API Key / Token</span><span class="input-wrap secret-field"><input class="field-input" name="token" type="password" autocomplete="new-password" placeholder="Enter the token for this channel"><button class="reveal-secret" type="button" id="toggleSecret">Show</button></span><span class="sensitive-note">Demo data only. In production, secrets must be stored and displayed securely.</span></label>
+              </div>
+            </section>
+            <div class="detail-actions"><button class="command" id="cancelEdit" type="button">Cancel</button><button class="command primary" type="submit"><span class="icon">✓</span>Save</button></div>
+          </form>
+          <aside>
+            <section class="side-card"><div class="card-header">Record Information</div><div class="side-body"><div class="side-row"><span class="side-label">Channel Code</span><span class="side-value" id="sideCode">—</span></div><div class="side-row"><span class="side-label">Platform Type</span><span class="side-value" id="sidePlatform">—</span></div><div class="side-row"><span class="side-label">Status</span><span class="side-value" id="sideActive">—</span></div><div class="side-row"><span class="side-label">Configuration scope</span><span class="side-value">Per channel</span></div></div></section>
+            <section class="side-card" style="margin-top:12px"><div class="card-header">Documented Fields</div><div class="side-body"><div class="key-value">Channel Code · Platform Type<br>Default Customer No. B2C<br>Default Location Code<br>Default Shipment Method<br>Prepayment Required<br>API Endpoint · API Key / Token<br>Prices Incl. VAT<br>Stock Check Location Code</div><p class="field-help">No. Series is struck through in SAL.04 section 11 and is therefore not included on this card.</p></div></section>
+          </aside>
+        </div>
+      </section>
+    </div>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const listView = document.getElementById("listView");
+    const detailView = document.getElementById("detailView");
+    const channelsBody = document.getElementById("channelsBody");
+    const channelForm = document.getElementById("channelForm");
+    const toast = document.getElementById("toast");
+    let selectedRow = null;
+    let selectedOverride = null;
+    let selectedMarketplaceRow = null;
+    let selectedMarketplace = "";
+    let toastTimer;
+    const marketplaceProfiles = {
+      MDM: { platform: "Mirakl", connectionCode: "MDM shared connection", endpoint: "", token: "", codes: ["MDM_FR", "MDM_FS", "MDM_IT", "MDM_DE"] },
+      H24MP: { platform: "Other", connectionCode: "H24MP shared connection", endpoint: "", token: "", codes: ["H24MP_", "H24MP_AT_", "H24MP_FR_", "H24MP_NL_"] }
+    };
+    const marketSettings = Object.fromEntries(Object.entries(marketplaceProfiles).flatMap(([marketplace, profile]) =>
+      profile.codes.map((code) => [`${marketplace}:${code}`, { customer: "", series: "", marketKey: "", defaultLocation: "KPN_VIRT", shipmentMethod: "", stockLocation: "KPN_VIRT", prepayment: null, vat: null }])
+    ));
+
+    function notify(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 2500);
+    }
+
+    function openChannel(row) {
+      if (!row) return;
+      selectedRow = row;
+      const data = row.dataset;
+      document.getElementById("detailHeading").textContent = data.code;
+      document.getElementById("detailStatus").textContent = "Example entry";
+      document.getElementById("sideCode").textContent = data.code;
+      document.getElementById("sidePlatform").textContent = data.platform;
+      document.getElementById("sideActive").textContent = "Example entry";
+      channelForm.elements.code.value = data.code;
+      channelForm.elements.code.readOnly = true;
+      channelForm.elements.platform.value = data.platform;
+      channelForm.elements.customer.value = data.customer;
+      channelForm.elements.location.value = data.location;
+      channelForm.elements.shipment.value = data.shipment;
+      channelForm.elements.stock.value = data.stock;
+      channelForm.elements.prepayment.checked = data.prepayment === "true";
+      channelForm.elements.prepayment.indeterminate = data.prepayment === "";
+      channelForm.elements.endpoint.value = data.endpoint;
+      channelForm.elements.token.value = data.token;
+      channelForm.elements.vat.checked = data.vat === "true";
+      channelForm.elements.vat.indeterminate = data.vat === "";
+      updateToggleLabels();
+      listView.hidden = true;
+      detailView.hidden = false;
+      document.getElementById("currentAction").textContent = `Editing channel: ${data.code}`;
+      window.scrollTo({top: 0, behavior: "smooth"});
+    }
+
+    function closeChannel() {
+      detailView.hidden = true;
+      listView.hidden = false;
+      document.getElementById("currentAction").textContent = "E-commerce channel settings";
+      window.scrollTo({top: 0, behavior: "smooth"});
+    }
+
+    function updateToggleLabels() {
+      ["prepayment", "vat"].forEach((name) => {
+        const state = channelForm.elements[name].indeterminate ? "Not set" : channelForm.elements[name].checked ? "Yes" : "No";
+        channelForm.querySelector(`[data-state="${name}"]`).textContent = state;
+      });
+    }
+
+    function applySearch() {
+      const query = document.getElementById("searchChannels").value.trim().toLocaleLowerCase("en-US");
+      let count = 0;
+      channelsBody.querySelectorAll("tr").forEach((row) => {
+        const visible = row.textContent.toLocaleLowerCase("en-US").includes(query);
+        row.hidden = !visible;
+        if (visible) count += 1;
+      });
+      document.getElementById("listCount").textContent = `${count} ${count === 1 ? "marketplace" : "marketplaces"}`;
+      document.getElementById("footerCount").textContent = count;
+    }
+
+    function switchPage(pageId) {
+      detailView.hidden = true;
+      [listView, document.getElementById("marketplaceSetupView"), document.getElementById("overridesView")].forEach((page) => {
+        page.hidden = page.id !== pageId;
+      });
+      document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab.dataset.page === pageId));
+      document.getElementById("currentAction").textContent = pageId === "marketplaceSetupView" ? `${selectedMarketplace} customer mapping` : pageId === "overridesView" ? "Item-specific warehouse assignments" : "Marketplace setup";
+    }
+
+    function openOverride(row) {
+      selectedOverride = row;
+      const form = document.getElementById("overrideForm");
+      document.getElementById("overrideFormTitle").textContent = "Edit Item Location Override";
+      form.elements.channel.value = row.dataset.channel;
+      form.elements.namedItem("item").value = row.dataset.item;
+      form.elements.location.value = row.dataset.location;
+      form.elements.item.readOnly = true;
+      updateOverrideDefault();
+      form.hidden = false;
+      form.scrollIntoView({behavior: "smooth", block: "nearest"});
+    }
+
+    function updateOverrideDefault() {
+      document.getElementById("overrideDefaultLocation").textContent = "KPN_VIRT";
+    }
+
+    function filterOverrides() {
+      const query = document.getElementById("searchOverrides").value.trim().toLocaleLowerCase("en-US");
+      let count = 0;
+      document.querySelectorAll("#overridesBody tr").forEach((row) => {
+        row.hidden = !row.textContent.toLocaleLowerCase("en-US").includes(query);
+        if (!row.hidden) count += 1;
+      });
+      document.getElementById("overrideCount").textContent = `${count} item location ${count === 1 ? "override" : "overrides"}`;
+      document.getElementById("overrideFooterCount").textContent = count;
+      document.getElementById("overridesEmpty").hidden = count > 0;
+    }
+
+    const mdmMarketCard = document.getElementById("mdmMarketCard");
+    let selectedMdmMarket = null;
+
+    function renderCustomerMapping(marketplace) {
+      selectedMarketplace = marketplace;
+      selectedMdmMarket = null;
+      mdmMarketCard.hidden = true;
+      document.getElementById("sharedConnectionCard").hidden = true;
+      const profile = marketplaceProfiles[marketplace];
+      const rows = document.getElementById("marketSetupRows");
+      document.getElementById("marketplacePageTitle").textContent = `${marketplace} Customer Mapping`;
+      document.getElementById("marketplaceInfoTitle").textContent = `${marketplace} · ${profile.codes.length} market-specific setups`;
+      document.getElementById("marketplaceInfoDescription").textContent = `Shared ${profile.platform} connection. Each market code below has its own customer mapping and setup card.`;
+      document.getElementById("sharedConnectionCaption").textContent = `One ${marketplace} connection`;
+      document.getElementById("sharedConnectionCode").textContent = profile.connectionCode;
+      document.getElementById("sharedPlatformType").textContent = profile.platform;
+      document.getElementById("marketRowsHeading").textContent = `${marketplace} Customer Mapping`;
+      document.getElementById("marketRowsCount").textContent = profile.codes.length;
+      rows.replaceChildren();
+      profile.codes.forEach((code) => {
+        const settings = marketSettings[`${marketplace}:${code}`];
+        const row = document.createElement("tr");
+        row.tabIndex = 0;
+        row.dataset.code = code;
+        row.dataset.marketplace = marketplace;
+        row.dataset.customer = settings.customer;
+        row.dataset.series = settings.series;
+        row.dataset.marketKey = settings.marketKey;
+        const values = [code, profile.platform, profile.connectionCode, settings.customer || "Not configured", settings.series || "Not configured", settings.defaultLocation, settings.stockLocation];
+        values.forEach((value, index) => {
+          const cell = row.insertCell();
+          if (index === 0) {
+            const link = document.createElement("button");
+            link.type = "button";
+            link.className = "channel-link";
+            link.textContent = value;
+            cell.append(link);
+          } else {
+            cell.textContent = value;
+          }
+        });
+        row.addEventListener("click", () => openMdmMarket(row));
+        row.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openMdmMarket(row);
+          }
+        });
+        rows.append(row);
+      });
+      switchPage("marketplaceSetupView");
+    }
+
+    function openSharedConnectionCard() {
+      if (!selectedMarketplace) return;
+      const profile = marketplaceProfiles[selectedMarketplace];
+      const card = document.getElementById("sharedConnectionCard");
+      document.getElementById("sharedConnectionCardTitle").textContent = `${selectedMarketplace} API Connection`;
+      card.elements.connectionCode.value = profile.connectionCode;
+      card.elements.platformType.value = profile.platform;
+      card.elements.endpoint.value = profile.endpoint;
+      card.elements.token.value = profile.token;
+      card.hidden = false;
+      card.scrollIntoView({behavior: "smooth", block: "nearest"});
+    }
+
+    document.getElementById("openConnectionCard").addEventListener("click", openSharedConnectionCard);
+    document.getElementById("openMarketConnection").addEventListener("click", openSharedConnectionCard);
+    document.getElementById("cancelSharedConnection").addEventListener("click", () => {
+      document.getElementById("sharedConnectionCard").hidden = true;
+    });
+    document.getElementById("toggleSharedToken").addEventListener("click", (event) => {
+      const token = document.getElementById("sharedConnectionCard").elements.token;
+      token.type = token.type === "password" ? "text" : "password";
+      event.currentTarget.textContent = token.type === "password" ? "Show" : "Hide";
+    });
+    document.getElementById("sharedConnectionCard").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const profile = marketplaceProfiles[selectedMarketplace];
+      const card = event.currentTarget;
+      profile.endpoint = card.elements.endpoint.value.trim();
+      profile.token = card.elements.token.value;
+      card.hidden = true;
+      notify(`Shared API connection saved for ${selectedMarketplace} in this demo.`);
+    });
+
+    function openMdmMarket(row) {
+      if (!row) return;
+      if (selectedMdmMarket) selectedMdmMarket.classList.remove("is-current");
+      selectedMdmMarket = row;
+      row.classList.add("is-current");
+      const profile = marketplaceProfiles[row.dataset.marketplace];
+      document.getElementById("mdmMarketCardTitle").textContent = row.dataset.code;
+      mdmMarketCard.elements.channelCode.value = row.dataset.code;
+      mdmMarketCard.elements.connectionCode.value = profile.connectionCode;
+      mdmMarketCard.elements.platformType.value = profile.platform;
+      mdmMarketCard.elements.sharedEndpointDisplay.value = profile.endpoint || "Not configured in shared connection";
+      mdmMarketCard.elements.sharedTokenDisplay.value = profile.token ? "Configured in shared connection · hidden" : "Not configured in shared connection";
+      mdmMarketCard.elements.marketKey.value = row.dataset.marketKey === "Not specified" ? "" : row.dataset.marketKey;
+      mdmMarketCard.elements.customerNo.value = row.dataset.customer;
+      mdmMarketCard.elements.noSeries.value = row.dataset.series;
+      const settings = marketSettings[`${row.dataset.marketplace}:${row.dataset.code}`];
+      mdmMarketCard.elements.defaultLocation.value = settings.defaultLocation;
+      mdmMarketCard.elements.shipmentMethod.value = settings.shipmentMethod;
+      mdmMarketCard.elements.stockLocation.value = settings.stockLocation;
+      mdmMarketCard.elements.prepayment.checked = settings.prepayment === true;
+      mdmMarketCard.elements.prepayment.indeterminate = settings.prepayment === null;
+      mdmMarketCard.elements.vat.checked = settings.vat === true;
+      mdmMarketCard.elements.vat.indeterminate = settings.vat === null;
+      ["prepayment", "vat"].forEach((name) => {
+        mdmMarketCard.querySelector(`[data-market-state="${name}"]`).textContent = settings[name] === null ? "Not set" : settings[name] ? "Yes" : "No";
+      });
+      mdmMarketCard.hidden = false;
+    }
+
+    document.getElementById("closeMdmMarketCard").addEventListener("click", () => {
+      mdmMarketCard.hidden = true;
+      if (selectedMdmMarket) selectedMdmMarket.classList.remove("is-current");
+      selectedMdmMarket = null;
+    });
+    mdmMarketCard.querySelectorAll('input[name="prepayment"], input[name="vat"]').forEach((input) => input.addEventListener("change", () => {
+      input.indeterminate = false;
+      mdmMarketCard.querySelector(`[data-market-state="${input.name}"]`).textContent = input.checked ? "Yes" : "No";
+    }));
+    mdmMarketCard.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!selectedMdmMarket) return;
+      const form = mdmMarketCard.elements;
+      const key = `${selectedMdmMarket.dataset.marketplace}:${selectedMdmMarket.dataset.code}`;
+      const settings = marketSettings[key];
+      selectedMdmMarket.dataset.marketKey = form.marketKey.value.trim() || "Not specified";
+      selectedMdmMarket.dataset.customer = form.customerNo.value.trim();
+      selectedMdmMarket.dataset.series = form.noSeries.value.trim();
+      settings.customer = form.customerNo.value.trim();
+      settings.series = form.noSeries.value.trim();
+      settings.marketKey = form.marketKey.value.trim();
+      settings.defaultLocation = form.defaultLocation.value.trim();
+      settings.shipmentMethod = form.shipmentMethod.value.trim();
+      settings.stockLocation = form.stockLocation.value.trim();
+      settings.prepayment = form.prepayment.indeterminate ? null : form.prepayment.checked;
+      settings.vat = form.vat.indeterminate ? null : form.vat.checked;
+      const marketplace = selectedMdmMarket.dataset.marketplace;
+      renderCustomerMapping(marketplace);
+      notify(`Customer mapping saved for ${key.replace(":", " / ")} in this demo.`);
+    });
+
+    function selectMarketplace(row) {
+      if (selectedMarketplaceRow) selectedMarketplaceRow.classList.remove("selected");
+      selectedMarketplaceRow = row;
+      row.classList.add("selected");
+      renderCustomerMapping(row.dataset.marketplace);
+    }
+
+    channelsBody.addEventListener("click", (event) => {
+      const row = event.target.closest("tr");
+      if (row) selectMarketplace(row);
+    });
+    channelsBody.addEventListener("dblclick", (event) => {
+      const row = event.target.closest("tr");
+      if (row) selectMarketplace(row);
+    });
+    channelsBody.addEventListener("keydown", (event) => {
+      if ((event.key === "Enter" || event.key === " ") && event.target.matches("tr")) {
+        event.preventDefault();
+        selectMarketplace(event.target);
+      }
+    });
+    document.getElementById("backToMarketplaces").addEventListener("click", () => {
+      if (selectedMarketplaceRow) selectedMarketplaceRow.classList.remove("selected");
+      selectedMarketplaceRow = null;
+      switchPage("listView");
+    });
+    document.getElementById("searchChannels").addEventListener("input", applySearch);
+    channelForm.querySelectorAll('input[name="prepayment"], input[name="vat"]').forEach((input) => input.addEventListener("change", () => {
+      input.indeterminate = false;
+      updateToggleLabels();
+    }));
+    document.getElementById("toggleSecret").addEventListener("click", (event) => {
+      const token = channelForm.elements.token;
+      token.type = token.type === "password" ? "text" : "password";
+      event.currentTarget.textContent = token.type === "password" ? "Show" : "Hide";
+    });
+    document.querySelectorAll(".lookup").forEach((button) => button.addEventListener("click", () => notify(`Selecting ${button.dataset.lookup} — demo lookup.`)));
+    channelForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!selectedRow) return;
+      const data = selectedRow.dataset;
+      data.platform = channelForm.elements.platform.value;
+      data.customer = channelForm.elements.customer.value;
+      data.location = channelForm.elements.location.value;
+      data.shipment = channelForm.elements.shipment.value;
+      data.prepayment = channelForm.elements.prepayment.indeterminate ? "" : String(channelForm.elements.prepayment.checked);
+      data.endpoint = channelForm.elements.endpoint.value;
+      data.token = channelForm.elements.token.value;
+      data.vat = channelForm.elements.vat.indeterminate ? "" : String(channelForm.elements.vat.checked);
+      data.stock = channelForm.elements.stock.value;
+      const cells = selectedRow.cells;
+      cells[1].innerHTML = `<span class="platform-chip">${data.platform}</span>`;
+      cells[2].textContent = data.customer;
+      cells[3].textContent = data.location;
+      cells[4].textContent = data.shipment;
+      cells[5].innerHTML = data.prepayment === "true" ? '<span class="bool-yes">● Yes</span>' : data.prepayment === "false" ? '<span class="bool-no">○ No</span>' : '<span class="bool-no">○ —</span>';
+      cells[6].innerHTML = data.vat === "true" ? '<span class="bool-yes">● Yes</span>' : data.vat === "false" ? '<span class="bool-no">○ No</span>' : '<span class="bool-no">○ —</span>';
+      cells[7].textContent = data.stock;
+      document.getElementById("sidePlatform").textContent = data.platform;
+      notify(`Changes saved for ${data.code} in this demo.`);
+      closeChannel();
+    });
+    document.getElementById("refreshList").addEventListener("click", () => { applySearch(); filterOverrides(); notify("The setup lists have been refreshed."); });
+    document.querySelectorAll(".tab").forEach((tab) => tab.addEventListener("click", () => switchPage(tab.dataset.page)));
+
+    const overridesBody = document.getElementById("overridesBody");
+    const overrideForm = document.getElementById("overrideForm");
+    overridesBody.addEventListener("click", (event) => {
+      const row = event.target.closest("tr");
+      if (row) openOverride(row);
+    });
+    overridesBody.addEventListener("keydown", (event) => {
+      if ((event.key === "Enter" || event.key === " ") && event.target.matches("tr")) {
+        event.preventDefault();
+        openOverride(event.target);
+      }
+    });
+    document.getElementById("searchOverrides").addEventListener("input", filterOverrides);
+    document.getElementById("createOverride").addEventListener("click", () => {
+      selectedOverride = null;
+      overrideForm.reset();
+      overrideForm.elements.namedItem("item").readOnly = false;
+      document.getElementById("overrideFormTitle").textContent = "New Item Location Override";
+      updateOverrideDefault();
+      overrideForm.hidden = false;
+      overrideForm.scrollIntoView({behavior: "smooth", block: "nearest"});
+    });
+    overrideForm.elements.channel.addEventListener("change", updateOverrideDefault);
+    document.getElementById("cancelOverride").addEventListener("click", () => { overrideForm.hidden = true; selectedOverride = null; });
+    overrideForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const channel = overrideForm.elements.channel.value;
+      const item = overrideForm.elements.namedItem("item").value.trim();
+      const location = overrideForm.elements.location.value.trim();
+      const defaultLocation = document.getElementById("overrideDefaultLocation").textContent;
+      let row = selectedOverride;
+      if (!row) {
+        row = document.createElement("tr");
+        row.tabIndex = 0;
+        const codeCell = row.insertCell();
+        const codeLink = document.createElement("button");
+        codeLink.type = "button";
+        codeLink.className = "channel-link";
+        codeCell.append(codeLink);
+        row.insertCell();
+        row.insertCell();
+        row.insertCell();
+        overridesBody.prepend(row);
+      }
+      row.dataset.channel = channel;
+      row.dataset.item = item;
+      row.dataset.location = location;
+      row.dataset.default = defaultLocation;
+      row.cells[0].querySelector("button").textContent = channel;
+      row.cells[1].textContent = item;
+      row.cells[2].textContent = location;
+      row.cells[3].textContent = defaultLocation;
+      overrideForm.hidden = true;
+      selectedOverride = null;
+      filterOverrides();
+      notify(`Override saved for ${channel} / ${item}.`);
+    });
+    document.querySelectorAll(".mapping-link").forEach((button) => button.addEventListener("click", () => notify(`Mapping ${button.textContent} is shown as a SAL.04 example.`)));
+  </script>
+</body>
+</html>
