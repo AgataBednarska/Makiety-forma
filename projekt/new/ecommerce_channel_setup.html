@@ -175,7 +175,7 @@
     <div class="page-heading">
       <p class="breadcrumb">Setup &gt; E-commerce &gt; Sales Channels</p>
       <div class="heading-row"><div><h1>E-Commerce Channel Setup</h1><p class="subtitle">Configure connections and default settings for each sales channel</p></div><span class="environment-badge">● LIVE environment</span></div>
-      <nav class="tabs" aria-label="Configuration pages"><button class="tab active" type="button" data-page="listView">Home</button><button class="tab" type="button" data-page="overridesView">Item Location Overrides</button></nav>
+      <nav class="tabs" aria-label="Configuration pages"><button class="tab active" type="button" data-page="listView">Home</button></nav>
     </div>
     <div class="commandbar" role="toolbar" aria-label="Setup actions">
       <button class="command" id="refreshList" type="button"><span class="icon">↻</span>Refresh</button>
@@ -281,28 +281,6 @@
         <div class="route-note"><strong>Routing rule:</strong> order import must identify the market from a reliable country/market field in the marketplace payload. Confirm the exact API field before implementation.</div>
       </section>
 
-      <section class="list-view" id="overridesView" hidden>
-        <div class="info-banner"><span class="info-icon">ⓘ</span><div><strong>Per-channel inventory location overrides</strong>This optional SAL.XX extension maps a sales channel and item to a dedicated warehouse. If no override exists, the channel's Stock Check Location Code is used. Confirm this optional scope before implementation.</div></div>
-        <div class="list-toolbar"><strong id="overrideCount">0 item location overrides</strong><div style="display:flex;gap:8px;align-items:center"><button class="command primary" id="createOverride" type="button">＋ New Override</button><input class="search" id="searchOverrides" type="search" placeholder="Search channel, item, or location…" aria-label="Search item location overrides"></div></div>
-        <section class="table-frame" aria-label="Item location overrides">
-          <div class="table-scroll"><table style="min-width:780px"><thead><tr><th style="width:190px">Sales Channel Code</th><th style="width:190px">Item No.</th><th style="width:190px">Dedicated Location Code</th><th style="width:190px">Default Channel Location</th></tr></thead>
-            <tbody id="overridesBody"></tbody>
-          </table></div>
-          <div class="empty-state" id="overridesEmpty" style="display:block;padding:18px;color:#616161;text-align:center">No item-specific overrides are shown. No item numbers or override locations were provided; the channel default KPN_VIRT applies.</div>
-          <div class="table-footer"><span>Rows: <strong id="overrideFooterCount">0</strong></span><span>Select an override to edit its dedicated inventory location.</span></div>
-        </section>
-        <form id="overrideForm" class="form-card" style="margin-top:14px" hidden>
-          <div class="card-header"><span id="overrideFormTitle">Edit Item Location Override</span><small>Optional SAL.XX table</small></div>
-          <section class="form-section"><div class="field-grid">
-            <label class="field"><span class="field-label">Sales Channel Code <span class="required">*</span></span><select class="field-select" name="channel" id="overrideChannelSelect" required><option value="" selected disabled>Select channel and country</option></select></label>
-            <label class="field"><span class="field-label">Item No. <span class="required">*</span></span><input class="field-input" name="item" required maxlength="20" placeholder="Item number"></label>
-            <label class="field"><span class="field-label">Location Code <span class="required">*</span></span><input class="field-input" name="location" required maxlength="10" placeholder="Dedicated warehouse"></label>
-            <div class="field"><span class="field-label">Default Channel Location Code</span><div class="field-input" id="overrideDefaultLocation" style="display:flex;align-items:center;background:#f3f2f1">—</div></div>
-          </div></section>
-          <div class="detail-actions"><button class="command" id="cancelOverride" type="button">Cancel</button><button class="command primary" type="submit">Save Override</button></div>
-        </form>
-      </section>
-
       <section class="detail-view" id="detailView" hidden>
         <div class="detail-top"><button class="back-button" id="backToList" type="button">← Channel List</button><div><div class="detail-title" id="detailHeading">MDM_FR</div><p class="detail-description">Sales channel setup card</p></div><span class="environment-badge" id="detailStatus">Example entry</span></div>
         <div class="detail-layout">
@@ -353,7 +331,6 @@
     const channelForm = document.getElementById("channelForm");
     const toast = document.getElementById("toast");
     let selectedRow = null;
-    let selectedOverride = null;
     let selectedMarketplaceRow = null;
     let selectedMarketplace = "";
     let toastTimer;
@@ -386,15 +363,6 @@
     const marketSettings = Object.fromEntries(Object.entries(marketplaceProfiles).flatMap(([marketplace, profile]) =>
       profile.codes.map((code) => [`${marketplace}:${code}`, { customerB2C: "", customerB2B: "", series: "", marketKey: code, defaultLocation: profile.locations?.[code] || "KPN_VIRT", shipmentMethod: "", stockLocation: profile.locations?.[code] || "KPN_VIRT", prepayment: null, vat: null }])
     ));
-    Object.entries(marketplaceProfiles).forEach(([channelGroup, profile]) => {
-      profile.codes.forEach((country) => {
-        const option = document.createElement("option");
-        option.value = `${channelGroup}|${country}`;
-        option.textContent = `${channelGroup} · ${country}`;
-        document.getElementById("overrideChannelSelect").append(option);
-      });
-    });
-
     function notify(message) {
       toast.textContent = message;
       toast.classList.add("show");
@@ -459,41 +427,11 @@
 
     function switchPage(pageId) {
       detailView.hidden = true;
-      [listView, document.getElementById("marketplaceSetupView"), document.getElementById("overridesView")].forEach((page) => {
+      [listView, document.getElementById("marketplaceSetupView")].forEach((page) => {
         page.hidden = page.id !== pageId;
       });
       document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab.dataset.page === pageId));
-      document.getElementById("currentAction").textContent = pageId === "marketplaceSetupView" ? `${selectedMarketplace} customer mapping` : pageId === "overridesView" ? "Item-specific warehouse assignments" : "Marketplace setup";
-    }
-
-    function openOverride(row) {
-      selectedOverride = row;
-      const form = document.getElementById("overrideForm");
-      document.getElementById("overrideFormTitle").textContent = "Edit Item Location Override";
-      form.elements.channel.value = row.dataset.channel;
-      form.elements.namedItem("item").value = row.dataset.item;
-      form.elements.location.value = row.dataset.location;
-      form.elements.item.readOnly = true;
-      updateOverrideDefault();
-      form.hidden = false;
-      form.scrollIntoView({behavior: "smooth", block: "nearest"});
-    }
-
-    function updateOverrideDefault() {
-      const [channelGroup, country] = overrideForm.elements.channel.value.split("|");
-      document.getElementById("overrideDefaultLocation").textContent = marketSettings[`${channelGroup}:${country}`]?.defaultLocation || "—";
-    }
-
-    function filterOverrides() {
-      const query = document.getElementById("searchOverrides").value.trim().toLocaleLowerCase("en-US");
-      let count = 0;
-      document.querySelectorAll("#overridesBody tr").forEach((row) => {
-        row.hidden = !row.textContent.toLocaleLowerCase("en-US").includes(query);
-        if (!row.hidden) count += 1;
-      });
-      document.getElementById("overrideCount").textContent = `${count} item location ${count === 1 ? "override" : "overrides"}`;
-      document.getElementById("overrideFooterCount").textContent = count;
-      document.getElementById("overridesEmpty").hidden = count > 0;
+      document.getElementById("currentAction").textContent = pageId === "marketplaceSetupView" ? `${selectedMarketplace} customer mapping` : "Marketplace setup";
     }
 
     const mdmMarketCard = document.getElementById("mdmMarketCard");
@@ -709,67 +647,8 @@
       notify(`Changes saved for ${data.code} in this demo.`);
       closeChannel();
     });
-    document.getElementById("refreshList").addEventListener("click", () => { applySearch(); filterOverrides(); notify("The setup lists have been refreshed."); });
+    document.getElementById("refreshList").addEventListener("click", () => { applySearch(); notify("The setup lists have been refreshed."); });
     document.querySelectorAll(".tab").forEach((tab) => tab.addEventListener("click", () => switchPage(tab.dataset.page)));
-
-    const overridesBody = document.getElementById("overridesBody");
-    const overrideForm = document.getElementById("overrideForm");
-    overridesBody.addEventListener("click", (event) => {
-      const row = event.target.closest("tr");
-      if (row) openOverride(row);
-    });
-    overridesBody.addEventListener("keydown", (event) => {
-      if ((event.key === "Enter" || event.key === " ") && event.target.matches("tr")) {
-        event.preventDefault();
-        openOverride(event.target);
-      }
-    });
-    document.getElementById("searchOverrides").addEventListener("input", filterOverrides);
-    document.getElementById("createOverride").addEventListener("click", () => {
-      selectedOverride = null;
-      overrideForm.reset();
-      overrideForm.elements.namedItem("item").readOnly = false;
-      document.getElementById("overrideFormTitle").textContent = "New Item Location Override";
-      updateOverrideDefault();
-      overrideForm.hidden = false;
-      overrideForm.scrollIntoView({behavior: "smooth", block: "nearest"});
-    });
-    overrideForm.elements.channel.addEventListener("change", updateOverrideDefault);
-    document.getElementById("cancelOverride").addEventListener("click", () => { overrideForm.hidden = true; selectedOverride = null; });
-    overrideForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const channel = overrideForm.elements.channel.value;
-      const channelLabel = overrideForm.elements.channel.selectedOptions[0]?.textContent || channel;
-      const item = overrideForm.elements.namedItem("item").value.trim();
-      const location = overrideForm.elements.location.value.trim();
-      const defaultLocation = document.getElementById("overrideDefaultLocation").textContent;
-      let row = selectedOverride;
-      if (!row) {
-        row = document.createElement("tr");
-        row.tabIndex = 0;
-        const codeCell = row.insertCell();
-        const codeLink = document.createElement("button");
-        codeLink.type = "button";
-        codeLink.className = "channel-link";
-        codeCell.append(codeLink);
-        row.insertCell();
-        row.insertCell();
-        row.insertCell();
-        overridesBody.prepend(row);
-      }
-      row.dataset.channel = channel;
-      row.dataset.item = item;
-      row.dataset.location = location;
-      row.dataset.default = defaultLocation;
-      row.cells[0].querySelector("button").textContent = channelLabel;
-      row.cells[1].textContent = item;
-      row.cells[2].textContent = location;
-      row.cells[3].textContent = defaultLocation;
-      overrideForm.hidden = true;
-      selectedOverride = null;
-      filterOverrides();
-      notify(`Override saved for ${channel} / ${item}.`);
-    });
     document.querySelectorAll(".mapping-link").forEach((button) => button.addEventListener("click", () => notify(`Mapping ${button.textContent} is shown as a SAL.04 example.`)));
   </script>
 </body>
