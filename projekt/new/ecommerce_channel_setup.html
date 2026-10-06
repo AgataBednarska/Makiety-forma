@@ -73,24 +73,6 @@
     .bc-market-table tbody tr td:first-child { background: #79dc43; }
     .bc-market-detail { margin-top: 15px; }
     .bc-market-detail[hidden] { display: none; }
-    .warehouse-routing-layout { display: grid; grid-template-columns: minmax(250px, .8fr) minmax(0, 1.6fr); gap: 14px; margin-bottom: 16px; align-items: stretch; }
-    .warehouse-card { min-width: 0; border: 1px solid var(--border); background: white; }
-    .warehouse-card--single { border-top: 4px solid #0078d4; }
-    .warehouse-card--channels { border-top: 4px solid #c2398a; }
-    .warehouse-card-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--border); background: var(--subtle); }
-    .warehouse-card-heading strong { display: block; font-size: 13px; }
-    .warehouse-card-heading small { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; font-weight: 400; }
-    .warehouse-card-body { padding: 14px; }
-    .warehouse-single-badge { display: inline-block; margin-bottom: 10px; padding: 4px 9px; border: 1px solid #b7d7f0; border-radius: 12px; background: #eef6fc; color: #0f548c; font-size: 11px; font-weight: 600; }
-    .warehouse-single-code { margin: 2px 0 4px; color: #0f548c; font-size: 24px; font-weight: 600; }
-    .warehouse-hint { margin: 0; color: var(--muted); font-size: 11px; }
-    .warehouse-channel-table { min-width: 600px; }
-    .warehouse-channel-table tr.is-pink td { background: #fff0f7; }
-    .warehouse-channel-table tr.is-pink td:first-child { border-left: 3px solid #c2398a; }
-    .warehouse-pink-chip { display: inline-block; padding: 3px 8px; border: 1px solid #efb5d3; border-radius: 10px; background: #fce4f0; color: #9b2868; font-size: 11px; font-weight: 600; }
-    .warehouse-codes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 11px; }
-    .warehouse-code-chip { padding: 3px 7px; border: 1px solid var(--border); background: #f8f8f8; color: #424242; font: 11px Consolas, monospace; }
-    @media (max-width: 800px) { .warehouse-routing-layout { grid-template-columns: 1fr; } }
     .info-banner { display: flex; gap: 10px; margin-bottom: 15px; padding: 10px 12px; border: 1px solid #b7d7f0; background: #eef6fc; color: #0f548c; }
     .info-icon { font-size: 17px; }
     .info-banner strong { display: block; }
@@ -193,7 +175,7 @@
     <div class="page-heading">
       <p class="breadcrumb">Setup &gt; E-commerce &gt; Sales Channels</p>
       <div class="heading-row"><div><h1>E-Commerce Channel Setup</h1><p class="subtitle">Configure connections and default settings for each sales channel</p></div><span class="environment-badge">● LIVE environment</span></div>
-      <nav class="tabs" aria-label="Configuration pages"><button class="tab active" type="button" data-page="listView">Home</button><button class="tab" type="button" data-page="overridesView">Warehouses by Channel</button></nav>
+      <nav class="tabs" aria-label="Configuration pages"><button class="tab active" type="button" data-page="listView">Home</button><button class="tab" type="button" data-page="overridesView">Item Location Overrides</button></nav>
     </div>
     <div class="commandbar" role="toolbar" aria-label="Setup actions">
       <button class="command" id="refreshList" type="button"><span class="icon">↻</span>Refresh</button>
@@ -300,32 +282,13 @@
       </section>
 
       <section class="list-view" id="overridesView" hidden>
-        <div class="warehouse-routing-layout" aria-label="Warehouse assignments by channel">
-          <section class="warehouse-card warehouse-card--single" aria-label="Single channel default warehouse">
-            <div class="warehouse-card-heading"><div><strong>One channel · one default warehouse</strong><small>Blue side — the channel's primary location</small></div></div>
-            <div class="warehouse-card-body"><span class="warehouse-single-badge">SINGLE CHANNEL</span><div class="warehouse-single-code">MDM_CXL_ · FR</div><p class="warehouse-hint">Default warehouse for this channel and country</p><div class="warehouse-codes"><span class="warehouse-code-chip">KPN_VIRT</span></div></div>
-          </section>
-          <section class="warehouse-card warehouse-card--channels" aria-label="Warehouse routing by channel">
-            <div class="warehouse-card-heading"><div><strong>Warehouse assignments by channel</strong><small>Pink side — example VPMP channel routing across markets</small></div><span class="warehouse-pink-chip">VPMP EXAMPLE</span></div>
-            <div class="table-scroll"><table class="warehouse-channel-table"><thead><tr><th style="width:150px">Channel Group</th><th style="width:150px">Market / Country</th><th style="width:180px">Warehouse Code</th></tr></thead><tbody>
-              <tr class="is-pink"><td>VPMP_</td><td><span class="warehouse-pink-chip">FR</span></td><td>MAG-FR</td></tr>
-              <tr class="is-pink"><td>VPMP_</td><td><span class="warehouse-pink-chip">BE-fr</span></td><td>MAG-BE</td></tr>
-              <tr class="is-pink"><td>VPMP_</td><td><span class="warehouse-pink-chip">BE-nl</span></td><td>MAG-BE</td></tr>
-              <tr class="is-pink"><td>VPMP_</td><td><span class="warehouse-pink-chip">NL</span></td><td>MAG-NL</td></tr>
-              <tr class="is-pink"><td>VPMP_</td><td><span class="warehouse-pink-chip">IT</span></td><td>MAG-IT</td></tr>
-              <tr class="is-pink"><td>VPMP_</td><td><span class="warehouse-pink-chip">ES</span></td><td>MAG-ES</td></tr>
-              <tr class="is-pink"><td>VPMP_</td><td><span class="warehouse-pink-chip">DE</span></td><td>MAG-DE</td></tr>
-            </tbody></table></div>
-            <div class="warehouse-card-body"><p class="warehouse-hint">Example warehouse codes (replace with the actual BC Location Codes):</p><div class="warehouse-codes"><span class="warehouse-code-chip">KPN_VIRT</span><span class="warehouse-code-chip">MAG-FR</span><span class="warehouse-code-chip">MAG-BE</span><span class="warehouse-code-chip">MAG-NL</span><span class="warehouse-code-chip">MAG-IT</span><span class="warehouse-code-chip">MAG-ES</span><span class="warehouse-code-chip">MAG-DE</span></div></div>
-          </section>
-        </div>
-        <div class="info-banner"><span class="info-icon">ⓘ</span><div><strong>Per-item warehouse overrides</strong>This optional SAL.XX extension maps a channel and item to a dedicated warehouse. If no item override exists, the channel's default warehouse above is used.</div></div>
+        <div class="info-banner"><span class="info-icon">ⓘ</span><div><strong>Per-channel inventory location overrides</strong>This optional SAL.XX extension maps a sales channel and item to a dedicated warehouse. If no override exists, the channel's Stock Check Location Code is used. Confirm this optional scope before implementation.</div></div>
         <div class="list-toolbar"><strong id="overrideCount">0 item location overrides</strong><div style="display:flex;gap:8px;align-items:center"><button class="command primary" id="createOverride" type="button">＋ New Override</button><input class="search" id="searchOverrides" type="search" placeholder="Search channel, item, or location…" aria-label="Search item location overrides"></div></div>
         <section class="table-frame" aria-label="Item location overrides">
           <div class="table-scroll"><table style="min-width:780px"><thead><tr><th style="width:190px">Sales Channel Code</th><th style="width:190px">Item No.</th><th style="width:190px">Dedicated Location Code</th><th style="width:190px">Default Channel Location</th></tr></thead>
             <tbody id="overridesBody"></tbody>
           </table></div>
-          <div class="empty-state" id="overridesEmpty" style="display:block;padding:18px;color:#616161;text-align:center">No item-specific overrides are shown. If no item override exists, the configured default warehouse for that channel applies.</div>
+          <div class="empty-state" id="overridesEmpty" style="display:block;padding:18px;color:#616161;text-align:center">No item-specific overrides are shown. No item numbers or override locations were provided; the channel default KPN_VIRT applies.</div>
           <div class="table-footer"><span>Rows: <strong id="overrideFooterCount">0</strong></span><span>Select an override to edit its dedicated inventory location.</span></div>
         </section>
         <form id="overrideForm" class="form-card" style="margin-top:14px" hidden>
@@ -500,7 +463,7 @@
         page.hidden = page.id !== pageId;
       });
       document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab.dataset.page === pageId));
-      document.getElementById("currentAction").textContent = pageId === "marketplaceSetupView" ? `${selectedMarketplace} customer mapping` : pageId === "overridesView" ? "Warehouse routing by channel" : "Marketplace setup";
+      document.getElementById("currentAction").textContent = pageId === "marketplaceSetupView" ? `${selectedMarketplace} customer mapping` : pageId === "overridesView" ? "Item-specific warehouse assignments" : "Marketplace setup";
     }
 
     function openOverride(row) {
