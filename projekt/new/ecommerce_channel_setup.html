@@ -73,6 +73,11 @@
     .bc-market-table tbody tr td:first-child { background: #79dc43; }
     .bc-market-detail { margin-top: 15px; }
     .bc-market-detail[hidden] { display: none; }
+    .additional-config-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 14px; }
+    .additional-config-back { min-height: 32px; padding: 0 10px; border: 1px solid var(--border-strong); background: white; color: #333; }
+    .additional-config-note { margin: 0 0 14px; padding: 10px 12px; border: 1px solid #b7d7f0; background: #eef6fc; color: #0f548c; font-size: 12px; }
+    .additional-config-table { min-width: 760px; }
+    .additional-config-empty { padding: 16px; color: var(--muted); text-align: center; }
     .info-banner { display: flex; gap: 10px; margin-bottom: 15px; padding: 10px 12px; border: 1px solid #b7d7f0; background: #eef6fc; color: #0f548c; }
     .info-icon { font-size: 17px; }
     .info-banner strong { display: block; }
@@ -175,7 +180,7 @@
     <div class="page-heading">
       <p class="breadcrumb">Setup &gt; E-commerce &gt; Sales Channels</p>
       <div class="heading-row"><div><h1>E-Commerce Channel Setup</h1><p class="subtitle">Configure connections and default settings for each sales channel</p></div><span class="environment-badge">● LIVE environment</span></div>
-      <nav class="tabs" aria-label="Configuration pages"><button class="tab active" type="button" data-page="listView">Home</button></nav>
+      <nav class="tabs" aria-label="Configuration pages"><button class="tab active" type="button" data-page="listView">Home</button><button class="tab" id="additionalConfigTab" type="button" data-page="additionalConfigView" hidden>Additional Configuration</button></nav>
     </div>
     <div class="commandbar" role="toolbar" aria-label="Setup actions">
       <button class="command" id="refreshList" type="button"><span class="icon">↻</span>Refresh</button>
@@ -281,6 +286,27 @@
         <div class="route-note"><strong>Routing rule:</strong> order import must identify the market from a reliable country/market field in the marketplace payload. Confirm the exact API field before implementation.</div>
       </section>
 
+      <section class="list-view" id="additionalConfigView" hidden>
+        <div class="additional-config-toolbar"><div class="detail-top" style="margin:0"><button class="additional-config-back" id="backToMarketplaceSetup" type="button">← Marketplace Setup</button><div><div class="detail-title">Additional Configuration</div><p class="detail-description" id="additionalConfigScope">Extra item and warehouse assignments for this marketplace</p></div></div></div>
+        <p class="additional-config-note">Add an item-specific or item-group-specific warehouse assignment. Location codes shown are examples; select the actual warehouse used in Business Central.</p>
+        <form id="additionalConfigForm" class="form-card">
+          <div class="card-header"><span>Additional Item / Item Group Warehouse</span><small>Applies to the selected marketplace and country</small></div>
+          <section class="form-section"><div class="field-grid">
+            <label class="field"><span class="field-label">Marketplace</span><input class="field-input" name="marketplace" readonly></label>
+            <label class="field"><span class="field-label">Country / Market <span class="required">*</span></span><select class="field-select" name="country" required></select></label>
+            <label class="field"><span class="field-label">Assignment Type <span class="required">*</span></span><select class="field-select" name="assignmentType" required><option value="item">Item</option><option value="itemGroup">Item Group</option></select></label>
+            <label class="field"><span class="field-label" id="additionalTargetLabel">Item No. <span class="required">*</span></span><input class="field-input" name="targetCode" required list="additionalTargetOptions" placeholder="Select or enter an item"></label>
+            <label class="field"><span class="field-label">Additional Warehouse <span class="required">*</span></span><select class="field-select" name="locationCode" required><option value="" selected disabled>Select warehouse</option><option>KPN_VIRT</option><option>MAG-FR</option><option>MAG-BE</option><option>MAG-NL</option><option>MAG-IT</option><option>MAG-ES</option><option>MAG-DE</option><option>MAG-PT</option><option>MAG-PL</option></select><span class="field-help">Example location codes; replace with the real BC location code.</span></label>
+          </div><datalist id="additionalTargetOptions"><option value="P-001209">Golden White satin 12mm</option><option value="MC8S-12MM">MC8S-12MM</option><option value="MC8S">Example item group</option></datalist></section>
+          <div class="detail-actions"><button class="command" id="clearAdditionalConfig" type="reset">Clear</button><button class="command primary" type="submit">＋ Add Assignment</button></div>
+        </form>
+        <section class="bc-section" style="margin-top:16px" aria-label="Additional warehouse assignments">
+          <div class="bc-section-heading"><span>Configured Assignments</span><small id="additionalConfigCount">0 assignments</small></div>
+          <div class="table-scroll"><table class="additional-config-table"><thead><tr><th style="width:150px">Marketplace</th><th style="width:120px">Country</th><th style="width:140px">Type</th><th style="width:200px">Item / Item Group</th><th style="width:180px">Additional Warehouse</th></tr></thead><tbody id="additionalConfigRows"></tbody></table></div>
+          <div class="additional-config-empty" id="additionalConfigEmpty">No additional assignments have been added for this marketplace.</div>
+        </section>
+      </section>
+
       <section class="detail-view" id="detailView" hidden>
         <div class="detail-top"><button class="back-button" id="backToList" type="button">← Channel List</button><div><div class="detail-title" id="detailHeading">MDM_FR</div><p class="detail-description">Sales channel setup card</p></div><span class="environment-badge" id="detailStatus">Example entry</span></div>
         <div class="detail-layout">
@@ -334,6 +360,7 @@
     let selectedMarketplaceRow = null;
     let selectedMarketplace = "";
     let toastTimer;
+    const additionalAssignments = {};
     const marketplaceProfiles = {
       "MDM_CXL_": { platform: "Mirakl", connectionCode: "MDM_CXL_ shared connection", endpoint: "", token: "", codes: ["FR", "ES", "IT", "DE"], tone: "green" },
       "MDM_COS_": { platform: "Mirakl", connectionCode: "MDM_COS_ shared connection", endpoint: "", token: "", codes: ["FR", "ES", "IT", "DE"], tone: "pink" },
@@ -427,11 +454,12 @@
 
     function switchPage(pageId) {
       detailView.hidden = true;
-      [listView, document.getElementById("marketplaceSetupView")].forEach((page) => {
+      [listView, document.getElementById("marketplaceSetupView"), document.getElementById("additionalConfigView")].forEach((page) => {
         page.hidden = page.id !== pageId;
       });
+      document.getElementById("additionalConfigTab").hidden = !["marketplaceSetupView", "additionalConfigView"].includes(pageId);
       document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab.dataset.page === pageId));
-      document.getElementById("currentAction").textContent = pageId === "marketplaceSetupView" ? `${selectedMarketplace} customer mapping` : "Marketplace setup";
+      document.getElementById("currentAction").textContent = pageId === "marketplaceSetupView" ? `${selectedMarketplace} customer mapping` : pageId === "additionalConfigView" ? `${selectedMarketplace} additional configuration` : "Marketplace setup";
     }
 
     const mdmMarketCard = document.getElementById("mdmMarketCard");
@@ -440,6 +468,7 @@
     function renderCustomerMapping(marketplace) {
       selectedMarketplace = marketplace;
       selectedMdmMarket = null;
+      document.getElementById("additionalConfigTab").hidden = false;
       mdmMarketCard.hidden = true;
       document.getElementById("sharedConnectionCard").hidden = true;
       const profile = marketplaceProfiles[marketplace];
@@ -487,6 +516,40 @@
         rows.append(row);
       });
       switchPage("marketplaceSetupView");
+    }
+
+    function renderAdditionalAssignments() {
+      const rows = document.getElementById("additionalConfigRows");
+      const assignments = additionalAssignments[selectedMarketplace] || [];
+      rows.replaceChildren();
+      assignments.forEach((assignment) => {
+        const row = rows.insertRow();
+        [assignment.marketplace, assignment.country, assignment.type === "item" ? "Item" : "Item Group", assignment.targetCode, assignment.locationCode].forEach((value) => {
+          row.insertCell().textContent = value;
+        });
+      });
+      document.getElementById("additionalConfigCount").textContent = `${assignments.length} ${assignments.length === 1 ? "assignment" : "assignments"}`;
+      document.getElementById("additionalConfigEmpty").hidden = assignments.length > 0;
+    }
+
+    function openAdditionalConfiguration() {
+      if (!selectedMarketplace) return;
+      const profile = marketplaceProfiles[selectedMarketplace];
+      const form = document.getElementById("additionalConfigForm");
+      form.elements.marketplace.value = selectedMarketplace;
+      const countrySelect = form.elements.country;
+      countrySelect.replaceChildren();
+      profile.codes.forEach((country) => {
+        const option = document.createElement("option");
+        option.value = country;
+        option.textContent = country;
+        countrySelect.append(option);
+      });
+      document.getElementById("additionalConfigScope").textContent = `${selectedMarketplace} · extra item and warehouse assignments`;
+      document.getElementById("additionalTargetLabel").innerHTML = 'Item No. <span class="required">*</span>';
+      form.elements.targetCode.placeholder = "Select or enter an item";
+      renderAdditionalAssignments();
+      switchPage("additionalConfigView");
     }
 
     function openSharedConnectionCard() {
@@ -649,6 +712,36 @@
     });
     document.getElementById("refreshList").addEventListener("click", () => { applySearch(); notify("The setup lists have been refreshed."); });
     document.querySelectorAll(".tab").forEach((tab) => tab.addEventListener("click", () => switchPage(tab.dataset.page)));
+    document.getElementById("additionalConfigTab").addEventListener("click", openAdditionalConfiguration);
+    document.getElementById("backToMarketplaceSetup").addEventListener("click", () => switchPage("marketplaceSetupView"));
+    document.getElementById("additionalConfigForm").elements.assignmentType.addEventListener("change", (event) => {
+      const isItem = event.currentTarget.value === "item";
+      document.getElementById("additionalTargetLabel").innerHTML = `${isItem ? "Item No." : "Item Group Code"} <span class="required">*</span>`;
+      document.getElementById("additionalConfigForm").elements.targetCode.placeholder = isItem ? "Select or enter an item" : "Select or enter an item group";
+    });
+    document.getElementById("clearAdditionalConfig").addEventListener("click", () => {
+      const form = document.getElementById("additionalConfigForm");
+      form.elements.marketplace.value = selectedMarketplace;
+      document.getElementById("additionalTargetLabel").innerHTML = 'Item No. <span class="required">*</span>';
+      form.elements.targetCode.placeholder = "Select or enter an item";
+    });
+    document.getElementById("additionalConfigForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const assignment = {
+        marketplace: selectedMarketplace,
+        country: form.elements.country.value,
+        type: form.elements.assignmentType.value,
+        targetCode: form.elements.targetCode.value.trim(),
+        locationCode: form.elements.locationCode.value
+      };
+      if (!additionalAssignments[selectedMarketplace]) additionalAssignments[selectedMarketplace] = [];
+      additionalAssignments[selectedMarketplace].push(assignment);
+      renderAdditionalAssignments();
+      form.elements.targetCode.value = "";
+      form.elements.locationCode.value = "";
+      notify(`Additional warehouse assignment added for ${assignment.marketplace} / ${assignment.country}.`);
+    });
     document.querySelectorAll(".mapping-link").forEach((button) => button.addEventListener("click", () => notify(`Mapping ${button.textContent} is shown as a SAL.04 example.`)));
   </script>
 </body>
