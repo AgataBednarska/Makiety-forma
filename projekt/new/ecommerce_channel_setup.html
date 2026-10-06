@@ -62,8 +62,35 @@
     .bc-field-value { min-height: 26px; display: flex; align-items: center; padding: 3px 8px; border: 1px solid var(--border); background: #f3f2f1; color: #323130; font-size: 12px; }
     .bc-market-table { min-width: 1020px; }
     .bc-market-table tbody tr.is-current td { background: #eaf4fb; }
+    .bc-market-table tbody tr.market-tone-green td:not(:first-child) { background: #dff3c8; }
+    .bc-market-table tbody tr.market-tone-pink td:not(:first-child) { background: #f8d9ee; }
+    .bc-market-table tbody tr.market-tone-gray td:not(:first-child) { background: #e1e1e1; }
+    .bc-market-table tbody tr.market-tone-yellow td:not(:first-child) { background: #f5ef99; }
+    .bc-market-table tbody tr.market-tone-blue td:not(:first-child) { background: #cfe8f5; }
+    .bc-market-table tbody tr.market-tone-cyan td:not(:first-child) { background: #89dfd5; }
+    .bc-market-table tbody tr.market-tone-cream td:not(:first-child) { background: #f8f7d6; }
+    .bc-market-table tbody tr.market-tone-sand td:not(:first-child) { background: #ead7ad; }
+    .bc-market-table tbody tr td:first-child { background: #79dc43; }
     .bc-market-detail { margin-top: 15px; }
     .bc-market-detail[hidden] { display: none; }
+    .warehouse-routing-layout { display: grid; grid-template-columns: minmax(250px, .8fr) minmax(0, 1.6fr); gap: 14px; margin-bottom: 16px; align-items: stretch; }
+    .warehouse-card { min-width: 0; border: 1px solid var(--border); background: white; }
+    .warehouse-card--single { border-top: 4px solid #0078d4; }
+    .warehouse-card--channels { border-top: 4px solid #c2398a; }
+    .warehouse-card-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--border); background: var(--subtle); }
+    .warehouse-card-heading strong { display: block; font-size: 13px; }
+    .warehouse-card-heading small { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; font-weight: 400; }
+    .warehouse-card-body { padding: 14px; }
+    .warehouse-single-badge { display: inline-block; margin-bottom: 10px; padding: 4px 9px; border: 1px solid #b7d7f0; border-radius: 12px; background: #eef6fc; color: #0f548c; font-size: 11px; font-weight: 600; }
+    .warehouse-single-code { margin: 2px 0 4px; color: #0f548c; font-size: 24px; font-weight: 600; }
+    .warehouse-hint { margin: 0; color: var(--muted); font-size: 11px; }
+    .warehouse-channel-table { min-width: 600px; }
+    .warehouse-channel-table tr.is-pink td { background: #fff0f7; }
+    .warehouse-channel-table tr.is-pink td:first-child { border-left: 3px solid #c2398a; }
+    .warehouse-pink-chip { display: inline-block; padding: 3px 8px; border: 1px solid #efb5d3; border-radius: 10px; background: #fce4f0; color: #9b2868; font-size: 11px; font-weight: 600; }
+    .warehouse-codes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 11px; }
+    .warehouse-code-chip { padding: 3px 7px; border: 1px solid var(--border); background: #f8f8f8; color: #424242; font: 11px Consolas, monospace; }
+    @media (max-width: 800px) { .warehouse-routing-layout { grid-template-columns: 1fr; } }
     .info-banner { display: flex; gap: 10px; margin-bottom: 15px; padding: 10px 12px; border: 1px solid #b7d7f0; background: #eef6fc; color: #0f548c; }
     .info-icon { font-size: 17px; }
     .info-banner strong { display: block; }
@@ -82,7 +109,9 @@
     tbody tr { cursor: pointer; }
     tbody tr:hover td { background: #f1f8fb; }
     tbody tr.selected td { background: #eaf4fb; }
+    #channelsBody td:first-child { background: #79dc43; }
     .channel-link { padding: 0; border: 0; background: transparent; color: var(--blue); font-weight: 600; }
+    #channelsBody .channel-link { color: #1d3b10; }
     .channel-link:hover { text-decoration: underline; }
     .platform-chip { display: inline-block; padding: 3px 8px; border: 1px solid #d9e7f2; border-radius: 10px; background: #f1f7fb; color: #315c77; font-size: 11px; }
     .bool-yes, .bool-no { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; }
@@ -164,7 +193,7 @@
     <div class="page-heading">
       <p class="breadcrumb">Setup &gt; E-commerce &gt; Sales Channels</p>
       <div class="heading-row"><div><h1>E-Commerce Channel Setup</h1><p class="subtitle">Configure connections and default settings for each sales channel</p></div><span class="environment-badge">● LIVE environment</span></div>
-      <nav class="tabs" aria-label="Configuration pages"><button class="tab active" type="button" data-page="listView">Home</button><button class="tab" type="button" data-page="overridesView">Item Location Overrides</button></nav>
+      <nav class="tabs" aria-label="Configuration pages"><button class="tab active" type="button" data-page="listView">Home</button><button class="tab" type="button" data-page="overridesView">Warehouses by Channel</button></nav>
     </div>
     <div class="commandbar" role="toolbar" aria-label="Setup actions">
       <button class="command" id="refreshList" type="button"><span class="icon">↻</span>Refresh</button>
@@ -173,22 +202,44 @@
 
     <div class="main">
       <section class="list-view" id="listView">
-        <div class="info-banner"><span class="info-icon">ⓘ</span><div><strong>Marketplace Setup</strong>Select the MDM or H24MP row to open its Customer Mapping list. Select a market row there to open its configuration card.</div></div>
+        <div class="info-banner"><span class="info-icon">ⓘ</span><div><strong>Marketplace Setup</strong>Select a channel group from the green-code list to view its country breakdown and configuration rows.</div></div>
         <section class="summary-row" aria-label="Marketplace summary">
-          <article class="summary-card"><div class="summary-label">Marketplaces</div><div class="summary-value" id="channelCount">2</div><div class="summary-note">Top-level integrations</div></article>
+          <article class="summary-card"><div class="summary-label">Marketplaces</div><div class="summary-value" id="channelCount">24</div><div class="summary-note">Channel groups from the supplied list</div></article>
           <article class="summary-card"><div class="summary-label">Default Warehouse</div><div class="summary-value">KPN_VIRT</div><div class="summary-note">Default for the supplied examples</div></article>
-          <article class="summary-card"><div class="summary-label">Marketplace Types</div><div class="summary-value">2</div><div class="summary-note">Mirakl and H24MP</div></article>
+          <article class="summary-card"><div class="summary-label">Marketplace Types</div><div class="summary-value">2</div><div class="summary-note">Mirakl and Other</div></article>
         </section>
-        <div class="list-toolbar"><strong id="listCount">2 marketplaces</strong><input class="search" id="searchChannels" type="search" placeholder="Search marketplace…" aria-label="Search marketplaces"></div>
+        <div class="list-toolbar"><strong id="listCount">24 marketplaces</strong><input class="search" id="searchChannels" type="search" placeholder="Search marketplace…" aria-label="Search marketplaces"></div>
         <section class="table-frame" aria-label="Marketplace list">
           <div class="table-scroll"><table style="min-width:760px">
             <thead><tr><th style="width:190px">Marketplace</th><th style="width:150px">Platform Type</th><th style="width:210px">Connection Profile</th><th style="width:140px">Market Rows</th><th style="width:170px">Default Warehouse</th></tr></thead>
             <tbody id="channelsBody">
-              <tr tabindex="0" data-marketplace="MDM" data-platform="Mirakl" data-connection="MDM shared connection"><td><button class="channel-link" type="button">MDM</button></td><td><span class="platform-chip">Mirakl</span></td><td>MDM shared connection</td><td>4 markets</td><td>KPN_VIRT</td></tr>
-              <tr tabindex="0" data-marketplace="H24MP" data-platform="Other" data-connection="H24MP shared connection"><td><button class="channel-link" type="button">H24MP</button></td><td><span class="platform-chip">Other</span></td><td>H24MP shared connection</td><td>4 markets</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="MDM_CXL_" data-platform="Mirakl" data-connection="MDM_CXL_ shared connection"><td><button class="channel-link" type="button">MDM_CXL_</button></td><td><span class="platform-chip">Mirakl</span></td><td>MDM_CXL_ shared connection</td><td>4 markets</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="MDM_COS_" data-platform="Mirakl" data-connection="MDM_COS_ shared connection"><td><button class="channel-link" type="button">MDM_COS_</button></td><td><span class="platform-chip">Mirakl</span></td><td>MDM_COS_ shared connection</td><td>4 markets</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="H24MP_" data-platform="Other" data-connection="H24MP_ shared connection"><td><button class="channel-link" type="button">H24MP_</button></td><td><span class="platform-chip">Other</span></td><td>H24MP_ shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="H24MP_AT_" data-platform="Other" data-connection="H24MP_AT_ shared connection"><td><button class="channel-link" type="button">H24MP_AT_</button></td><td><span class="platform-chip">Other</span></td><td>H24MP_AT_ shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="H24MP_FR_" data-platform="Other" data-connection="H24MP_FR_ shared connection"><td><button class="channel-link" type="button">H24MP_FR_</button></td><td><span class="platform-chip">Other</span></td><td>H24MP_FR_ shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="H24MP_NL_" data-platform="Other" data-connection="H24MP_NL_ shared connection"><td><button class="channel-link" type="button">H24MP_NL_</button></td><td><span class="platform-chip">Other</span></td><td>H24MP_NL_ shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="XXL_" data-platform="Other" data-connection="XXL_ shared connection"><td><button class="channel-link" type="button">XXL_</button></td><td><span class="platform-chip">Other</span></td><td>XXL_ shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="XXL_AT_" data-platform="Other" data-connection="XXL_AT_ shared connection"><td><button class="channel-link" type="button">XXL_AT_</button></td><td><span class="platform-chip">Other</span></td><td>XXL_AT_ shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="BRW_" data-platform="Other" data-connection="BRW_ shared connection"><td><button class="channel-link" type="button">BRW_</button></td><td><span class="platform-chip">Other</span></td><td>BRW_ shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="CONF_" data-platform="Other" data-connection="CONF_ shared connection"><td><button class="channel-link" type="button">CONF_</button></td><td><span class="platform-chip">Other</span></td><td>CONF_ shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="RDC_" data-platform="Other" data-connection="RDC_ shared connection"><td><button class="channel-link" type="button">RDC_</button></td><td><span class="platform-chip">Other</span></td><td>RDC_ shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="BUT_" data-platform="Other" data-connection="BUT_ shared connection"><td><button class="channel-link" type="button">BUT_</button></td><td><span class="platform-chip">Other</span></td><td>BUT_ shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="CAST_" data-platform="Other" data-connection="CAST_ shared connection"><td><button class="channel-link" type="button">CAST_</button></td><td><span class="platform-chip">Other</span></td><td>CAST_ shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="VPMP_" data-platform="Other" data-connection="VPMP_ shared connection"><td><button class="channel-link" type="button">VPMP_</button></td><td><span class="platform-chip">Other</span></td><td>VPMP_ shared connection</td><td>7 markets</td><td>Multiple</td></tr>
+              <tr tabindex="0" data-marketplace="SRP_MP_" data-platform="Other" data-connection="SRP_MP_ shared connection"><td><button class="channel-link" type="button">SRP_MP_</button></td><td><span class="platform-chip">Other</span></td><td>SRP_MP_ shared connection</td><td>5 markets</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="VU_FR" data-platform="Other" data-connection="VU_FR shared connection"><td><button class="channel-link" type="button">VU_FR</button></td><td><span class="platform-chip">Other</span></td><td>VU_FR shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="VU_BE_" data-platform="Other" data-connection="VU_BE_ shared connection"><td><button class="channel-link" type="button">VU_BE_</button></td><td><span class="platform-chip">Other</span></td><td>VU_BE_ shared connection</td><td>2 markets</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="VU_NL_" data-platform="Other" data-connection="VU_NL_ shared connection"><td><button class="channel-link" type="button">VU_NL_</button></td><td><span class="platform-chip">Other</span></td><td>VU_NL_ shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="VU_IT_" data-platform="Other" data-connection="VU_IT_ shared connection"><td><button class="channel-link" type="button">VU_IT_</button></td><td><span class="platform-chip">Other</span></td><td>VU_IT_ shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="VU_ES_" data-platform="Other" data-connection="VU_ES_ shared connection"><td><button class="channel-link" type="button">VU_ES_</button></td><td><span class="platform-chip">Other</span></td><td>VU_ES_ shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="VU_DE_" data-platform="Other" data-connection="VU_DE_ shared connection"><td><button class="channel-link" type="button">VU_DE_</button></td><td><span class="platform-chip">Other</span></td><td>VU_DE_ shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="VU_PT_" data-platform="Other" data-connection="VU_PT_ shared connection"><td><button class="channel-link" type="button">VU_PT_</button></td><td><span class="platform-chip">Other</span></td><td>VU_PT_ shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="VU_PL_" data-platform="Other" data-connection="VU_PL_ shared connection"><td><button class="channel-link" type="button">VU_PL_</button></td><td><span class="platform-chip">Other</span></td><td>VU_PL_ shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
+              <tr tabindex="0" data-marketplace="MANO_" data-platform="Other" data-connection="MANO_ shared connection"><td><button class="channel-link" type="button">MANO_</button></td><td><span class="platform-chip">Other</span></td><td>MANO_ shared connection</td><td>1 market</td><td>KPN_VIRT</td></tr>
             </tbody>
           </table></div>
-          <div class="table-footer"><span>Rows: <strong id="footerCount">2</strong></span><span>Select a marketplace row to open its Customer Mapping.</span></div>
+          <div class="table-footer"><span>Rows: <strong id="footerCount">24</strong></span><span>Select a channel group to open its country mapping.</span></div>
         </section>
       </section>
 
@@ -217,7 +268,7 @@
         <section class="bc-section" aria-label="Marketplace customer mappings">
           <div class="bc-section-heading"><span id="marketRowsHeading">MDM Customer Mapping</span><small>Each market has its own customer and number-series configuration</small></div>
           <div class="table-scroll"><table class="bc-market-table">
-            <thead><tr><th style="width:160px">Channel Code</th><th style="width:150px">Platform Type</th><th style="width:190px">Connection Code</th><th style="width:210px">One-Time Customer No.</th><th style="width:160px">No. Series</th><th style="width:170px">Default Location Code</th><th style="width:170px">Stock Check Location Code</th></tr></thead>
+            <thead><tr><th style="width:150px">Channel Code</th><th style="width:110px">Market / Country</th><th style="width:130px">Platform Type</th><th style="width:180px">Connection Code</th><th style="width:190px">One-Time Customer No. B2C</th><th style="width:190px">One-Time Customer No. B2B</th><th style="width:150px">No. Series</th><th style="width:170px">Default Location Code</th></tr></thead>
             <tbody id="marketSetupRows"></tbody>
           </table></div>
           <div class="table-footer"><span>Rows: <strong id="marketRowsCount">4</strong></span><span>Select a row to open its setup card.</span></div>
@@ -234,7 +285,8 @@
             <div class="field"><span class="field-label">API Connection</span><button class="small-button" id="openMarketConnection" type="button">Open shared API connection card</button></div>
           </div></section>
           <section class="form-section"><h2 class="section-title">Market-Specific Defaults</h2><div class="field-grid">
-            <label class="field"><span class="field-label">Default Customer No. B2C</span><input class="field-input" name="customerNo" placeholder="Set one-time customer for this market"></label>
+            <label class="field"><span class="field-label">One-Time Customer No. B2C</span><input class="field-input" name="customerNoB2C" placeholder="Set B2C one-time customer for this market"></label>
+            <label class="field"><span class="field-label">One-Time Customer No. B2B</span><input class="field-input" name="customerNoB2B" placeholder="Set B2B one-time customer for this market"></label>
             <label class="field"><span class="field-label">No. Series</span><input class="field-input" name="noSeries" placeholder="Set number series for this market"></label>
             <label class="field"><span class="field-label">Default Location Code</span><input class="field-input" name="defaultLocation" value="KPN_VIRT"></label>
             <label class="field"><span class="field-label">Default Shipment Method</span><input class="field-input" name="shipmentMethod" placeholder="Set shipment method"></label>
@@ -248,19 +300,38 @@
       </section>
 
       <section class="list-view" id="overridesView" hidden>
-        <div class="info-banner"><span class="info-icon">ⓘ</span><div><strong>Per-channel inventory location overrides</strong>This optional SAL.XX extension maps a sales channel and item to a dedicated warehouse. If no override exists, the channel's Stock Check Location Code is used. Confirm this optional scope before implementation.</div></div>
+        <div class="warehouse-routing-layout" aria-label="Warehouse assignments by channel">
+          <section class="warehouse-card warehouse-card--single" aria-label="Single channel default warehouse">
+            <div class="warehouse-card-heading"><div><strong>One channel · one default warehouse</strong><small>Blue side — the channel's primary location</small></div></div>
+            <div class="warehouse-card-body"><span class="warehouse-single-badge">SINGLE CHANNEL</span><div class="warehouse-single-code">MDM_CXL_ · FR</div><p class="warehouse-hint">Default warehouse for this channel and country</p><div class="warehouse-codes"><span class="warehouse-code-chip">KPN_VIRT</span></div></div>
+          </section>
+          <section class="warehouse-card warehouse-card--channels" aria-label="Warehouse routing by channel">
+            <div class="warehouse-card-heading"><div><strong>Warehouse assignments by channel</strong><small>Pink side — example VPMP channel routing across markets</small></div><span class="warehouse-pink-chip">VPMP EXAMPLE</span></div>
+            <div class="table-scroll"><table class="warehouse-channel-table"><thead><tr><th style="width:150px">Channel Group</th><th style="width:150px">Market / Country</th><th style="width:180px">Warehouse Code</th></tr></thead><tbody>
+              <tr class="is-pink"><td>VPMP_</td><td><span class="warehouse-pink-chip">FR</span></td><td>MAG-FR</td></tr>
+              <tr class="is-pink"><td>VPMP_</td><td><span class="warehouse-pink-chip">BE-fr</span></td><td>MAG-BE</td></tr>
+              <tr class="is-pink"><td>VPMP_</td><td><span class="warehouse-pink-chip">BE-nl</span></td><td>MAG-BE</td></tr>
+              <tr class="is-pink"><td>VPMP_</td><td><span class="warehouse-pink-chip">NL</span></td><td>MAG-NL</td></tr>
+              <tr class="is-pink"><td>VPMP_</td><td><span class="warehouse-pink-chip">IT</span></td><td>MAG-IT</td></tr>
+              <tr class="is-pink"><td>VPMP_</td><td><span class="warehouse-pink-chip">ES</span></td><td>MAG-ES</td></tr>
+              <tr class="is-pink"><td>VPMP_</td><td><span class="warehouse-pink-chip">DE</span></td><td>MAG-DE</td></tr>
+            </tbody></table></div>
+            <div class="warehouse-card-body"><p class="warehouse-hint">Example warehouse codes (replace with the actual BC Location Codes):</p><div class="warehouse-codes"><span class="warehouse-code-chip">KPN_VIRT</span><span class="warehouse-code-chip">MAG-FR</span><span class="warehouse-code-chip">MAG-BE</span><span class="warehouse-code-chip">MAG-NL</span><span class="warehouse-code-chip">MAG-IT</span><span class="warehouse-code-chip">MAG-ES</span><span class="warehouse-code-chip">MAG-DE</span></div></div>
+          </section>
+        </div>
+        <div class="info-banner"><span class="info-icon">ⓘ</span><div><strong>Per-item warehouse overrides</strong>This optional SAL.XX extension maps a channel and item to a dedicated warehouse. If no item override exists, the channel's default warehouse above is used.</div></div>
         <div class="list-toolbar"><strong id="overrideCount">0 item location overrides</strong><div style="display:flex;gap:8px;align-items:center"><button class="command primary" id="createOverride" type="button">＋ New Override</button><input class="search" id="searchOverrides" type="search" placeholder="Search channel, item, or location…" aria-label="Search item location overrides"></div></div>
         <section class="table-frame" aria-label="Item location overrides">
           <div class="table-scroll"><table style="min-width:780px"><thead><tr><th style="width:190px">Sales Channel Code</th><th style="width:190px">Item No.</th><th style="width:190px">Dedicated Location Code</th><th style="width:190px">Default Channel Location</th></tr></thead>
             <tbody id="overridesBody"></tbody>
           </table></div>
-          <div class="empty-state" id="overridesEmpty" style="display:block;padding:18px;color:#616161;text-align:center">No item-specific overrides are shown. No item numbers or override locations were provided; the channel default KPN_VIRT applies.</div>
+          <div class="empty-state" id="overridesEmpty" style="display:block;padding:18px;color:#616161;text-align:center">No item-specific overrides are shown. If no item override exists, the configured default warehouse for that channel applies.</div>
           <div class="table-footer"><span>Rows: <strong id="overrideFooterCount">0</strong></span><span>Select an override to edit its dedicated inventory location.</span></div>
         </section>
         <form id="overrideForm" class="form-card" style="margin-top:14px" hidden>
           <div class="card-header"><span id="overrideFormTitle">Edit Item Location Override</span><small>Optional SAL.XX table</small></div>
           <section class="form-section"><div class="field-grid">
-            <label class="field"><span class="field-label">Sales Channel Code <span class="required">*</span></span><select class="field-select" name="channel" required><option>MDM_FR</option><option>MDM_FS</option><option>MDM_IT</option><option>MDM_DE</option><option>H24MP_</option><option>H24MP_AT_</option><option>H24MP_FR_</option><option>H24MP_NL_</option></select></label>
+            <label class="field"><span class="field-label">Sales Channel Code <span class="required">*</span></span><select class="field-select" name="channel" id="overrideChannelSelect" required><option value="" selected disabled>Select channel and country</option></select></label>
             <label class="field"><span class="field-label">Item No. <span class="required">*</span></span><input class="field-input" name="item" required maxlength="20" placeholder="Item number"></label>
             <label class="field"><span class="field-label">Location Code <span class="required">*</span></span><input class="field-input" name="location" required maxlength="10" placeholder="Dedicated warehouse"></label>
             <div class="field"><span class="field-label">Default Channel Location Code</span><div class="field-input" id="overrideDefaultLocation" style="display:flex;align-items:center;background:#f3f2f1">—</div></div>
@@ -324,12 +395,42 @@
     let selectedMarketplace = "";
     let toastTimer;
     const marketplaceProfiles = {
-      MDM: { platform: "Mirakl", connectionCode: "MDM shared connection", endpoint: "", token: "", codes: ["MDM_FR", "MDM_FS", "MDM_IT", "MDM_DE"] },
-      H24MP: { platform: "Other", connectionCode: "H24MP shared connection", endpoint: "", token: "", codes: ["H24MP_", "H24MP_AT_", "H24MP_FR_", "H24MP_NL_"] }
+      "MDM_CXL_": { platform: "Mirakl", connectionCode: "MDM_CXL_ shared connection", endpoint: "", token: "", codes: ["FR", "ES", "IT", "DE"], tone: "green" },
+      "MDM_COS_": { platform: "Mirakl", connectionCode: "MDM_COS_ shared connection", endpoint: "", token: "", codes: ["FR", "ES", "IT", "DE"], tone: "pink" },
+      "H24MP_": { platform: "Other", connectionCode: "H24MP_ shared connection", endpoint: "", token: "", codes: ["DE"], tone: "gray" },
+      "H24MP_AT_": { platform: "Other", connectionCode: "H24MP_AT_ shared connection", endpoint: "", token: "", codes: ["AT"], tone: "green" },
+      "H24MP_FR_": { platform: "Other", connectionCode: "H24MP_FR_ shared connection", endpoint: "", token: "", codes: ["FR"], tone: "green" },
+      "H24MP_NL_": { platform: "Other", connectionCode: "H24MP_NL_ shared connection", endpoint: "", token: "", codes: ["NL"], tone: "green" },
+      "XXL_": { platform: "Other", connectionCode: "XXL_ shared connection", endpoint: "", token: "", codes: ["DE"], tone: "gray" },
+      "XXL_AT_": { platform: "Other", connectionCode: "XXL_AT_ shared connection", endpoint: "", token: "", codes: ["AT"], tone: "green" },
+      "BRW_": { platform: "Other", connectionCode: "BRW_ shared connection", endpoint: "", token: "", codes: ["PL"], tone: "yellow" },
+      "CONF_": { platform: "Other", connectionCode: "CONF_ shared connection", endpoint: "", token: "", codes: ["FR"], tone: "blue" },
+      "RDC_": { platform: "Other", connectionCode: "RDC_ shared connection", endpoint: "", token: "", codes: ["FR"], tone: "blue" },
+      "BUT_": { platform: "Other", connectionCode: "BUT_ shared connection", endpoint: "", token: "", codes: ["FR"], tone: "cyan" },
+      "CAST_": { platform: "Other", connectionCode: "CAST_ shared connection", endpoint: "", token: "", codes: ["FR"], tone: "yellow" },
+      "VPMP_": { platform: "Other", connectionCode: "VPMP_ shared connection", endpoint: "", token: "", codes: ["FR", "BE-fr", "BE-nl", "NL", "IT", "ES", "DE"], tone: "pink", locations: { FR: "MAG-FR", "BE-fr": "MAG-BE", "BE-nl": "MAG-BE", NL: "MAG-NL", IT: "MAG-IT", ES: "MAG-ES", DE: "MAG-DE" } },
+      "SRP_MP_": { platform: "Other", connectionCode: "SRP_MP_ shared connection", endpoint: "", token: "", codes: ["FR", "BE-fr", "ES", "PT", "IT"], tone: "cream" },
+      "VU_FR": { platform: "Other", connectionCode: "VU_FR shared connection", endpoint: "", token: "", codes: ["FR"], tone: "sand" },
+      "VU_BE_": { platform: "Other", connectionCode: "VU_BE_ shared connection", endpoint: "", token: "", codes: ["BE-fr", "BE-nl"], tone: "sand" },
+      "VU_NL_": { platform: "Other", connectionCode: "VU_NL_ shared connection", endpoint: "", token: "", codes: ["NL"], tone: "sand" },
+      "VU_IT_": { platform: "Other", connectionCode: "VU_IT_ shared connection", endpoint: "", token: "", codes: ["IT"], tone: "sand" },
+      "VU_ES_": { platform: "Other", connectionCode: "VU_ES_ shared connection", endpoint: "", token: "", codes: ["ES"], tone: "sand" },
+      "VU_DE_": { platform: "Other", connectionCode: "VU_DE_ shared connection", endpoint: "", token: "", codes: ["DE"], tone: "sand" },
+      "VU_PT_": { platform: "Other", connectionCode: "VU_PT_ shared connection", endpoint: "", token: "", codes: ["PT"], tone: "sand" },
+      "VU_PL_": { platform: "Other", connectionCode: "VU_PL_ shared connection", endpoint: "", token: "", codes: ["PL"], tone: "sand" },
+      "MANO_": { platform: "Other", connectionCode: "MANO_ shared connection", endpoint: "", token: "", codes: ["FR"], tone: "pink" }
     };
     const marketSettings = Object.fromEntries(Object.entries(marketplaceProfiles).flatMap(([marketplace, profile]) =>
-      profile.codes.map((code) => [`${marketplace}:${code}`, { customer: "", series: "", marketKey: "", defaultLocation: "KPN_VIRT", shipmentMethod: "", stockLocation: "KPN_VIRT", prepayment: null, vat: null }])
+      profile.codes.map((code) => [`${marketplace}:${code}`, { customerB2C: "", customerB2B: "", series: "", marketKey: code, defaultLocation: profile.locations?.[code] || "KPN_VIRT", shipmentMethod: "", stockLocation: profile.locations?.[code] || "KPN_VIRT", prepayment: null, vat: null }])
     ));
+    Object.entries(marketplaceProfiles).forEach(([channelGroup, profile]) => {
+      profile.codes.forEach((country) => {
+        const option = document.createElement("option");
+        option.value = `${channelGroup}|${country}`;
+        option.textContent = `${channelGroup} · ${country}`;
+        document.getElementById("overrideChannelSelect").append(option);
+      });
+    });
 
     function notify(message) {
       toast.textContent = message;
@@ -399,7 +500,7 @@
         page.hidden = page.id !== pageId;
       });
       document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab.dataset.page === pageId));
-      document.getElementById("currentAction").textContent = pageId === "marketplaceSetupView" ? `${selectedMarketplace} customer mapping` : pageId === "overridesView" ? "Item-specific warehouse assignments" : "Marketplace setup";
+      document.getElementById("currentAction").textContent = pageId === "marketplaceSetupView" ? `${selectedMarketplace} customer mapping` : pageId === "overridesView" ? "Warehouse routing by channel" : "Marketplace setup";
     }
 
     function openOverride(row) {
@@ -416,7 +517,8 @@
     }
 
     function updateOverrideDefault() {
-      document.getElementById("overrideDefaultLocation").textContent = "KPN_VIRT";
+      const [channelGroup, country] = overrideForm.elements.channel.value.split("|");
+      document.getElementById("overrideDefaultLocation").textContent = marketSettings[`${channelGroup}:${country}`]?.defaultLocation || "—";
     }
 
     function filterOverrides() {
@@ -456,10 +558,12 @@
         row.tabIndex = 0;
         row.dataset.code = code;
         row.dataset.marketplace = marketplace;
-        row.dataset.customer = settings.customer;
+        row.classList.add(`market-tone-${profile.tone || "green"}`);
+        row.dataset.customerB2C = settings.customerB2C;
+        row.dataset.customerB2B = settings.customerB2B;
         row.dataset.series = settings.series;
-        row.dataset.marketKey = settings.marketKey;
-        const values = [code, profile.platform, profile.connectionCode, settings.customer || "Not configured", settings.series || "Not configured", settings.defaultLocation, settings.stockLocation];
+        row.dataset.marketKey = code;
+        const values = [marketplace, code, profile.platform, profile.connectionCode, settings.customerB2C || "Not configured", settings.customerB2B || "Not configured", settings.series || "Not configured", settings.defaultLocation];
         values.forEach((value, index) => {
           const cell = row.insertCell();
           if (index === 0) {
@@ -523,14 +627,15 @@
       selectedMdmMarket = row;
       row.classList.add("is-current");
       const profile = marketplaceProfiles[row.dataset.marketplace];
-      document.getElementById("mdmMarketCardTitle").textContent = row.dataset.code;
-      mdmMarketCard.elements.channelCode.value = row.dataset.code;
+      document.getElementById("mdmMarketCardTitle").textContent = `${row.dataset.marketplace}${row.dataset.code}`;
+      mdmMarketCard.elements.channelCode.value = row.dataset.marketplace;
       mdmMarketCard.elements.connectionCode.value = profile.connectionCode;
       mdmMarketCard.elements.platformType.value = profile.platform;
       mdmMarketCard.elements.sharedEndpointDisplay.value = profile.endpoint || "Not configured in shared connection";
       mdmMarketCard.elements.sharedTokenDisplay.value = profile.token ? "Configured in shared connection · hidden" : "Not configured in shared connection";
       mdmMarketCard.elements.marketKey.value = row.dataset.marketKey === "Not specified" ? "" : row.dataset.marketKey;
-      mdmMarketCard.elements.customerNo.value = row.dataset.customer;
+      mdmMarketCard.elements.customerNoB2C.value = row.dataset.customerB2C;
+      mdmMarketCard.elements.customerNoB2B.value = row.dataset.customerB2B;
       mdmMarketCard.elements.noSeries.value = row.dataset.series;
       const settings = marketSettings[`${row.dataset.marketplace}:${row.dataset.code}`];
       mdmMarketCard.elements.defaultLocation.value = settings.defaultLocation;
@@ -562,9 +667,11 @@
       const key = `${selectedMdmMarket.dataset.marketplace}:${selectedMdmMarket.dataset.code}`;
       const settings = marketSettings[key];
       selectedMdmMarket.dataset.marketKey = form.marketKey.value.trim() || "Not specified";
-      selectedMdmMarket.dataset.customer = form.customerNo.value.trim();
+      selectedMdmMarket.dataset.customerB2C = form.customerNoB2C.value.trim();
+      selectedMdmMarket.dataset.customerB2B = form.customerNoB2B.value.trim();
       selectedMdmMarket.dataset.series = form.noSeries.value.trim();
-      settings.customer = form.customerNo.value.trim();
+      settings.customerB2C = form.customerNoB2C.value.trim();
+      settings.customerB2B = form.customerNoB2B.value.trim();
       settings.series = form.noSeries.value.trim();
       settings.marketKey = form.marketKey.value.trim();
       settings.defaultLocation = form.defaultLocation.value.trim();
@@ -669,6 +776,7 @@
     overrideForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const channel = overrideForm.elements.channel.value;
+      const channelLabel = overrideForm.elements.channel.selectedOptions[0]?.textContent || channel;
       const item = overrideForm.elements.namedItem("item").value.trim();
       const location = overrideForm.elements.location.value.trim();
       const defaultLocation = document.getElementById("overrideDefaultLocation").textContent;
@@ -690,7 +798,7 @@
       row.dataset.item = item;
       row.dataset.location = location;
       row.dataset.default = defaultLocation;
-      row.cells[0].querySelector("button").textContent = channel;
+      row.cells[0].querySelector("button").textContent = channelLabel;
       row.cells[1].textContent = item;
       row.cells[2].textContent = location;
       row.cells[3].textContent = defaultLocation;
