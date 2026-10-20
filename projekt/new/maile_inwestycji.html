@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maile | Business Central</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --line: #d2d0ce;
+      --line-soft: #edebe9;
+      --line-strong: #8a8886;
+      --text: #323130;
+      --muted: #605e5c;
+      --link: #007681;
+      --accent: #00838f;
+      --accent-dark: #006e78;
+      --shell: #282828;
+      --sel: #a6ebe6;
+      --sel-soft: #d6f3f1;
+      --focus: #00b7c3;
+      --font: "Segoe UI", "Segoe WP", Segoe, device-segoe, Tahoma, Helvetica, Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; }
+    button, input, textarea { font: inherit; }
+
+    .shell { height: 48px; display: flex; align-items: center; justify-content: space-between; padding: 0 0 0 16px; background: var(--shell); color: #fff; }
+    .shell-title { font-size: 16px; }
+    .shell-icons { display: flex; }
+    .shell-icons span { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; font-size: 16px; color: #fff; }
+    .shell-env { display: flex; align-items: center; gap: 8px; padding: 0 12px; font-size: 10px; line-height: 1.4; }
+    .shell-env b { display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: #d9d47a; color: #212121; font-size: 11px; }
+
+    .view[hidden] { display: none; }
+    .page { padding: 0 32px 32px; max-width: 1500px; }
+
+    .titlebar { display: flex; align-items: center; gap: 16px; padding: 16px 0 10px; }
+    .back { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: #cde8ea; color: var(--accent-dark); font-size: 20px; cursor: pointer; flex: none; }
+    .back:hover { background: #b6dde0; }
+    .titlebar h1 { margin: 0; font-size: 14px; font-weight: 400; color: var(--text); flex: 1; }
+    .titlebar .state { color: var(--muted); font-size: 13px; }
+
+    .cmdbar { display: flex; align-items: center; gap: 2px; min-height: 40px; padding: 0 0 0 4px; border-bottom: 1px solid var(--line-soft); }
+    .cmd { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border: 0; background: transparent; color: var(--text); font-size: 14px; cursor: pointer; border-radius: 2px; white-space: nowrap; }
+    .cmd:hover:not(:disabled) { background: #f3f2f1; }
+    .cmd:disabled { color: #a19f9d; cursor: default; }
+    .cmd .ic { color: var(--accent); font-size: 14px; }
+    .cmd:disabled .ic { color: #a19f9d; }
+    .cmdsep { width: 1px; height: 20px; background: var(--line); margin: 0 6px; }
+
+    .bigtitle { margin: 0; padding: 18px 0 12px; font-size: 20px; font-weight: 600; }
+    .sub { margin: 0 0 12px; color: var(--muted); font-size: 13px; }
+
+    table.grid { width: 100%; border-collapse: collapse; }
+    .grid th { padding: 10px 10px; border-bottom: 1px solid var(--line); background: #fff; color: var(--muted); font-size: 13px; font-weight: 400; text-align: left; white-space: nowrap; }
+    .grid td { padding: 10px 10px; border-bottom: 1px solid var(--line-soft); font-size: 14px; white-space: nowrap; }
+    .grid tbody tr { cursor: default; }
+    .grid tbody tr:hover td { background: #f3f2f1; }
+    .grid tbody tr.cur td { background: var(--sel); }
+    .grid td.link, .grid td a { color: var(--link); }
+    .grid td.empty { padding: 36px; text-align: center; color: var(--muted); white-space: normal; }
+    .grid td.num, .grid th.num { text-align: right; }
+    .grid .lnk { color: var(--link); text-decoration: none; cursor: pointer; }
+    .grid .lnk:hover { text-decoration: underline; }
+    .grid .warn { color: #a4262c; }
+
+    .card-title { margin: 0; padding: 14px 0 12px; font-size: 28px; font-weight: 400; }
+    .fast { margin-top: 10px; }
+    .fast-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 2px solid #323130; }
+    .fast-head b { font-size: 16px; font-weight: 600; }
+    .fast-head span { color: var(--link); font-size: 13px; }
+    .fields { padding: 14px 0 6px; }
+    .row { display: grid; grid-template-columns: 38% minmax(0, 1fr); align-items: center; min-height: 36px; }
+    .row .lbl { display: flex; align-items: center; gap: 8px; padding-right: 12px; color: var(--text); }
+    .row .lbl::after { content: ""; flex: 1; border-bottom: 1px dotted #a19f9d; }
+    .row .val { min-width: 0; }
+    .in { width: 100%; height: 32px; padding: 0 8px; border: 1px solid var(--line-strong); border-radius: 2px; background: #fff; color: var(--text); }
+    .in.ro { border-color: transparent; background: transparent; padding-left: 0; }
+    .in:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+    .dots { position: relative; }
+    .dots::after { content: "\22EF"; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+    .msg-wrap { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .msg-lbl { margin-bottom: 6px; color: var(--muted); font-size: 13px; }
+    .msg { width: 100%; min-height: 240px; padding: 10px 12px; border: 1px solid var(--line-strong); border-bottom: 0; background: #fff; white-space: pre-wrap; font-size: 14px; line-height: 1.45; }
+    .rte { display: flex; gap: 14px; align-items: center; padding: 8px 10px; border: 1px solid var(--line-strong); color: #605e5c; font-size: 13px; }
+    .rte b { font-weight: 700; } .rte i { font-style: italic; } .rte u { text-decoration: underline; }
+
+    .toast { position: fixed; left: 50%; top: 64px; transform: translateX(-50%); z-index: 80; max-width: 640px; padding: 10px 16px; border: 1px solid #c7e0f4; background: #eff6fc; color: #323130; box-shadow: 0 4px 12px rgba(0,0,0,.18); font-size: 13px; }
+    .toast[hidden] { display: none; }
+  </style>
+</head>
+<body>
+  <header class="shell">
+    <div class="shell-title">Dynamics 365 Business Central</div>
+    <div class="shell-icons">
+      <div class="shell-env"><b>TE ST</b><span>Środowisko:<br>LOPI_PL_STAGING</span></div>
+      <span>&#9906;</span><span>&#9993;</span><span>&#9881;</span><span>?</span><span>&#9786;</span>
+    </div>
+  </header>
+
+  <!-- 1. LISTA LIST: MAILE -->
+  <section class="view" data-view="menu">
+    <div class="page">
+      <div class="titlebar"><button class="back" type="button" data-back="none" aria-label="Wstecz" style="visibility:hidden">&#8592;</button><h1>Maile [NAV24 Niestandardowa strona]</h1></div>
+      <div class="cmdbar">
+        <button class="cmd" type="button" id="menuOpen"><span class="ic">&#9776;</span>Otwórz listę</button>
+      </div>
+      <h2 class="bigtitle">Maile</h2>
+      <table class="grid" id="menuGrid">
+        <thead><tr><th>Nazwa listy</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 2. LISTY MAILI -->
+  <section class="view" data-view="list" hidden>
+    <div class="page">
+      <div class="titlebar"><button class="back" type="button" data-back="menu" aria-label="Wstecz">&#8592;</button><h1 id="listWin"></h1></div>
+      <div class="cmdbar" id="listBar"></div>
+      <h2 class="bigtitle" id="listTitle"></h2>
+      <p class="sub" id="listSub"></p>
+      <table class="grid" id="listGrid"><thead></thead><tbody></tbody></table>
+    </div>
+  </section>
+
+  <!-- 3. KARTA MAILA -->
+  <section class="view" data-view="mail" hidden>
+    <div class="page">
+      <div class="titlebar"><button class="back" type="button" data-back="list" aria-label="Wstecz">&#8592;</button><h1>Szczegóły maila</h1><span class="state">Tylko do odczytu</span></div>
+      <div class="cmdbar" id="mailBar"></div>
+      <h2 class="card-title" id="mTitle"></h2>
+      <div class="fast">
+        <div class="fast-head"><b>Szczegóły adresu e-mail</b><span>Pokaż mniej</span></div>
+        <div class="fields">
+          <div class="row"><span class="lbl">Od</span><div class="val"><input class="in ro" id="mFrom" readonly></div></div>
+          <div class="row"><span class="lbl">Do</span><div class="val dots"><input class="in" id="mTo" readonly></div></div>
+          <div class="row"><span class="lbl">DW</span><div class="val dots"><input class="in" id="mCc" readonly></div></div>
+          <div class="row"><span class="lbl">Temat</span><div class="val"><input class="in" id="mSubject" readonly></div></div>
+          <div class="row"><span class="lbl">Data maila</span><div class="val"><input class="in ro" id="mDate" readonly></div></div>
+          <div class="row"><span class="lbl">Godzina maila</span><div class="val"><input class="in ro" id="mTime" readonly></div></div>
+          <div class="row"><span class="lbl">Nr inwestycji</span><div class="val"><input class="in ro" id="mInv" readonly></div></div>
+          <div class="row"><span class="lbl">ID wiadomości</span><div class="val"><input class="in ro" id="mId" readonly></div></div>
+        </div>
+      </div>
+      <div class="msg-wrap">
+        <div class="msg-lbl">Wiadomość</div>
+        <div class="msg" id="mBody"></div>
+        <div class="rte"><span>A</span><b>B</b><i>I</i><u>U</u><span>&#8801;</span><span>&#8801;</span><span>&#10077;</span><span>&#9776;</span><span>&#9783;</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. LISTA INWESTYCJI (wybór) -->
+  <section class="view" data-view="inv" hidden>
+    <div class="page">
+      <div class="titlebar"><button class="back" type="button" data-back="list" aria-label="Wstecz">&#8592;</button><h1>Inwestycje [NAV24 Niestandardowa strona]</h1></div>
+      <div class="cmdbar">
+        <button class="cmd" type="button" id="invPick"><span class="ic">&#10003;</span>Wybierz inwestycję</button>
+        <span class="cmdsep"></span>
+        <button class="cmd" type="button" id="invCancel"><span class="ic">&#10005;</span>Anuluj</button>
+      </div>
+      <h2 class="bigtitle">Inwestycje</h2>
+      <p class="sub" id="invSub"></p>
+      <table class="grid" id="invGrid">
+        <thead><tr><th>Nr inwestycji</th><th>Nazwa inwestycji</th><th>Status</th><th>Nabywca</th><th>Handlowiec</th><th>Data utworzenia</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script>
+    var TODAY = new Date(2026, 9, 20);
+    var DAYS = 14;
+
+    var investments = [
+      { no: "INW-000123", name: "Budowa hali Bielsko", status: "W realizacji", cust: "Bielsko Logistics Sp. z o.o.", sales: "Jan Kowalski", created: "07.01.2026" },
+      { no: "INW-000124", name: "Modernizacja magazynu Kraków", status: "Nowa", cust: "Krak-Mag Sp. z o.o.", sales: "Anna Nowak", created: "14.01.2026" },
+      { no: "INW-000125", name: "Rozbudowa centrum logistycznego Poznań", status: "Zamknięta", cust: "Logistic Center SA", sales: "Piotr Wiśniewski", created: "01.09.2025" }
+    ];
+
+    function mk(id, from, to, cc, subject, date, time, inv, body, state) {
+      return { id: id, from: from, to: to, cc: cc, subject: subject, date: date, time: time, inv: inv, body: body, state: state, msgId: "AAMkAD" + id.toUpperCase() + "k3Q" + (1000 + id.length * 37) };
+    }
+    var mails = [
+      mk("u1", "biuro@bielsko-logistics.pl", "zakupy@lopi.pl", "", "Pytanie o harmonogram dostaw", "2026-10-19", "08:42", "", "Dzień dobry,\n\nprosimy o potwierdzenie terminu dostawy pierwszej partii. Czy możemy liczyć na początek listopada?\n\nPozdrawiam\nBiuro Bielsko Logistics", "unassigned"),
+      mk("u2", "k.nowak@krak-mag.pl", "sprzedaz@lopi.pl", "a.zielinska@krak-mag.pl", "Zapytanie o zmianę zakresu", "2026-10-17", "14:05", "", "Witam,\n\nchcielibyśmy dodać do zakresu dodatkową strefę przeładunkową. Proszę o kontakt.\n\nK. Nowak", "unassigned"),
+      mk("u3", "dostawca@stal-plus.pl", "zakupy@lopi.pl", "", "Nowa oferta cenowa na konstrukcje", "2026-10-09", "10:20", "", "W załączeniu przesyłamy aktualną ofertę cenową na konstrukcje stalowe.\n\nStal Plus", "unassigned"),
+      mk("u4", "info@logistic-center.pl", "serwis@lopi.pl", "", "Reklamacja dostawy", "2026-10-07", "16:30", "", "Informujemy o uszkodzeniu części dostawy. Zdjęcia w następnej wiadomości.\n\nLogistic Center", "unassigned"),
+      mk("a1", "biuro@bielsko-logistics.pl", "sprzedaz@lopi.pl", "zakupy@lopi.pl", "RE: Oferta sprzedaży OS-00045 [INW-000123]", "2026-10-16", "09:15", "INW-000123", "Dziękujemy za ofertę. Prosimy o korektę pozycji 3 i ponowną wysyłkę.\n\nBiuro Bielsko Logistics", "assigned"),
+      mk("a2", "m.wojcik@bielsko-logistics.pl", "zakupy@lopi.pl", "", "Zamówienie ZS-00112 [INW-000123] - potwierdzenie", "2026-10-14", "11:50", "INW-000123", "Potwierdzamy otrzymanie zamówienia. Termin realizacji zgodny z uzgodnieniami.\n\nM. Wójcik", "assigned"),
+      mk("a3", "k.nowak@krak-mag.pl", "sprzedaz@lopi.pl", "", "Pro forma PF-00031 [INW-000124]", "2026-10-15", "13:10", "INW-000124", "Prosimy o przesłanie pro formy w wersji w EUR.\n\nK. Nowak", "assigned"),
+      mk("r1", "info@logistic-center.pl", "sprzedaz@lopi.pl", "", "Faktura korygująca FK-00012 [INW-000125]", "2026-08-12", "12:00", "INW-000125", "Prosimy o potwierdzenie przyjęcia faktury korygującej.\n\nLogistic Center", "archAssigned"),
+      mk("r2", "info@logistic-center.pl", "serwis@lopi.pl", "", "Zamówienie zakupu ZZ-00203 [INW-000125]", "2026-07-30", "09:00", "INW-000125", "Potwierdzamy zamówienie materiałów.\n\nLogistic Center", "archAssigned"),
+      mk("x1", "newsletter@targi-logistyczne.pl", "biuro@lopi.pl", "", "Zaproszenie na targi logistyczne", "2026-09-01", "07:30", "", "Zapraszamy do udziału w targach logistycznych.\n\nOrganizator", "archUnassigned"),
+      mk("x2", "kontakt@nieznany-klient.pl", "sprzedaz@lopi.pl", "", "Zapytanie ofertowe", "2026-08-20", "10:10", "", "Prosimy o wycenę magazynu 2000 m2.\n\nNieznany klient", "archUnassigned")
+    ];
+
+    var LISTS = {
+      unassigned: { name: "Nieprzypisane maile", desc: "Maile oczekujące na przypisanie do inwestycji. Po upływie ustalonej liczby dni trafią do archiwum nieprzypisanych.", actions: ["open", "assign", "toArchive"], cols: ["Data maila", "Godzina maila", "Email nadawcy", "Temat", "Nr inwestycji"] },
+      assigned: { name: "Maile przypisane do inwestycji", desc: "Maile przypisane do inwestycji w realizacji.", actions: ["open", "release"], cols: ["Data maila", "Godzina maila", "Email nadawcy", "Temat", "Nr inwestycji"] },
+      archAssigned: { name: "Archiwum przypisanych maili", desc: "Maile zakończonych inwestycji.", actions: ["open", "release"], cols: ["Data maila", "Godzina maila", "Email nadawcy", "Temat", "Nr inwestycji"] },
+      archUnassigned: { name: "Archiwum nieprzypisanych maili", desc: "Maile, które nie zostały przypisane do inwestycji w wyznaczonym czasie.", actions: ["open", "assign"], cols: ["Data maila", "Godzina maila", "Email nadawcy", "Temat"] }
+    };
+    var ACT = {
+      open: { t: "Otwórz mail", i: "\u2709" },
+      assign: { t: "Przypisz do inwestycji", i: "\u2692" },
+      toArchive: { t: "Przenieś do archiwum nieprzypisanych", i: "\u21E9" },
+      release: { t: "Odpisz z inwestycji", i: "\u21BA" }
+    };
+
+    var cur = { list: "unassigned", selMail: null, openMail: null, invSel: null, assignMail: null, menuSel: "unassigned" };
+
+    function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+    function fd(iso) { var p = iso.split("-"); return p[2] + "." + p[1] + "." + p[0]; }
+    function age(iso) { var p = iso.split("-"); return Math.round((TODAY - new Date(+p[0], +p[1] - 1, +p[2])) / 86400000); }
+    function inState(st) { return mails.filter(function (x) { return x.state === st; }).sort(function (a, b) { return (b.date + b.time).localeCompare(a.date + a.time); }); }
+    function byId(id) { return mails.filter(function (x) { return x.id === id; })[0]; }
+    function invBy(no) { return investments.filter(function (x) { return x.no === no; })[0]; }
+    function toast(t) { var el = document.getElementById("toast"); el.textContent = t; el.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(function () { el.hidden = true; }, 3500); }
+
+    var navStack = [];
+    function show(name, push) {
+      var now = document.querySelector(".view:not([hidden])");
+      if (push !== false && now) navStack.push(now.dataset.view);
+      document.querySelectorAll(".view").forEach(function (v) { v.hidden = v.dataset.view !== name; });
+      window.scrollTo(0, 0);
+    }
+    function goBack() { var p = navStack.pop() || "menu"; show(p, false); renderCurrent(); }
+    function renderCurrent() {
+      var v = document.querySelector(".view:not([hidden])").dataset.view;
+      if (v === "menu") renderMenu(); if (v === "list") renderList(); if (v === "inv") renderInv();
+    }
+    document.querySelectorAll("[data-back]").forEach(function (b) { b.addEventListener("click", goBack); });
+
+    // ---- menu
+    function renderMenu() {
+      var tb = document.querySelector("#menuGrid tbody");
+      tb.innerHTML = Object.keys(LISTS).map(function (k) {
+        return '<tr data-k="' + k + '"' + (cur.menuSel === k ? ' class="cur"' : "") + '><td><a class="lnk">' + esc(LISTS[k].name) + "</a></td></tr>";
+      }).join("");
+      tb.querySelectorAll("tr").forEach(function (tr) {
+        tr.addEventListener("click", function () { cur.menuSel = tr.dataset.k; renderMenu(); });
+        tr.addEventListener("dblclick", function () { openList(tr.dataset.k); });
+        tr.querySelector("a").addEventListener("click", function (e) { e.stopPropagation(); cur.menuSel = tr.dataset.k; openList(tr.dataset.k); });
+      });
+    }
+    document.getElementById("menuOpen").addEventListener("click", function () { openList(cur.menuSel); });
+
+    // ---- lista maili
+    function openList(k) { cur.list = k; cur.selMail = null; show("list"); renderList(); }
+    function renderList() {
+      var L = LISTS[cur.list], rows = inState(cur.list);
+      if (!rows.some(function (r) { return r.id === cur.selMail; })) cur.selMail = rows.length ? rows[0].id : null;
+      document.getElementById("listWin").textContent = L.name + " [NAV24 Niestandardowa strona]";
+      document.getElementById("listTitle").textContent = L.name;
+      document.getElementById("listSub").textContent = L.desc;
+
+      var bar = document.getElementById("listBar"); bar.innerHTML = "";
+      L.actions.forEach(function (a, i) {
+        var b = document.createElement("button"); b.type = "button"; b.className = "cmd"; b.disabled = !cur.selMail;
+        b.innerHTML = '<span class="ic">' + ACT[a].i + "</span>" + ACT[a].t;
+        b.addEventListener("click", function () { doAction(a, cur.selMail, "list"); });
+        bar.appendChild(b);
+        if (i === 0) { var s = document.createElement("span"); s.className = "cmdsep"; bar.appendChild(s); }
+      });
+
+      var th = document.querySelector("#listGrid thead");
+      th.innerHTML = "<tr>" + L.cols.map(function (c) { return "<th>" + c + "</th>"; }).join("") + (cur.list === "unassigned" ? "<th class=\"num\">Dni do archiwizacji</th>" : "") + "</tr>";
+      var tb = document.querySelector("#listGrid tbody");
+      var n = L.cols.length + (cur.list === "unassigned" ? 1 : 0);
+      tb.innerHTML = rows.length ? rows.map(function (x) {
+        var cells = [fd(x.date), x.time, x.from, x.subject];
+        if (L.cols.length === 5) cells.push(x.inv || "");
+        var html = cells.map(function (c, i) { return "<td" + (i === 3 ? ' class="link"' : "") + ">" + esc(c) + "</td>"; }).join("");
+        if (cur.list === "unassigned") { var left = DAYS - age(x.date); html += '<td class="num' + (left <= 3 ? " warn" : "") + '">' + Math.max(left, 0) + "</td>"; }
+        return '<tr data-id="' + x.id + '"' + (cur.selMail === x.id ? ' class="cur"' : "") + ">" + html + "</tr>";
+      }).join("") : '<tr><td class="empty" colspan="' + n + '">Brak maili na tej liście.</td></tr>';
+      tb.querySelectorAll("tr[data-id]").forEach(function (tr) {
+        tr.addEventListener("click", function () { cur.selMail = tr.dataset.id; renderList(); });
+        tr.addEventListener("dblclick", function () { cur.selMail = tr.dataset.id; doAction("open", tr.dataset.id, "list"); });
+      });
+    }
+
+    function doAction(a, id, from) {
+      if (!id) return;
+      var x = byId(id);
+      if (a === "open") openMailCard(id);
+      if (a === "assign") { cur.assignMail = id; cur.invSel = null; show("inv"); renderInv(); }
+      if (a === "toArchive") { x.state = "archUnassigned"; toast("Mail przeniesiony do archiwum nieprzypisanych maili."); if (from === "mail") goBack(); renderCurrent(); }
+      if (a === "release") { x.state = "unassigned"; x.inv = ""; toast("Mail odpisany z inwestycji i wrócił do nieprzypisanych maili. Można zmienić mu przypisanie."); if (from === "mail") goBack(); renderCurrent(); }
+    }
+
+    // ---- karta maila
+    function openMailCard(id) {
+      var x = byId(id); cur.openMail = id;
+      document.getElementById("mTitle").textContent = x.subject;
+      document.getElementById("mFrom").value = x.from;
+      document.getElementById("mTo").value = x.to;
+      document.getElementById("mCc").value = x.cc;
+      document.getElementById("mSubject").value = x.subject;
+      document.getElementById("mDate").value = fd(x.date);
+      document.getElementById("mTime").value = x.time;
+      document.getElementById("mInv").value = x.inv;
+      document.getElementById("mId").value = x.msgId;
+      document.getElementById("mBody").textContent = x.body;
+      var bar = document.getElementById("mailBar"); bar.innerHTML = "";
+      var acts = x.state === "unassigned" ? ["assign", "toArchive"] : x.state === "archUnassigned" ? ["assign"] : ["release"];
+      acts.forEach(function (a) {
+        var b = document.createElement("button"); b.type = "button"; b.className = "cmd";
+        b.innerHTML = '<span class="ic">' + ACT[a].i + "</span>" + ACT[a].t;
+        b.addEventListener("click", function () { doAction(a, id, "mail"); });
+        bar.appendChild(b);
+      });
+      show("mail");
+    }
+
+    // ---- lista inwestycji (wybor)
+    function renderInv() {
+      var x = byId(cur.assignMail);
+      document.getElementById("invSub").textContent = x ? "Wybierz inwestycję dla maila: " + x.subject : "";
+      var tb = document.querySelector("#invGrid tbody");
+      if (!cur.invSel) cur.invSel = investments[0].no;
+      tb.innerHTML = investments.map(function (i) {
+        return '<tr data-no="' + i.no + '"' + (cur.invSel === i.no ? ' class="cur"' : "") + "><td class=\"link\">" + i.no + "</td><td>" + esc(i.name) + "</td><td>" + esc(i.status) + "</td><td>" + esc(i.cust) + "</td><td>" + esc(i.sales) + "</td><td>" + i.created + "</td></tr>";
+      }).join("");
+      tb.querySelectorAll("tr").forEach(function (tr) {
+        tr.addEventListener("click", function () { cur.invSel = tr.dataset.no; renderInv(); });
+        tr.addEventListener("dblclick", function () { cur.invSel = tr.dataset.no; pickInv(); });
+      });
+    }
+    function pickInv() {
+      var x = byId(cur.assignMail), i = invBy(cur.invSel); if (!x || !i) return;
+      x.inv = i.no; x.state = i.status === "Zamknięta" ? "archAssigned" : "assigned";
+      toast("Mail przypisany do inwestycji " + i.no + (x.state === "archAssigned" ? " (zamknięta, trafił do archiwum przypisanych maili)." : "."));
+      show("list", false); navStack = ["menu"]; renderList();
+    }
+    document.getElementById("invPick").addEventListener("click", pickInv);
+    document.getElementById("invCancel").addEventListener("click", goBack);
+
+    renderMenu();
+  </script>
+</body>
+</html>
