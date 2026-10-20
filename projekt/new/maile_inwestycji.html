@@ -6,9 +6,10 @@
   <title>Maile | Business Central</title>
   <style>
     :root {
-      --bg: #ffffff;
+      --bg: #f5f6f7;
+      --white: #ffffff;
       --line: #d2d0ce;
-      --line-soft: #edebe9;
+      --line-soft: #e6e6e6;
       --line-strong: #8a8886;
       --text: #323130;
       --muted: #605e5c;
@@ -17,157 +18,244 @@
       --accent-dark: #006e78;
       --shell: #282828;
       --sel: #a6ebe6;
-      --sel-soft: #d6f3f1;
-      --focus: #00b7c3;
       --font: "Segoe UI", "Segoe WP", Segoe, device-segoe, Tahoma, Helvetica, Arial, sans-serif;
     }
     * { box-sizing: border-box; }
     html, body { height: 100%; }
-    body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; }
-    button, input, textarea { font: inherit; }
+    body { margin: 0; background: var(--white); color: var(--text); font-family: var(--font); font-size: 14px; }
+    button, input, textarea, select { font: inherit; }
+    svg.i { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 
     .shell { height: 48px; display: flex; align-items: center; justify-content: space-between; padding: 0 0 0 16px; background: var(--shell); color: #fff; }
     .shell-title { font-size: 16px; }
-    .shell-icons { display: flex; }
-    .shell-icons span { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; font-size: 16px; color: #fff; }
+    .shell-right { display: flex; align-items: center; }
     .shell-env { display: flex; align-items: center; gap: 8px; padding: 0 12px; font-size: 10px; line-height: 1.4; }
     .shell-env b { display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: #d9d47a; color: #212121; font-size: 11px; }
+    .shell-right .sic { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; }
 
     .view[hidden] { display: none; }
-    .page { padding: 0 32px 32px; max-width: 1500px; }
+    .view { min-height: calc(100vh - 48px); background: var(--bg); }
 
-    .titlebar { display: flex; align-items: center; gap: 16px; padding: 16px 0 10px; }
-    .back { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: #cde8ea; color: var(--accent-dark); font-size: 20px; cursor: pointer; flex: none; }
+    .titlebar { display: flex; align-items: center; gap: 16px; padding: 12px 24px 10px 12px; background: var(--white); }
+    .back { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: #cde8ea; color: #333; cursor: pointer; flex: none; }
     .back:hover { background: #b6dde0; }
-    .titlebar h1 { margin: 0; font-size: 14px; font-weight: 400; color: var(--text); flex: 1; }
-    .titlebar .state { color: var(--muted); font-size: 13px; }
+    .back svg { width: 20px; height: 20px; stroke-width: 1.5; }
+    .titlebar h1 { margin: 0; font-size: 14px; font-weight: 400; flex: 1; color: var(--muted); }
+    .tricons { display: flex; gap: 18px; color: var(--accent); }
+    .tricons svg { width: 18px; height: 18px; }
+    .tricons span { cursor: default; display: flex; }
 
-    .cmdbar { display: flex; align-items: center; gap: 2px; min-height: 40px; padding: 0 0 0 4px; border-bottom: 1px solid var(--line-soft); }
-    .cmd { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border: 0; background: transparent; color: var(--text); font-size: 14px; cursor: pointer; border-radius: 2px; white-space: nowrap; }
+    .cmdbar { display: flex; align-items: center; min-height: 44px; padding: 0 24px 0 56px; background: var(--white); border-bottom: 1px solid var(--line); gap: 2px; }
+    .cmd { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 10px; border: 0; background: transparent; color: var(--text); font-size: 14px; cursor: pointer; border-radius: 2px; white-space: nowrap; }
     .cmd:hover:not(:disabled) { background: #f3f2f1; }
     .cmd:disabled { color: #a19f9d; cursor: default; }
-    .cmd .ic { color: var(--accent); font-size: 14px; }
-    .cmd:disabled .ic { color: #a19f9d; }
-    .cmdsep { width: 1px; height: 20px; background: var(--line); margin: 0 6px; }
+    .cmd svg { color: var(--accent); }
+    .cmd:disabled svg { color: #a19f9d; }
+    .cmd.ico { padding: 0 8px; }
+    .cmd.ico svg { color: var(--text); }
+    .cmd.on { background: #e1f0f1; }
+    .cmd.tab { font-weight: 400; }
+    .cmdsep { width: 1px; height: 22px; background: var(--line); margin: 0 8px; }
+    .cmdspace { flex: 1; }
+    .menu { position: relative; }
+    .dd { position: absolute; top: 34px; left: 0; z-index: 30; min-width: 200px; padding: 4px 0; background: #fff; border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(0,0,0,.18); }
+    .dd[hidden] { display: none; }
+    .dd button { display: block; width: 100%; padding: 8px 14px; border: 0; background: transparent; text-align: left; cursor: pointer; }
+    .dd button:hover { background: #f3f2f1; }
 
-    .bigtitle { margin: 0; padding: 18px 0 12px; font-size: 20px; font-weight: 600; }
-    .sub { margin: 0 0 12px; color: var(--muted); font-size: 13px; }
+    .strip { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 24px 10px 56px; background: #fff; border-bottom: 1px solid var(--line); }
+    .strip[hidden] { display: none; }
+    .strip label { color: var(--muted); font-size: 12px; }
+    .strip .in { width: 200px; }
+
+    .body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 0; padding: 12px 24px 24px 56px; align-items: start; }
+    .body.single { grid-template-columns: minmax(0, 1fr); }
+    .listwrap { min-width: 0; padding-right: 12px; }
+    .bigtitle { margin: 0; padding: 6px 0 4px; font-size: 20px; font-weight: 600; }
+    .sub { margin: 0 0 10px; color: var(--muted); font-size: 13px; }
 
     table.grid { width: 100%; border-collapse: collapse; }
-    .grid th { padding: 10px 10px; border-bottom: 1px solid var(--line); background: #fff; color: var(--muted); font-size: 13px; font-weight: 400; text-align: left; white-space: nowrap; }
+    .grid th { padding: 10px 10px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 13px; font-weight: 400; text-align: left; white-space: nowrap; }
     .grid td { padding: 10px 10px; border-bottom: 1px solid var(--line-soft); font-size: 14px; white-space: nowrap; }
-    .grid tbody tr { cursor: default; }
-    .grid tbody tr:hover td { background: #f3f2f1; }
+    .grid tbody tr:hover td { background: #ebecee; }
     .grid tbody tr.cur td { background: var(--sel); }
-    .grid td.link, .grid td a { color: var(--link); }
+    .grid td.link { color: var(--link); }
     .grid td.empty { padding: 36px; text-align: center; color: var(--muted); white-space: normal; }
-    .grid td.num, .grid th.num { text-align: right; }
-    .grid .lnk { color: var(--link); text-decoration: none; cursor: pointer; }
-    .grid .lnk:hover { text-decoration: underline; }
-    .grid .warn { color: #a4262c; }
+    .grid .num { text-align: right; }
+    .grid .warn { color: #a4262c; font-weight: 600; }
+    .grid a.lnk { color: var(--link); text-decoration: none; cursor: pointer; }
+    .grid a.lnk:hover { text-decoration: underline; }
+    .nc { display: inline-flex; align-items: center; gap: 3px; color: var(--accent); font-size: 12px; }
+    .nc svg { width: 14px; height: 14px; }
 
+    .factbox { background: #fff; border: 1px solid var(--line); border-radius: 6px; min-height: 420px; align-self: stretch; padding: 14px 16px; }
+    .fb-head { display: flex; align-items: center; gap: 10px; }
+    .fb-head b { font-size: 16px; font-weight: 600; }
+    .fb-plus { display: flex; border: 0; background: transparent; cursor: pointer; color: #333; padding: 2px; }
+    .fb-plus:hover { color: var(--accent); }
+    .fb-plus svg { width: 20px; height: 20px; }
+    .fb-sub { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+    .fb-empty { margin-top: 34px; text-align: center; color: var(--muted); font-size: 13px; }
+    .note { margin-top: 14px; padding: 10px 12px; border: 1px solid var(--line-soft); border-radius: 4px; background: #fafafa; }
+    .note .meta { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 4px; color: var(--muted); font-size: 11px; }
+    .note .txt { white-space: pre-wrap; font-size: 13px; line-height: 1.4; }
+    .note button { border: 0; background: transparent; color: var(--link); cursor: pointer; padding: 0; font-size: 11px; }
+    .note button:hover { text-decoration: underline; }
+    .newnote { margin-top: 14px; }
+    .newnote textarea { width: 100%; min-height: 84px; padding: 8px; border: 1px solid var(--line-strong); border-radius: 2px; resize: vertical; }
+    .newnote textarea:focus, .in:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+    .newnote .btns { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+    .btn { min-height: 30px; padding: 0 16px; border: 1px solid var(--line-strong); border-radius: 2px; background: #fff; cursor: pointer; }
+    .btn.primary { border-color: var(--accent); background: var(--accent); color: #fff; }
+    .btn:disabled { opacity: .5; cursor: default; }
+
+    .card { background: #fff; border: 1px solid var(--line-soft); padding: 4px 24px 20px; }
     .card-title { margin: 0; padding: 14px 0 12px; font-size: 28px; font-weight: 400; }
-    .fast { margin-top: 10px; }
     .fast-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 2px solid #323130; }
     .fast-head b { font-size: 16px; font-weight: 600; }
     .fast-head span { color: var(--link); font-size: 13px; }
     .fields { padding: 14px 0 6px; }
     .row { display: grid; grid-template-columns: 38% minmax(0, 1fr); align-items: center; min-height: 36px; }
-    .row .lbl { display: flex; align-items: center; gap: 8px; padding-right: 12px; color: var(--text); }
+    .row .lbl { display: flex; align-items: center; gap: 8px; padding-right: 12px; }
     .row .lbl::after { content: ""; flex: 1; border-bottom: 1px dotted #a19f9d; }
     .row .val { min-width: 0; }
     .in { width: 100%; height: 32px; padding: 0 8px; border: 1px solid var(--line-strong); border-radius: 2px; background: #fff; color: var(--text); }
     .in.ro { border-color: transparent; background: transparent; padding-left: 0; }
-    .in:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
-    .dots { position: relative; }
-    .dots::after { content: "\22EF"; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
     .msg-wrap { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
     .msg-lbl { margin-bottom: 6px; color: var(--muted); font-size: 13px; }
-    .msg { width: 100%; min-height: 240px; padding: 10px 12px; border: 1px solid var(--line-strong); border-bottom: 0; background: #fff; white-space: pre-wrap; font-size: 14px; line-height: 1.45; }
-    .rte { display: flex; gap: 14px; align-items: center; padding: 8px 10px; border: 1px solid var(--line-strong); color: #605e5c; font-size: 13px; }
-    .rte b { font-weight: 700; } .rte i { font-style: italic; } .rte u { text-decoration: underline; }
+    .msg { min-height: 220px; padding: 10px 12px; border: 1px solid var(--line-strong); border-bottom: 0; white-space: pre-wrap; line-height: 1.45; }
+    .rte { display: flex; gap: 14px; padding: 8px 10px; border: 1px solid var(--line-strong); color: #605e5c; font-size: 13px; }
 
-    .toast { position: fixed; left: 50%; top: 64px; transform: translateX(-50%); z-index: 80; max-width: 640px; padding: 10px 16px; border: 1px solid #c7e0f4; background: #eff6fc; color: #323130; box-shadow: 0 4px 12px rgba(0,0,0,.18); font-size: 13px; }
+    .toast { position: fixed; left: 50%; top: 64px; transform: translateX(-50%); z-index: 80; max-width: 640px; padding: 10px 16px; border: 1px solid #c7e0f4; background: #eff6fc; box-shadow: 0 4px 12px rgba(0,0,0,.18); font-size: 13px; }
     .toast[hidden] { display: none; }
+    @media (max-width: 1000px) { .body { grid-template-columns: 1fr; padding-left: 16px; } .cmdbar, .strip { padding-left: 16px; } }
   </style>
 </head>
 <body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="M15 15l6 6"/></symbol>
+      <symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></symbol>
+      <symbol id="i-list" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" style="fill:currentColor;stroke:none"/><path d="M12 11v6M12 7.5v.5" style="stroke:#fff"/></symbol>
+      <symbol id="i-share" viewBox="0 0 24 24"><path d="M4 12v8h16v-8M12 15V3M7 8l5-5 5 5"/></symbol>
+      <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></symbol>
+      <symbol id="i-openwin" viewBox="0 0 24 24"><path d="M14 3h7v7M21 3l-9 9M19 14v7H5V5h7"/></symbol>
+      <symbol id="i-expand" viewBox="0 0 24 24"><path d="M14 3h7v7M21 3l-8 8M10 21H3v-7M3 21l8-8"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></symbol>
+      <symbol id="i-pers" viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 10h16M10 10v10"/></symbol>
+      <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3 6h18v12H3zM3 6l9 7 9-7"/></symbol>
+      <symbol id="i-assign" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.6 0l3-3a4 4 0 0 0-5.6-5.6l-1 1M14 10a4 4 0 0 0-5.6 0l-3 3a4 4 0 0 0 5.6 5.6l1-1"/></symbol>
+      <symbol id="i-archive" viewBox="0 0 24 24"><path d="M3 5h18v4H3zM5 9v10h14V9M10 13h4"/></symbol>
+      <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 8L4 13l5 5M4 13h9a5 5 0 0 0 0-10h-2"/></symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24"><path d="M4 8h10v10H4zM10 4h10v10"/></symbol>
+      <symbol id="i-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+      <symbol id="i-back" viewBox="0 0 24 24"><path d="M20 12H5M11 6l-6 6 6 6"/></symbol>
+      <symbol id="i-note" viewBox="0 0 24 24"><path d="M5 3h14v18H5zM9 8h6M9 12h6M9 16h4"/></symbol>
+    </defs>
+  </svg>
+
   <header class="shell">
     <div class="shell-title">Dynamics 365 Business Central</div>
-    <div class="shell-icons">
+    <div class="shell-right">
       <div class="shell-env"><b>TE ST</b><span>Środowisko:<br>LOPI_PL_STAGING</span></div>
-      <span>&#9906;</span><span>&#9993;</span><span>&#9881;</span><span>?</span><span>&#9786;</span>
+      <span class="sic"><svg class="i"><use href="#i-search"/></svg></span>
+      <span class="sic"><svg class="i"><use href="#i-mail"/></svg></span>
+      <span class="sic"><svg class="i"><use href="#i-pers"/></svg></span>
+      <span class="sic"><svg class="i"><use href="#i-info"/></svg></span>
     </div>
   </header>
 
-  <!-- 1. LISTA LIST: MAILE -->
+  <!-- MENU -->
   <section class="view" data-view="menu">
-    <div class="page">
-      <div class="titlebar"><button class="back" type="button" data-back="none" aria-label="Wstecz" style="visibility:hidden">&#8592;</button><h1>Maile [NAV24 Niestandardowa strona]</h1></div>
-      <div class="cmdbar">
-        <button class="cmd" type="button" id="menuOpen"><span class="ic">&#9776;</span>Otwórz listę</button>
+    <div class="titlebar"><button class="back" type="button" style="visibility:hidden"><svg class="i"><use href="#i-back"/></svg></button><h1>Maile [NAV24 Niestandardowa strona]</h1><div class="tricons" data-icons></div></div>
+    <div class="cmdbar">
+      <button class="cmd ico" type="button" title="Szukaj"><svg class="i"><use href="#i-search"/></svg></button>
+      <span class="cmdsep"></span>
+      <button class="cmd tab" type="button">Zarządzaj</button>
+      <button class="cmd" type="button" id="menuOpen"><svg class="i"><use href="#i-list"/></svg>Otwórz listę</button>
+    </div>
+    <div class="body single">
+      <div class="listwrap">
+        <h2 class="bigtitle">Maile</h2>
+        <table class="grid" id="menuGrid"><thead><tr><th>Nazwa listy</th><th class="num">Liczba maili</th></tr></thead><tbody></tbody></table>
       </div>
-      <h2 class="bigtitle">Maile</h2>
-      <table class="grid" id="menuGrid">
-        <thead><tr><th>Nazwa listy</th></tr></thead>
-        <tbody></tbody>
-      </table>
     </div>
   </section>
 
-  <!-- 2. LISTY MAILI -->
+  <!-- LISTA MAILI -->
   <section class="view" data-view="list" hidden>
-    <div class="page">
-      <div class="titlebar"><button class="back" type="button" data-back="menu" aria-label="Wstecz">&#8592;</button><h1 id="listWin"></h1></div>
-      <div class="cmdbar" id="listBar"></div>
-      <h2 class="bigtitle" id="listTitle"></h2>
-      <p class="sub" id="listSub"></p>
-      <table class="grid" id="listGrid"><thead></thead><tbody></tbody></table>
+    <div class="titlebar"><button class="back" type="button" data-back aria-label="Wstecz"><svg class="i"><use href="#i-back"/></svg></button><h1 id="listWin"></h1><div class="tricons" data-icons></div></div>
+    <div class="cmdbar" id="listBar"></div>
+    <div class="strip" id="searchStrip" hidden><label for="searchIn">Wyszukaj</label><input class="in" id="searchIn" placeholder="Nadawca, temat, nr inwestycji..."></div>
+    <div class="strip" id="filterStrip" hidden>
+      <label>Filtr:</label>
+      <input class="in" id="fFrom" placeholder="Email nadawcy">
+      <input class="in" id="fSubj" placeholder="Temat">
+      <input class="in" id="fInv" placeholder="Nr inwestycji">
+      <button class="btn" type="button" id="fClear">Wyczyść filtr</button>
+    </div>
+    <div class="body">
+      <div class="listwrap">
+        <h2 class="bigtitle" id="listTitle"></h2>
+        <p class="sub" id="listSub"></p>
+        <table class="grid" id="listGrid"><thead></thead><tbody></tbody></table>
+      </div>
+      <aside class="factbox" id="listNotes"></aside>
     </div>
   </section>
 
-  <!-- 3. KARTA MAILA -->
+  <!-- KARTA MAILA -->
   <section class="view" data-view="mail" hidden>
-    <div class="page">
-      <div class="titlebar"><button class="back" type="button" data-back="list" aria-label="Wstecz">&#8592;</button><h1>Szczegóły maila</h1><span class="state">Tylko do odczytu</span></div>
-      <div class="cmdbar" id="mailBar"></div>
-      <h2 class="card-title" id="mTitle"></h2>
-      <div class="fast">
-        <div class="fast-head"><b>Szczegóły adresu e-mail</b><span>Pokaż mniej</span></div>
-        <div class="fields">
-          <div class="row"><span class="lbl">Od</span><div class="val"><input class="in ro" id="mFrom" readonly></div></div>
-          <div class="row"><span class="lbl">Do</span><div class="val dots"><input class="in" id="mTo" readonly></div></div>
-          <div class="row"><span class="lbl">DW</span><div class="val dots"><input class="in" id="mCc" readonly></div></div>
-          <div class="row"><span class="lbl">Temat</span><div class="val"><input class="in" id="mSubject" readonly></div></div>
-          <div class="row"><span class="lbl">Data maila</span><div class="val"><input class="in ro" id="mDate" readonly></div></div>
-          <div class="row"><span class="lbl">Godzina maila</span><div class="val"><input class="in ro" id="mTime" readonly></div></div>
-          <div class="row"><span class="lbl">Nr inwestycji</span><div class="val"><input class="in ro" id="mInv" readonly></div></div>
-          <div class="row"><span class="lbl">ID wiadomości</span><div class="val"><input class="in ro" id="mId" readonly></div></div>
+    <div class="titlebar"><button class="back" type="button" data-back aria-label="Wstecz"><svg class="i"><use href="#i-back"/></svg></button><h1>Szczegóły maila</h1><div class="tricons" data-icons></div></div>
+    <div class="cmdbar" id="mailBar"></div>
+    <div class="body">
+      <div class="listwrap">
+        <div class="card">
+          <h2 class="card-title" id="mTitle"></h2>
+          <div class="fast-head"><b>Szczegóły adresu e-mail</b><span>Pokaż mniej</span></div>
+          <div class="fields">
+            <div class="row"><span class="lbl">Od</span><div class="val"><input class="in ro" id="mFrom" readonly></div></div>
+            <div class="row"><span class="lbl">Do</span><div class="val"><input class="in" id="mTo" readonly></div></div>
+            <div class="row"><span class="lbl">DW</span><div class="val"><input class="in" id="mCc" readonly></div></div>
+            <div class="row"><span class="lbl">Temat</span><div class="val"><input class="in" id="mSubject" readonly></div></div>
+            <div class="row"><span class="lbl">Data maila</span><div class="val"><input class="in ro" id="mDate" readonly></div></div>
+            <div class="row"><span class="lbl">Godzina maila</span><div class="val"><input class="in ro" id="mTime" readonly></div></div>
+            <div class="row"><span class="lbl">Nr inwestycji</span><div class="val"><input class="in ro" id="mInv" readonly></div></div>
+            <div class="row"><span class="lbl">ID wiadomości</span><div class="val"><input class="in ro" id="mId" readonly></div></div>
+          </div>
+          <div class="msg-wrap">
+            <div class="msg-lbl">Wiadomość</div>
+            <div class="msg" id="mBody"></div>
+            <div class="rte"><span>A</span><b>B</b><i>I</i><u>U</u><span>&#8801;</span><span>&#10077;</span></div>
+          </div>
         </div>
       </div>
-      <div class="msg-wrap">
-        <div class="msg-lbl">Wiadomość</div>
-        <div class="msg" id="mBody"></div>
-        <div class="rte"><span>A</span><b>B</b><i>I</i><u>U</u><span>&#8801;</span><span>&#8801;</span><span>&#10077;</span><span>&#9776;</span><span>&#9783;</span></div>
-      </div>
+      <aside class="factbox" id="mailNotes"></aside>
     </div>
   </section>
 
-  <!-- 4. LISTA INWESTYCJI (wybór) -->
+  <!-- LISTA INWESTYCJI -->
   <section class="view" data-view="inv" hidden>
-    <div class="page">
-      <div class="titlebar"><button class="back" type="button" data-back="list" aria-label="Wstecz">&#8592;</button><h1>Inwestycje [NAV24 Niestandardowa strona]</h1></div>
-      <div class="cmdbar">
-        <button class="cmd" type="button" id="invPick"><span class="ic">&#10003;</span>Wybierz inwestycję</button>
-        <span class="cmdsep"></span>
-        <button class="cmd" type="button" id="invCancel"><span class="ic">&#10005;</span>Anuluj</button>
+    <div class="titlebar"><button class="back" type="button" data-back aria-label="Wstecz"><svg class="i"><use href="#i-back"/></svg></button><h1>Inwestycje [NAV24 Niestandardowa strona]</h1><div class="tricons" data-icons></div></div>
+    <div class="cmdbar">
+      <button class="cmd ico" type="button" title="Szukaj"><svg class="i"><use href="#i-search"/></svg></button>
+      <span class="cmdsep"></span>
+      <button class="cmd tab" type="button">Zarządzaj</button>
+      <button class="cmd" type="button" id="invPick"><svg class="i"><use href="#i-check"/></svg>Wybierz inwestycję</button>
+      <button class="cmd" type="button" id="invCancel"><svg class="i"><use href="#i-close"/></svg>Anuluj</button>
+    </div>
+    <div class="body single">
+      <div class="listwrap">
+        <h2 class="bigtitle">Inwestycje</h2>
+        <p class="sub" id="invSub"></p>
+        <table class="grid" id="invGrid">
+          <thead><tr><th>Nr inwestycji</th><th>Nazwa inwestycji</th><th>Status</th><th>Nabywca</th><th>Handlowiec</th><th>Data utworzenia</th></tr></thead>
+          <tbody></tbody>
+        </table>
       </div>
-      <h2 class="bigtitle">Inwestycje</h2>
-      <p class="sub" id="invSub"></p>
-      <table class="grid" id="invGrid">
-        <thead><tr><th>Nr inwestycji</th><th>Nazwa inwestycji</th><th>Status</th><th>Nabywca</th><th>Handlowiec</th><th>Data utworzenia</th></tr></thead>
-        <tbody></tbody>
-      </table>
     </div>
   </section>
 
@@ -176,6 +264,7 @@
   <script>
     var TODAY = new Date(2026, 9, 20);
     var DAYS = 14;
+    var USER = "JKOW";
 
     var investments = [
       { no: "INW-000123", name: "Budowa hali Bielsko", status: "W realizacji", cust: "Bielsko Logistics Sp. z o.o.", sales: "Jan Kowalski", created: "07.01.2026" },
@@ -200,48 +289,60 @@
       mk("x2", "kontakt@nieznany-klient.pl", "sprzedaz@lopi.pl", "", "Zapytanie ofertowe", "2026-08-20", "10:10", "", "Prosimy o wycenę magazynu 2000 m2.\n\nNieznany klient", "archUnassigned")
     ];
 
+    var notes = {
+      u1: [{ u: "ANOW", d: "19.10.2026 09:10", t: "Klient dzwonił w tej sprawie. Sprawdzić z logistyką." }],
+      a1: [{ u: "JKOW", d: "16.10.2026 10:00", t: "Korekta pozycji 3 do uzgodnienia z działem sprzedaży." }]
+    };
+
     var LISTS = {
-      unassigned: { name: "Nieprzypisane maile", desc: "Maile oczekujące na przypisanie do inwestycji. Po upływie ustalonej liczby dni trafią do archiwum nieprzypisanych.", actions: ["open", "assign", "toArchive"], cols: ["Data maila", "Godzina maila", "Email nadawcy", "Temat", "Nr inwestycji"] },
-      assigned: { name: "Maile przypisane do inwestycji", desc: "Maile przypisane do inwestycji w realizacji.", actions: ["open", "release"], cols: ["Data maila", "Godzina maila", "Email nadawcy", "Temat", "Nr inwestycji"] },
-      archAssigned: { name: "Archiwum przypisanych maili", desc: "Maile zakończonych inwestycji.", actions: ["open", "release"], cols: ["Data maila", "Godzina maila", "Email nadawcy", "Temat", "Nr inwestycji"] },
-      archUnassigned: { name: "Archiwum nieprzypisanych maili", desc: "Maile, które nie zostały przypisane do inwestycji w wyznaczonym czasie.", actions: ["open", "assign"], cols: ["Data maila", "Godzina maila", "Email nadawcy", "Temat"] }
+      unassigned: { name: "Nieprzypisane maile", desc: "Maile oczekujące na przypisanie do inwestycji. Po upływie ustalonej liczby dni trafią do archiwum nieprzypisanych.", actions: ["open", "assign", "toArchive"], inv: true, days: true },
+      assigned: { name: "Maile przypisane do inwestycji", desc: "Maile przypisane do inwestycji w realizacji.", actions: ["open", "release"], inv: true },
+      archAssigned: { name: "Archiwum przypisanych maili", desc: "Maile zakończonych inwestycji.", actions: ["open", "release"], inv: true },
+      archUnassigned: { name: "Archiwum nieprzypisanych maili", desc: "Maile, które nie zostały przypisane do inwestycji w wyznaczonym czasie.", actions: ["open", "assign"], inv: false }
     };
     var ACT = {
-      open: { t: "Otwórz mail", i: "\u2709" },
-      assign: { t: "Przypisz do inwestycji", i: "\u2692" },
-      toArchive: { t: "Przenieś do archiwum nieprzypisanych", i: "\u21E9" },
-      release: { t: "Odpisz z inwestycji", i: "\u21BA" }
+      open: { t: "Otwórz mail", i: "i-mail" },
+      assign: { t: "Przypisz do inwestycji", i: "i-assign" },
+      toArchive: { t: "Przenieś do archiwum nieprzypisanych", i: "i-archive" },
+      release: { t: "Odpisz z inwestycji", i: "i-undo" }
     };
 
-    var cur = { list: "unassigned", selMail: null, openMail: null, invSel: null, assignMail: null, menuSel: "unassigned" };
+    var cur = { list: "unassigned", selMail: null, openMail: null, invSel: null, assignMail: null, menuSel: "unassigned", search: "", fFrom: "", fSubj: "", fInv: "", addingNote: null };
+    var navStack = [];
 
+    function ic(n) { return '<svg class="i"><use href="#' + n + '"/></svg>'; }
     function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
     function fd(iso) { var p = iso.split("-"); return p[2] + "." + p[1] + "." + p[0]; }
     function age(iso) { var p = iso.split("-"); return Math.round((TODAY - new Date(+p[0], +p[1] - 1, +p[2])) / 86400000); }
-    function inState(st) { return mails.filter(function (x) { return x.state === st; }).sort(function (a, b) { return (b.date + b.time).localeCompare(a.date + a.time); }); }
+    function stateRows(st) { return mails.filter(function (x) { return x.state === st; }).sort(function (a, b) { return (b.date + b.time).localeCompare(a.date + a.time); }); }
     function byId(id) { return mails.filter(function (x) { return x.id === id; })[0]; }
     function invBy(no) { return investments.filter(function (x) { return x.no === no; })[0]; }
     function toast(t) { var el = document.getElementById("toast"); el.textContent = t; el.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(function () { el.hidden = true; }, 3500); }
+    function nowStamp() { return "20.10.2026 " + ("0" + new Date().getHours()).slice(-2) + ":" + ("0" + new Date().getMinutes()).slice(-2); }
 
-    var navStack = [];
+    document.querySelectorAll("[data-icons]").forEach(function (h) {
+      h.innerHTML = '<span title="Zakładka">' + ic("i-bookmark") + '</span><span title="Otwórz w nowym oknie">' + ic("i-openwin") + '</span><span title="Rozwiń">' + ic("i-expand") + "</span>";
+    });
+
     function show(name, push) {
       var now = document.querySelector(".view:not([hidden])");
       if (push !== false && now) navStack.push(now.dataset.view);
       document.querySelectorAll(".view").forEach(function (v) { v.hidden = v.dataset.view !== name; });
       window.scrollTo(0, 0);
     }
-    function goBack() { var p = navStack.pop() || "menu"; show(p, false); renderCurrent(); }
+    function goBack() { var p = navStack.pop() || "menu"; show(p, false); cur.addingNote = null; renderCurrent(); }
     function renderCurrent() {
       var v = document.querySelector(".view:not([hidden])").dataset.view;
       if (v === "menu") renderMenu(); if (v === "list") renderList(); if (v === "inv") renderInv();
+      if (v === "mail") renderNotes("mailNotes", cur.openMail);
     }
     document.querySelectorAll("[data-back]").forEach(function (b) { b.addEventListener("click", goBack); });
 
-    // ---- menu
+    // ---------- MENU
     function renderMenu() {
       var tb = document.querySelector("#menuGrid tbody");
       tb.innerHTML = Object.keys(LISTS).map(function (k) {
-        return '<tr data-k="' + k + '"' + (cur.menuSel === k ? ' class="cur"' : "") + '><td><a class="lnk">' + esc(LISTS[k].name) + "</a></td></tr>";
+        return '<tr data-k="' + k + '"' + (cur.menuSel === k ? ' class="cur"' : "") + '><td><a class="lnk">' + esc(LISTS[k].name) + '</a></td><td class="num">' + stateRows(k).length + "</td></tr>";
       }).join("");
       tb.querySelectorAll("tr").forEach(function (tr) {
         tr.addEventListener("click", function () { cur.menuSel = tr.dataset.k; renderMenu(); });
@@ -251,39 +352,96 @@
     }
     document.getElementById("menuOpen").addEventListener("click", function () { openList(cur.menuSel); });
 
-    // ---- lista maili
-    function openList(k) { cur.list = k; cur.selMail = null; show("list"); renderList(); }
-    function renderList() {
-      var L = LISTS[cur.list], rows = inState(cur.list);
+    // ---------- LISTA MAILI
+    function openList(k) {
+      cur.list = k; cur.selMail = null; cur.search = ""; cur.fFrom = cur.fSubj = cur.fInv = ""; cur.addingNote = null;
+      ["searchIn", "fFrom", "fSubj", "fInv"].forEach(function (id) { document.getElementById(id).value = ""; });
+      document.getElementById("searchStrip").hidden = true; document.getElementById("filterStrip").hidden = true;
+      show("list"); renderList();
+    }
+    function visibleRows() {
+      var L = LISTS[cur.list], s = cur.search.toLowerCase();
+      return stateRows(cur.list).filter(function (x) {
+        var hay = (fd(x.date) + " " + x.time + " " + x.from + " " + x.subject + " " + x.inv).toLowerCase();
+        if (s && hay.indexOf(s) < 0) return false;
+        if (cur.fFrom && x.from.toLowerCase().indexOf(cur.fFrom.toLowerCase()) < 0) return false;
+        if (cur.fSubj && x.subject.toLowerCase().indexOf(cur.fSubj.toLowerCase()) < 0) return false;
+        if (cur.fInv && x.inv.toLowerCase().indexOf(cur.fInv.toLowerCase()) < 0) return false;
+        return true;
+      });
+    }
+    function buildBar(bar, actions, id, from) {
+      bar.innerHTML = "";
+      function add(html, cls, fn, dis, title) { var b = document.createElement("button"); b.type = "button"; b.className = "cmd " + (cls || ""); b.innerHTML = html; b.disabled = !!dis; if (title) b.title = title; if (fn) b.addEventListener("click", fn); bar.appendChild(b); return b; }
+      function sep() { var s = document.createElement("span"); s.className = "cmdsep"; bar.appendChild(s); }
+      if (from === "list") {
+        add(ic("i-grid") + ic("i-chev"), "ico", function () { toast("Makieta: Copilot / skróty."); }, false, "Skróty");
+        var sb = add(ic("i-search"), "ico", null, false, "Szukaj");
+        sb.id = "btnSearch"; sb.classList.toggle("on", !document.getElementById("searchStrip").hidden); sb.addEventListener("click", function () { var st = document.getElementById("searchStrip"); st.hidden = !st.hidden; sb.classList.toggle("on", !st.hidden); if (!st.hidden) document.getElementById("searchIn").focus(); });
+        add(ic("i-pers"), "ico", function () { toast("Makieta: personalizacja widoku."); }, false, "Personalizuj");
+        sep();
+      } else { sep(); }
+      add("Zarządzaj", "tab");
+      actions.forEach(function (a) { add(ic(ACT[a].i) + ACT[a].t, "", function () { doAction(a, id, from); }, !id); });
+      sep();
+      var wrap = document.createElement("span"); wrap.className = "menu";
+      var more = document.createElement("button"); more.type = "button"; more.className = "cmd"; more.textContent = "Więcej opcji";
+      var dd = document.createElement("div"); dd.className = "dd"; dd.hidden = true;
+      dd.innerHTML = '<button type="button" data-m="refresh">Odśwież</button><button type="button" data-m="clear">Wyczyść filtry</button>';
+      more.addEventListener("click", function (e) { e.stopPropagation(); dd.hidden = !dd.hidden; });
+      dd.addEventListener("click", function (e) { var m = e.target.dataset.m; dd.hidden = true; if (m === "refresh") { renderCurrent(); toast("Odświeżono."); } if (m === "clear") clearFilters(); });
+      wrap.appendChild(more); wrap.appendChild(dd); bar.appendChild(wrap);
+      var sp = document.createElement("span"); sp.className = "cmdspace"; bar.appendChild(sp);
+      if (from === "list") {
+        add(ic("i-share"), "ico", function () { toast("Makieta: udostępnianie."); }, false, "Udostępnij");
+        var fb = add(ic("i-filter"), "ico", null, false, "Filtr"); fb.id = "btnFilter"; fb.classList.toggle("on", !document.getElementById("filterStrip").hidden);
+        fb.addEventListener("click", function () { var st = document.getElementById("filterStrip"); st.hidden = !st.hidden; fb.classList.toggle("on", !st.hidden); });
+        add(ic("i-list"), "ico", function () { toast("Makieta: przełączenie widoku listy."); }, false, "Widok");
+        add(ic("i-info"), "ico", function () { toast(LISTS[cur.list].desc); }, false, "Informacje");
+      }
+    }
+    document.addEventListener("click", function () { document.querySelectorAll(".dd").forEach(function (d) { d.hidden = true; }); });
+
+    function clearFilters() {
+      cur.search = cur.fFrom = cur.fSubj = cur.fInv = "";
+      ["searchIn", "fFrom", "fSubj", "fInv"].forEach(function (id) { document.getElementById(id).value = ""; });
+      renderList();
+    }
+    document.getElementById("searchIn").addEventListener("input", function (e) { cur.search = e.target.value; renderList(true); });
+    document.getElementById("fFrom").addEventListener("input", function (e) { cur.fFrom = e.target.value; renderList(true); });
+    document.getElementById("fSubj").addEventListener("input", function (e) { cur.fSubj = e.target.value; renderList(true); });
+    document.getElementById("fInv").addEventListener("input", function (e) { cur.fInv = e.target.value; renderList(true); });
+    document.getElementById("fClear").addEventListener("click", clearFilters);
+
+    function renderList(keepBar) {
+      var L = LISTS[cur.list], rows = visibleRows();
       if (!rows.some(function (r) { return r.id === cur.selMail; })) cur.selMail = rows.length ? rows[0].id : null;
       document.getElementById("listWin").textContent = L.name + " [NAV24 Niestandardowa strona]";
       document.getElementById("listTitle").textContent = L.name;
       document.getElementById("listSub").textContent = L.desc;
+      var bar = document.getElementById("listBar");
+      if (!keepBar || !bar.children.length) buildBar(bar, L.actions, cur.selMail, "list");
+      else Array.prototype.forEach.call(bar.querySelectorAll(".cmd:not(.ico):not(.tab)"), function (b) { if (b.parentNode === bar && b.textContent.indexOf("Więcej") < 0) b.disabled = !cur.selMail; });
 
-      var bar = document.getElementById("listBar"); bar.innerHTML = "";
-      L.actions.forEach(function (a, i) {
-        var b = document.createElement("button"); b.type = "button"; b.className = "cmd"; b.disabled = !cur.selMail;
-        b.innerHTML = '<span class="ic">' + ACT[a].i + "</span>" + ACT[a].t;
-        b.addEventListener("click", function () { doAction(a, cur.selMail, "list"); });
-        bar.appendChild(b);
-        if (i === 0) { var s = document.createElement("span"); s.className = "cmdsep"; bar.appendChild(s); }
-      });
-
-      var th = document.querySelector("#listGrid thead");
-      th.innerHTML = "<tr>" + L.cols.map(function (c) { return "<th>" + c + "</th>"; }).join("") + (cur.list === "unassigned" ? "<th class=\"num\">Dni do archiwizacji</th>" : "") + "</tr>";
+      var heads = ["", "Data maila", "Godzina maila", "Email nadawcy", "Temat"].slice(1);
+      if (L.inv) heads.push("Nr inwestycji");
+      if (L.days) heads.push("Dni do archiwizacji");
+      heads.push("Notatki");
+      document.querySelector("#listGrid thead").innerHTML = "<tr>" + heads.map(function (h) { return "<th" + (h === "Dni do archiwizacji" ? ' class="num"' : "") + ">" + h + "</th>"; }).join("") + "</tr>";
       var tb = document.querySelector("#listGrid tbody");
-      var n = L.cols.length + (cur.list === "unassigned" ? 1 : 0);
       tb.innerHTML = rows.length ? rows.map(function (x) {
-        var cells = [fd(x.date), x.time, x.from, x.subject];
-        if (L.cols.length === 5) cells.push(x.inv || "");
-        var html = cells.map(function (c, i) { return "<td" + (i === 3 ? ' class="link"' : "") + ">" + esc(c) + "</td>"; }).join("");
-        if (cur.list === "unassigned") { var left = DAYS - age(x.date); html += '<td class="num' + (left <= 3 ? " warn" : "") + '">' + Math.max(left, 0) + "</td>"; }
-        return '<tr data-id="' + x.id + '"' + (cur.selMail === x.id ? ' class="cur"' : "") + ">" + html + "</tr>";
-      }).join("") : '<tr><td class="empty" colspan="' + n + '">Brak maili na tej liście.</td></tr>';
+        var h = "<td>" + fd(x.date) + "</td><td>" + x.time + "</td><td>" + esc(x.from) + '</td><td class="link">' + esc(x.subject) + "</td>";
+        if (L.inv) h += "<td>" + esc(x.inv) + "</td>";
+        if (L.days) { var left = DAYS - age(x.date); h += '<td class="num' + (left <= 3 ? " warn" : "") + '">' + Math.max(left, 0) + "</td>"; }
+        var n = (notes[x.id] || []).length;
+        h += "<td>" + (n ? '<span class="nc">' + ic("i-note") + n + "</span>" : "") + "</td>";
+        return '<tr data-id="' + x.id + '"' + (cur.selMail === x.id ? ' class="cur"' : "") + ">" + h + "</tr>";
+      }).join("") : '<tr><td class="empty" colspan="' + heads.length + '">(Brak danych do wyświetlenia w tym widoku)</td></tr>';
       tb.querySelectorAll("tr[data-id]").forEach(function (tr) {
-        tr.addEventListener("click", function () { cur.selMail = tr.dataset.id; renderList(); });
+        tr.addEventListener("click", function () { cur.selMail = tr.dataset.id; cur.addingNote = null; renderList(true); });
         tr.addEventListener("dblclick", function () { cur.selMail = tr.dataset.id; doAction("open", tr.dataset.id, "list"); });
       });
+      renderNotes("listNotes", cur.selMail);
     }
 
     function doAction(a, id, from) {
@@ -295,9 +453,38 @@
       if (a === "release") { x.state = "unassigned"; x.inv = ""; toast("Mail odpisany z inwestycji i wrócił do nieprzypisanych maili. Można zmienić mu przypisanie."); if (from === "mail") goBack(); renderCurrent(); }
     }
 
-    // ---- karta maila
+    // ---------- NOTATKI
+    function renderNotes(hostId, mailId) {
+      var host = document.getElementById(hostId), x = mailId ? byId(mailId) : null;
+      var list = (mailId && notes[mailId]) || [];
+      var html = '<div class="fb-head"><b>Notatki</b><button class="fb-plus" type="button" title="Dodaj notatkę"' + (x ? "" : " disabled") + ">" + ic("i-plus") + "</button></div>";
+      if (x) html += '<p class="fb-sub">Mail: ' + esc(x.subject) + "</p>";
+      if (cur.addingNote === hostId && x) {
+        html += '<div class="newnote"><textarea placeholder="Wpisz notatkę do tego maila..."></textarea><div class="btns"><button class="btn" type="button" data-n="cancel">Anuluj</button><button class="btn primary" type="button" data-n="save">Dodaj</button></div></div>';
+      }
+      if (!list.length && cur.addingNote !== hostId) html += '<div class="fb-empty">(Brak danych do wyświetlenia w tym widoku)</div>';
+      list.forEach(function (n, i) {
+        html += '<div class="note"><div class="meta"><span>' + esc(n.u) + " &middot; " + esc(n.d) + '</span><button type="button" data-del="' + i + '">Usuń</button></div><div class="txt">' + esc(n.t) + "</div></div>";
+      });
+      host.innerHTML = html;
+      var plus = host.querySelector(".fb-plus");
+      plus.addEventListener("click", function () { if (!x) return; cur.addingNote = hostId; renderNotes(hostId, mailId); var ta = host.querySelector("textarea"); if (ta) ta.focus(); });
+      var c = host.querySelector('[data-n="cancel"]'); if (c) c.addEventListener("click", function () { cur.addingNote = null; renderNotes(hostId, mailId); });
+      var s = host.querySelector('[data-n="save"]');
+      if (s) s.addEventListener("click", function () {
+        var t = host.querySelector("textarea").value.trim(); if (!t) { toast("Wpisz treść notatki."); return; }
+        (notes[mailId] = notes[mailId] || []).unshift({ u: USER, d: nowStamp(), t: t });
+        cur.addingNote = null; toast("Notatka dodana do maila."); renderNotes(hostId, mailId);
+        if (hostId === "listNotes") renderList(true);
+      });
+      host.querySelectorAll("[data-del]").forEach(function (b) {
+        b.addEventListener("click", function () { notes[mailId].splice(+b.dataset.del, 1); renderNotes(hostId, mailId); if (hostId === "listNotes") renderList(true); });
+      });
+    }
+
+    // ---------- KARTA MAILA
     function openMailCard(id) {
-      var x = byId(id); cur.openMail = id;
+      var x = byId(id); cur.openMail = id; cur.addingNote = null;
       document.getElementById("mTitle").textContent = x.subject;
       document.getElementById("mFrom").value = x.from;
       document.getElementById("mTo").value = x.to;
@@ -308,25 +495,19 @@
       document.getElementById("mInv").value = x.inv;
       document.getElementById("mId").value = x.msgId;
       document.getElementById("mBody").textContent = x.body;
-      var bar = document.getElementById("mailBar"); bar.innerHTML = "";
       var acts = x.state === "unassigned" ? ["assign", "toArchive"] : x.state === "archUnassigned" ? ["assign"] : ["release"];
-      acts.forEach(function (a) {
-        var b = document.createElement("button"); b.type = "button"; b.className = "cmd";
-        b.innerHTML = '<span class="ic">' + ACT[a].i + "</span>" + ACT[a].t;
-        b.addEventListener("click", function () { doAction(a, id, "mail"); });
-        bar.appendChild(b);
-      });
-      show("mail");
+      buildBar(document.getElementById("mailBar"), acts, id, "mail");
+      show("mail"); renderNotes("mailNotes", id);
     }
 
-    // ---- lista inwestycji (wybor)
+    // ---------- LISTA INWESTYCJI
     function renderInv() {
       var x = byId(cur.assignMail);
       document.getElementById("invSub").textContent = x ? "Wybierz inwestycję dla maila: " + x.subject : "";
       var tb = document.querySelector("#invGrid tbody");
       if (!cur.invSel) cur.invSel = investments[0].no;
       tb.innerHTML = investments.map(function (i) {
-        return '<tr data-no="' + i.no + '"' + (cur.invSel === i.no ? ' class="cur"' : "") + "><td class=\"link\">" + i.no + "</td><td>" + esc(i.name) + "</td><td>" + esc(i.status) + "</td><td>" + esc(i.cust) + "</td><td>" + esc(i.sales) + "</td><td>" + i.created + "</td></tr>";
+        return '<tr data-no="' + i.no + '"' + (cur.invSel === i.no ? ' class="cur"' : "") + '><td class="link">' + i.no + "</td><td>" + esc(i.name) + "</td><td>" + esc(i.status) + "</td><td>" + esc(i.cust) + "</td><td>" + esc(i.sales) + "</td><td>" + i.created + "</td></tr>";
       }).join("");
       tb.querySelectorAll("tr").forEach(function (tr) {
         tr.addEventListener("click", function () { cur.invSel = tr.dataset.no; renderInv(); });
